@@ -90,6 +90,14 @@ ul, ol { margin: 10px 0 10px 20px; line-height: 1.8; }
 li { color: #1e293b; margin-bottom: 4px; }
 strong { color: #1e1b4b; }
 
+/* === Article header / dek === */
+.article-header { margin-bottom: 10px; }
+.article-header h1 {
+    color: #0f2f5c; font-size: clamp(1.5rem, 4vw, 2rem);
+    line-height: 1.35; margin: 4px 0 10px;
+}
+.dek { color: #475569; font-size: 1.02rem; line-height: 1.8; }
+
 /* === Code === */
 pre {
     background: #2d2f36; color: #e8e8f0; padding: 15px; border-radius: 12px;
