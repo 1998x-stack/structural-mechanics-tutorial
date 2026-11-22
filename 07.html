@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第7章 虚功原理与结构位移计算</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        pre { overflow-x: auto; max-width: 100%; }
+        table { max-width: 100%; }
+        @media (max-width: 768px) { table { display: block; overflow-x: auto; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="章节目录">
         <h3>🏗️ 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 绪论</a></li>
@@ -41,8 +46,13 @@
             <li><a href="27.html">第27章 大跨与高层结构</a></li>
             <li><a href="28.html">第28章 综合项目实战</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main id="content" class="main-content">
+
+        <header class="article-header">
+            <h1>第7章 虚功原理与位移计算</h1>
+            <p class="dek">虚功原理把“求位移”转化为“内力乘积沿杆长的积分”。单位荷载法、图乘法、温度与支座位移，都建立在同一条虚功方程上。</p>
+        </header>
 
         <h2>开篇：一座"看起来没问题"但"走上去晃"的桥</h2>
 
@@ -111,11 +121,22 @@ k         — 剪应力不均匀系数（矩形截面k=1.2，工字钢k≈截面
 
         <p>图乘法的基本公式是：</p>
 
-        <pre><code>∫(M̅ · M / EI) ds = (1 / EI) × ω × y₀
+        <div class="math-equation" role="group" aria-label="图乘法公式">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="图乘法公式，可横向滚动">
+                <math display="block" aria-label="位移等于 EI 分之一乘以真实弯矩图面积 omega，再乘以单位弯矩图在形心处的纵坐标 y 零">
+                    <mrow>
+                        <msub><mo>∫</mo><mi>s</mi></msub>
+                        <mfrac><mrow><mover><mi>M</mi><mo>¯</mo></mover><mi>M</mi></mrow><mrow><mi>E</mi><mi>I</mi></mrow></mfrac>
+                        <mrow><mi>d</mi><mi>s</mi></mrow>
+                        <mo>=</mo>
+                        <mfrac><mn>1</mn><mrow><mi>E</mi><mi>I</mi></mrow></mfrac>
+                        <mi>ω</mi><mo>·</mo><msub><mi>y</mi><mn>0</mn></msub>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
-其中：
-ω — M图的面积（真实荷载弯矩图的面积）
-y₀ — 在M̅图中对应于M图形心位置的纵坐标值</code></pre>
+        <p>其中 <math class="math-inline" aria-label="omega 是真实弯矩图的面积"><mi>ω</mi></math> 为真实荷载弯矩图（M 图）的面积，<math class="math-inline" aria-label="y 零是单位弯矩图在形心处的纵坐标"><msub><mi>y</mi><mn>0</mn></msub></math> 为单位弯矩图 M̅ 在 M 图形心位置的纵坐标。</p>
 
         <p>简单来说，就是用"一个弯矩图的面积"乘以"另一个弯矩图在对应位置的纵坐标"。</p>
 
@@ -125,6 +146,30 @@ y₀ — 在M̅图中对应于M图形心位置的纵坐标值</code></pre>
             <li>两个弯矩图中至少有一个是<strong>直线段</strong>（单位荷载下的弯矩图M̅通常是直线）；</li>
             <li>纵坐标y₀取自<strong>直线图形</strong>。</li>
         </ul>
+
+        <figure>
+            <svg role="img" aria-labelledby="fig-tcm-title fig-tcm-desc" viewBox="0 0 800 320" xmlns="http://www.w3.org/2000/svg">
+                <title id="fig-tcm-title">图乘法示意</title>
+                <desc id="fig-tcm-desc">真实荷载弯矩图 M 为曲线，其与基线围成的阴影面积为 omega；取该面积的形心（居中约在中点），向下引垂线与直线形的单位弯矩图 M 交叉，交点至基线的纵坐标即为 y 零。</desc>
+                <rect x="0" y="0" width="800" height="320" fill="#fbfdff"/>
+                <line x1="70" y1="250" x2="735" y2="250" stroke="#334155" stroke-width="2"/>
+                <text x="740" y="256" font-family="system-ui'PingFang SC',sans-serif" font-size="13" fill="#334155">s</text>
+                <path d="M70 250 Q400 60 730 250 Z" fill="#fde68a" opacity="0.65"/>
+                <path d="M70 250 Q400 60 730 250" fill="none" stroke="#b45309" stroke-width="2.5"/>
+                <polygon points="70,250 400,80 730,250" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+                <line x1="400" y1="155" x2="400" y2="250" stroke="#b45309" stroke-width="1.5" stroke-dasharray="6 4"/>
+                <line x1="400" y1="80" x2="400" y2="250" stroke="#dc2626" stroke-width="2"/>
+                <polygon points="400,72 395,84 405,84" fill="#dc2626"/>
+                <polygon points="400,258 395,246 405,246" fill="#dc2626"/>
+                <g font-family="system-ui,'PingFang SC',sans-serif" font-size="13">
+                    <text x="250" y="86" fill="#1d4ed8">M̅ 图（直线）</text>
+                    <text x="150" y="205" fill="#92400e">M 图与基线围成面积 ω</text>
+                    <text x="410" y="132" fill="#dc2626">y̅₀（在 M̅ 上取）</text>
+                    <text x="300" y="292" fill="#b45309">形心位置</text>
+                </g>
+            </svg>
+            <figcaption>图乘法原理示意（非按比例）：取曲线弯矩图 M 的面积 ω，乘以其形心处直线形弯矩图 M̅ 的纵坐标 y₀。要求两者至少有一个为直线，且纵坐标必从直线图形上量取。</figcaption>
+        </figure>
 
         <p>常见的图乘组合：</p>
 
@@ -254,7 +299,7 @@ c_i  — 第i个支座的实际位移</code></pre>
             <a href="index.html">📖 返回目录</a>
             <a href="08.html">下一章 →</a>
         </div>
-    </div>
+    </main>
 </div>
 </div>
 </body>
