@@ -126,17 +126,21 @@
 
         <p><strong>阶段二：弹塑性状态。</strong>弯矩继续增加，截面最外缘的应力首先达到 f<sub>y</sub>——这称为<strong>屈服弯矩（Yield Moment）</strong> M<sub>y</sub>：</p>
 
-        <div class="math-equation" role="group" aria-label="屈服弯矩等于屈服强度乘弹性截面模量"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="屈服弯矩等于屈服强度乘弹性截面模量，可横向滚动"><math display="block" aria-label="屈服弯矩等于屈服强度乘弹性截面模量"><math class="math-inline" aria-label="屈服弯矩等于屈服强度乘弹性截面模量"><mrow><msub><mi>M</mi><mi>y</mi></msub><mo>=</mo><msub><mi>f</mi><mi>y</mi></msub><mo>·</mo><mi>W</mi></mrow></math></math></div></div>
+        <div class="math-equation" role="group" aria-label="屈服弯矩等于屈服强度乘弹性截面模量"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="屈服弯矩等于屈服强度乘弹性截面模量，可横向滚动"><math display="block" aria-label="屈服弯矩等于屈服强度乘弹性截面模量"><mrow><msub><mi>M</mi><mi>y</mi></msub><mo>=</mo><msub><mi>f</mi><mi>y</mi></msub><mo>·</mo><mi>W</mi></mrow></math></div></div>
+
+        <p>其中 W 是<strong>弹性截面模量（Elastic Section Modulus）</strong>，对矩形截面 <math class="math-inline" aria-label="弹性截面模量等于 b 乘 h 平方除以 6"><mrow><mi>W</mi><mo>=</mo><mfrac><mrow><mi>b</mi><msup><mi>h</mi><mn>2</mn></msup></mrow><mn>6</mn></mfrac></mrow></math>。</p>
 
         <p>弯矩超过 M<sub>y</sub> 后，塑性区域从外缘向内扩展——外层纤维应力保持 f<sub>y</sub>（不再增加），内层纤维应力继续线性增长直到也达到 f<sub>y</sub>。截面上出现了一个"弹性核"和两个"塑性区"。</p>
 
         <p><strong>阶段三：全截面塑性。</strong>当弯矩足够大时，整个截面的应力都达到 f<sub>y</sub>——弹性核消失，应力分布呈现两个矩形块（受拉区 f<sub>y</sub>，受压区 −f<sub>y</sub>）。这时的弯矩称为<strong>极限弯矩（Ultimate Moment / Plastic Moment）</strong> M<sub>u</sub> 或 M<sub>p</sub>：</p>
 
-        <div class="math-equation" role="group" aria-label="极限弯矩等于屈服强度乘塑性截面模量"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="极限弯矩等于屈服强度乘塑性截面模量，可横向滚动"><math display="block" aria-label="极限弯矩等于屈服强度乘塑性截面模量"><math class="math-inline" aria-label="极限弯矩等于屈服强度乘塑性截面模量"><mrow><msub><mi>M</mi><mi>p</mi></msub><mo>=</mo><msub><mi>f</mi><mi>y</mi></msub><mo>·</mo><mi>S</mi></mrow></math></math></div></div>
+        <div class="math-equation" role="group" aria-label="极限弯矩等于屈服强度乘塑性截面模量"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="极限弯矩等于屈服强度乘塑性截面模量，可横向滚动"><math display="block" aria-label="极限弯矩等于屈服强度乘塑性截面模量"><mrow><msub><mi>M</mi><mi>p</mi></msub><mo>=</mo><msub><mi>f</mi><mi>y</mi></msub><mo>·</mo><mi>S</mi></mrow></math></div></div>
+
+        <p>其中 S 是<strong>塑性截面模量（Plastic Section Modulus）</strong>，对矩形截面 <math class="math-inline" aria-label="塑性截面模量等于 b 乘 h 平方除以 4"><mrow><mi>S</mi><mo>=</mo><mfrac><mrow><mi>b</mi><msup><mi>h</mi><mn>2</mn></msup></mrow><mn>4</mn></mfrac></mrow></math>。</p>
 
         <p>对于矩形截面，<math class="math-inline" aria-label="塑性截面模量等于 b 乘 h 平方除以 4"><mrow><mi>S</mi><mo>=</mo><mfrac><mrow><mi>b</mi><msup><mi>h</mi><mn>2</mn></msup></mrow><mn>4</mn></mfrac></mrow></math>，而 <math class="math-inline" aria-label="弹性截面模量等于 b 乘 h 平方除以 6"><mrow><mi>W</mi><mo>=</mo><mfrac><mrow><mi>b</mi><msup><mi>h</mi><mn>2</mn></msup></mrow><mn>6</mn></mfrac></mrow></math>，所以：</p>
 
-        <div class="math-equation" role="group" aria-label="矩形截面极限弯矩与屈服弯矩之比"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="矩形截面极限弯矩与屈服弯矩之比，可横向滚动"><math display="block" aria-label="矩形截面极限弯矩与屈服弯矩之比"><math class="math-inline" aria-label="极限弯矩与屈服弯矩之比等于形状系数，矩形截面为 1.5"><mrow><mfrac><msub><mi>M</mi><mi>p</mi></msub><msub><mi>M</mi><mi>y</mi></msub></mfrac><mo>=</mo><mfrac><mi>S</mi><mi>W</mi></mfrac><mo>=</mo><mfrac><mfrac><mrow><mi>b</mi><msup><mi>h</mi><mn>2</mn></msup></mrow><mn>4</mn></mfrac><mfrac><mrow><mi>b</mi><msup><mi>h</mi><mn>2</mn></msup></mrow><mn>6</mn></mfrac></mfrac><mo>=</mo><mn>1.5</mn></mrow></math></math></div></div>
+        <div class="math-equation" role="group" aria-label="矩形截面极限弯矩与屈服弯矩之比"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="矩形截面极限弯矩与屈服弯矩之比，可横向滚动"><math display="block" aria-label="矩形截面极限弯矩与屈服弯矩之比"><mrow><mfrac><msub><mi>M</mi><mi>p</mi></msub><msub><mi>M</mi><mi>y</mi></msub></mfrac><mo>=</mo><mfrac><mi>S</mi><mi>W</mi></mfrac><mo>=</mo><mfrac><mfrac><mrow><mi>b</mi><msup><mi>h</mi><mn>2</mn></msup></mrow><mn>4</mn></mfrac><mfrac><mrow><mi>b</mi><msup><mi>h</mi><mn>2</mn></msup></mrow><mn>6</mn></mfrac></mfrac><mo>=</mo><mn>1.5</mn></mrow></math></div></div>
 
         <figure>
             <svg role="img" aria-labelledby="fig-stress-title fig-stress-desc" viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg">
