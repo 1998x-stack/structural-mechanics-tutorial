@@ -5,11 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第19章 结构动力学概论</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        pre { overflow-x: auto; max-width: 100%; }
+        table { max-width: 100%; }
+        .vib-controls { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: center; margin: 10px 0 4px; }
+        .vib-controls label { font-size: 0.92rem; color: #1e293b; }
+        .vib-controls input[type=range] { width: 180px; }
+        .vib-controls button { padding: 6px 18px; border-radius: 30px; border: 1px solid #8fb88a; background: #b7d8b0; color: #1f452b; font: inherit; cursor: pointer; }
+        @media (max-width: 768px) { table { display: block; overflow-x: auto; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="章节目录">
         <h3>🏗️ 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 绪论</a></li>
@@ -41,10 +50,13 @@
             <li><a href="27.html">第27章 大跨与高层结构</a></li>
             <li><a href="28.html">第28章 综合项目实战</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main id="content" class="main-content">
 
-        <h2>第十九章 结构动力学概论</h2>
+        <header class="article-header">
+            <h1>第19章 结构动力学概论</h1>
+            <p class="dek">从静力到动力，多了一个惯性项。本章建立单自由度体系的运动方程，理解自振频率、阻尼比与自由振动的衰减规律。</p>
+        </header>
 
         <p>不知道你有没有在电影里见过这样的场景——一座大桥在风中微微颤动，行人走在上面感觉脚下像踩着一层薄冰。你可能觉得这只是导演制造紧张气氛的手法，但事实上，这种"抖动"是真实存在的，而且它是结构工程师必须严肃对待的核心问题。</p>
 
@@ -172,7 +184,7 @@
 
         <p><strong>1. 刚度法（Stiffness Method）</strong></p>
 
-        <p>刚度法基于达朗贝尔原理（d'Alembert's Principle）：在质量上施加惯性力，将动力问题转化为"静力平衡"问题。惯性力 \( f_I = -m\ddot{u}(t) \)，方向与加速度相反。于是，根据力的平衡：</p>
+        <p>刚度法基于达朗贝尔原理（d'Alembert's Principle）：在质量上施加惯性力，将动力问题转化为"静力平衡"问题。惯性力 <math class="math-inline" aria-label="惯性力等于负的质点质量乘加速度"><msub><mi>f</mi><mi>I</mi></msub><mo>=</mo><mo>−</mo><mi>m</mi><mover><mi>u</mi><mo>¨</mo></mover><mo>(</mo><mi>t</mi><mo>)</mo></math>，方向与加速度相反。于是，根据力的平衡：</p>
 
         <pre><code>    f_I + f_D + f_S = p(t)
 
@@ -203,6 +215,77 @@
         <h2>无阻尼自由振动</h2>
 
         <p>如果你把一个单摆拉开然后松手，它会来回摆动——这就是自由振动。在结构动力学中，<strong>自由振动（Free Vibration）</strong> 是指结构在没有外荷载作用（p(t)=0）且不考虑阻尼（c=0）的情况下，由初始位移或初始速度引发的振动。</p>
+
+        <figure id="vib-figure">
+            <svg id="vib-fig" role="img" aria-labelledby="fig-vib-title fig-vib-desc" viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg">
+                <title id="fig-vib-title">单自由度体系的自由振动</title>
+                <desc id="fig-vib-desc">左侧为弹簧-质量模型：质量块悬挂在弹簧上，沿竖向振动；右侧为位移时程：有阻尼时振幅按指数规律衰减，虚线为衰减包络。</desc>
+                <rect x="0" y="0" width="800" height="300" fill="#fbfdff"/>
+                <line x1="60" y1="40" x2="300" y2="40" stroke="#334155" stroke-width="3"/>
+                <g stroke="#94a3b8" stroke-width="2">
+                    <line x1="70" y1="40" x2="62" y2="28"/><line x1="120" y1="40" x2="112" y2="28"/><line x1="170" y1="40" x2="162" y2="28"/><line x1="220" y1="40" x2="212" y2="28"/><line x1="270" y1="40" x2="262" y2="28"/>
+                </g>
+                <polyline points="180,40 158,55 202,70 158,85 202,100 158,115 202,130 180,145" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+                <line x1="60" y1="175" x2="300" y2="175" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="6 4"/>
+                <text x="60" y="170" font-family="system-ui,'PingFang SC',sans-serif" font-size="12" fill="#64748b">平衡位置</text>
+                <g id="vib-mass">
+                    <rect x="140" y="150" width="80" height="50" fill="#dbeafe" stroke="#1e3a8a" stroke-width="2" rx="4"/>
+                    <text x="180" y="181" font-family="system-ui,'PingFang SC',sans-serif" font-size="14" fill="#1e3a8a" text-anchor="middle">m</text>
+                </g>
+                <text x="215" y="90" font-family="system-ui,'PingFang SC',sans-serif" font-size="13" fill="#2563eb">弹簧刚度 k</text>
+                <line x1="440" y1="160" x2="770" y2="160" stroke="#334155" stroke-width="1.5"/>
+                <line x1="440" y1="60" x2="440" y2="260" stroke="#334155" stroke-width="1.5"/>
+                <text x="772" y="165" font-family="system-ui,sans-serif" font-size="12" fill="#334155">t</text>
+                <text x="400" y="56" font-family="system-ui,'PingFang SC',sans-serif" font-size="12" fill="#334155">u(t)</text>
+                <path id="vib-curve" d="M440 160 Q 466 0 493 160 Q 519 284 546 160 Q 572 64 599 160 Q 625 234 652 160 Q 678 102 705 160 Q 731 204 758 160" fill="none" stroke="#dc2626" stroke-width="2.5"/>
+                <circle id="vib-dot" cx="440" cy="160" r="6" fill="#dc2626"/>
+            </svg>
+            <div class="vib-controls">
+                <label for="vib-zeta">阻尼比 ζ</label>
+                <input type="range" id="vib-zeta" min="0" max="0.3" step="0.01" value="0.05">
+                <button type="button" id="vib-toggle">暂停动画</button>
+                <span id="vib-readout" role="status" aria-live="polite">ζ = 0.05</span>
+            </div>
+            <figcaption>单自由度弹簧-质量模型与位移时程（教学示意）：阻尼比越大，振幅衰减越快。拖动滑块改变 ζ，或点击按钮暂停/继续动画；即使不执行脚本，图中也给出了一条衰减振动曲线。</figcaption>
+        </figure>
+
+        <script>
+        (function(){
+            var svg=document.getElementById('vib-fig'); if(!svg) return;
+            var mass=document.getElementById('vib-mass'), dot=document.getElementById('vib-dot'),
+                curve=document.getElementById('vib-curve'), btn=document.getElementById('vib-toggle'),
+                zetaEl=document.getElementById('vib-zeta'), read=document.getElementById('vib-readout');
+            var x0=440,x1=758,yc=160,amp=80,mscale=55,t=0,last=0;
+            var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            var running=!reduce;
+            function zeta(){ return parseFloat(zetaEl.value)||0; }
+            function u(tt){ return Math.exp(-zeta()*tt)*Math.cos(tt); }
+            function drawCurve(){
+                var d='';
+                for(var i=0;i<=160;i++){
+                    var tt=i/160*6*Math.PI;
+                    d+=(i?'L':'M')+(x0+(i/160)*(x1-x0)).toFixed(1)+' '+(yc-u(tt)*amp).toFixed(1);
+                }
+                curve.setAttribute('d',d);
+                read.textContent='ζ = '+zeta().toFixed(2);
+                btn.textContent=running?'暂停动画':'播放动画';
+            }
+            function frame(now){
+                if(!last) last=now;
+                var dt=Math.min(0.05,(now-last)/1000); last=now;
+                if(running) t+=dt*2.2;
+                var tt=t%(6*Math.PI), yy=u(tt);
+                mass.setAttribute('transform','translate(0 '+(-yy*mscale).toFixed(1)+')');
+                dot.setAttribute('cx',(x0+tt/(6*Math.PI)*(x1-x0)).toFixed(1));
+                dot.setAttribute('cy',(yc-yy*amp).toFixed(1));
+                window.requestAnimationFrame(frame);
+            }
+            btn.addEventListener('click',function(){ running=!running; last=0; btn.textContent=running?'暂停动画':'播放动画'; });
+            zetaEl.addEventListener('input',drawCurve);
+            drawCurve();
+            window.requestAnimationFrame(frame);
+        })();
+        </script>
 
         <p>运动方程简化为：</p>
 
@@ -438,7 +521,7 @@
             <a href="index.html">📖 返回目录</a>
             <a href="20.html">下一章 →</a>
         </div>
-    </div>
+    </main>
 </div>
 </div>
 </body>
