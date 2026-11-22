@@ -122,9 +122,7 @@
 
         <p>对于平面刚架单元（考虑轴向、弯曲变形），局部坐标系下的单元刚度矩阵 [k]ᵉ 为 6×6 矩阵：</p>
 
-        <p style="text-align:center; font-size:0.9rem;">
         <div class="math-equation" role="group" aria-label="平面刚架梁单元的 6 乘 6 局部单元刚度矩阵"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="平面刚架梁单元的 6 乘 6 局部单元刚度矩阵，可横向滚动"><math display="block" aria-label="平面刚架梁单元的 6 乘 6 局部单元刚度矩阵"><mtable><mtr><mtd><mfrac><mrow><mi>E</mi><mi>A</mi></mrow><mi>L</mi></mfrac></mtd><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><mrow><mo>−</mo><mfrac><mrow><mi>E</mi><mi>A</mi></mrow><mi>L</mi></mfrac></mrow></mtd><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd></mtr><mtr><mtd><mn>0</mn></mtd><mtd><mfrac><mrow><mn>12</mn><mi>E</mi><mi>I</mi></mrow><msup><mi>L</mi><mn>3</mn></msup></mfrac></mtd><mtd><mfrac><mrow><mn>6</mn><mi>E</mi><mi>I</mi></mrow><msup><mi>L</mi><mn>2</mn></msup></mfrac></mtd><mtd><mn>0</mn></mtd><mtd><mrow><mo>−</mo><mfrac><mrow><mn>12</mn><mi>E</mi><mi>I</mi></mrow><msup><mi>L</mi><mn>3</mn></msup></mfrac></mrow></mtd><mtd><mfrac><mrow><mn>6</mn><mi>E</mi><mi>I</mi></mrow><msup><mi>L</mi><mn>2</mn></msup></mfrac></mtd></mtr><mtr><mtd><mn>0</mn></mtd><mtd><mfrac><mrow><mn>6</mn><mi>E</mi><mi>I</mi></mrow><msup><mi>L</mi><mn>2</mn></msup></mfrac></mtd><mtd><mfrac><mrow><mn>4</mn><mi>E</mi><mi>I</mi></mrow><mi>L</mi></mfrac></mtd><mtd><mn>0</mn></mtd><mtd><mrow><mo>−</mo><mfrac><mrow><mn>6</mn><mi>E</mi><mi>I</mi></mrow><msup><mi>L</mi><mn>2</mn></msup></mfrac></mrow></mtd><mtd><mfrac><mrow><mn>2</mn><mi>E</mi><mi>I</mi></mrow><mi>L</mi></mfrac></mtd></mtr><mtr><mtd><mrow><mo>−</mo><mfrac><mrow><mi>E</mi><mi>A</mi></mrow><mi>L</mi></mfrac></mrow></mtd><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><mfrac><mrow><mi>E</mi><mi>A</mi></mrow><mi>L</mi></mfrac></mtd><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd></mtr><mtr><mtd><mn>0</mn></mtd><mtd><mrow><mo>−</mo><mfrac><mrow><mn>12</mn><mi>E</mi><mi>I</mi></mrow><msup><mi>L</mi><mn>3</mn></msup></mfrac></mrow></mtd><mtd><mrow><mo>−</mo><mfrac><mrow><mn>6</mn><mi>E</mi><mi>I</mi></mrow><msup><mi>L</mi><mn>2</mn></msup></mfrac></mrow></mtd><mtd><mn>0</mn></mtd><mtd><mfrac><mrow><mn>12</mn><mi>E</mi><mi>I</mi></mrow><msup><mi>L</mi><mn>3</mn></msup></mfrac></mtd><mtd><mrow><mo>−</mo><mfrac><mrow><mn>6</mn><mi>E</mi><mi>I</mi></mrow><msup><mi>L</mi><mn>2</mn></msup></mfrac></mrow></mtd></mtr><mtr><mtd><mn>0</mn></mtd><mtd><mfrac><mrow><mn>6</mn><mi>E</mi><mi>I</mi></mrow><msup><mi>L</mi><mn>2</mn></msup></mfrac></mtd><mtd><mfrac><mrow><mn>2</mn><mi>E</mi><mi>I</mi></mrow><mi>L</mi></mfrac></mtd><mtd><mn>0</mn></mtd><mtd><mrow><mo>−</mo><mfrac><mrow><mn>6</mn><mi>E</mi><mi>I</mi></mrow><msup><mi>L</mi><mn>2</mn></msup></mfrac></mrow></mtd><mtd><mfrac><mrow><mn>4</mn><mi>E</mi><mi>I</mi></mrow><mi>L</mi></mfrac></mtd></mtr></mtable></math></div></div>
-        </p>
 
         <p>这个矩阵中，各列对应的是单元的6个自由度（从左到右：1-轴向、2-横向、3-转角、4-轴向、5-横向、6-转角）。各行对应的是这些方向上的力。例如，k₃₃ = 4EI/L 表示：当第3个自由度（左端转角）发生单位转角时，在第3个方向（左端弯矩）上产生的力。</p>
 
@@ -134,9 +132,7 @@
 
         <p>对于桁架单元（只有轴向力），矩阵简化为 4×4：</p>
 
-        <p style="text-align:center; font-size:0.9rem;">
         <div class="math-equation" role="group" aria-label="平面桁架单元的 4 乘 4 局部单元刚度矩阵"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="平面桁架单元的 4 乘 4 局部单元刚度矩阵，可横向滚动"><math display="block" aria-label="平面桁架单元的 4 乘 4 局部单元刚度矩阵"><mtable><mtr><mtd><mfrac><mrow><mi>E</mi><mi>A</mi></mrow><mi>L</mi></mfrac></mtd><mtd><mn>0</mn></mtd><mtd><mrow><mo>−</mo><mfrac><mrow><mi>E</mi><mi>A</mi></mrow><mi>L</mi></mfrac></mrow></mtd><mtd><mn>0</mn></mtd></mtr><mtr><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd></mtr><mtr><mtd><mrow><mo>−</mo><mfrac><mrow><mi>E</mi><mi>A</mi></mrow><mi>L</mi></mfrac></mrow></mtd><mtd><mn>0</mn></mtd><mtd><mfrac><mrow><mi>E</mi><mi>A</mi></mrow><mi>L</mi></mfrac></mtd><mtd><mn>0</mn></mtd></mtr><mtr><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd></mtr></mtable></math></div></div>
-        </p>
 
         <p>注意桁架单元没有弯曲刚度——这是桁架的基本假设（铰接结点、杆件只受轴力）。</p>
 
@@ -146,9 +142,7 @@
 
         <p>对于平面结构，局部坐标系和整体坐标系之间的夹角为 α（从整体x轴旋转到局部x轴的角度）。变换矩阵 [T] 为：</p>
 
-        <p style="text-align:center; font-size:0.9rem;">
         <div class="math-equation" role="group" aria-label="平面单元 6 乘 6 坐标变换矩阵"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="平面单元 6 乘 6 坐标变换矩阵，可横向滚动"><math display="block" aria-label="平面单元 6 乘 6 坐标变换矩阵"><mtable><mtr><mtd><mrow><mi>cos</mi><mi>α</mi></mrow></mtd><mtd><mrow><mi>sin</mi><mi>α</mi></mrow></mtd><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd></mtr><mtr><mtd><mrow><mo>−</mo><mrow><mi>sin</mi><mi>α</mi></mrow></mrow></mtd><mtd><mrow><mi>cos</mi><mi>α</mi></mrow></mtd><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd></mtr><mtr><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>1</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd></mtr><mtr><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><mrow><mi>cos</mi><mi>α</mi></mrow></mtd><mtd><mrow><mi>sin</mi><mi>α</mi></mrow></mtd><mtd><mn>0</mn></mtd></mtr><mtr><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><mrow><mo>−</mo><mrow><mi>sin</mi><mi>α</mi></mrow></mrow></mtd><mtd><mrow><mi>cos</mi><mi>α</mi></mrow></mtd><mtd><mn>0</mn></mtd></mtr><mtr><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>1</mn></mtd></mtr></mtable></math></div></div>
-        </p>
 
         <p>整体坐标系下的单元刚度矩阵为：</p>
 
