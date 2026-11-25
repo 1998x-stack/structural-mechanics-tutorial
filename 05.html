@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第5章 三铰拱与悬索</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        pre { overflow-x: auto; max-width: 100%; }
+        table { max-width: 100%; }
+        @media (max-width: 768px) { table { display: block; overflow-x: auto; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="章节目录">
         <h3>🏗️ 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 绪论</a></li>
@@ -41,8 +46,13 @@
             <li><a href="27.html">第27章 大跨与高层结构</a></li>
             <li><a href="28.html">第28章 综合项目实战</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main id="content" class="main-content">
+
+        <header class="article-header">
+            <h1>第5章 三铰拱与悬索：形状决定力流</h1>
+            <p class="dek">同样的竖向荷载，换成曲线形状就成了压力或拉力。本章讲清三铰拱的反力与“等效梁法”内力、合理拱轴线的来历，以及作为拱之镜像的悬索结构。</p>
+        </header>
 
         <h2>开篇：曲线之美，力学之智</h2>
 
@@ -63,23 +73,23 @@
             <li><strong>水平反力（推力）</strong>——这是拱与梁最本质的区别。拱在竖向荷载下会产生水平推力（thrust），水平推力的大小取决于拱的<strong>矢跨比</strong>（rise-to-span ratio，f/l）。矢跨比越小（拱越"扁平"），水平推力越大。</li>
         </ul>
 
-        <pre><code>三铰拱在竖向均布荷载q下的反力：
+        <p>对沿水平方向均匀分布荷载 q 的三铰拱，竖向反力与同跨简支梁相同（R_A = R_B = q·l/2），而水平推力（thrust）由矢高 f 决定：</p>
 
-        拱的形式：
-        q（均布荷载）
-        ↓↓↓↓↓↓↓↓↓↓↓↓
-           ┌───────┐
-          ╱         ╲
-         ╱           ╲
-        △             △
-        A              B
-         ←───  l  ───→
+        <div class="math-equation" role="group" aria-label="三铰拱水平推力公式">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="水平推力公式，可横向滚动">
+                <math display="block" aria-label="水平推力 H 等于 q 乘 l 平方，除以 8 f">
+                    <mrow>
+                        <mi>H</mi><mo>=</mo>
+                        <mfrac>
+                            <mrow><mi>q</mi><msup><mi>l</mi><mn>2</mn></msup></mrow>
+                            <mrow><mn>8</mn><mi>f</mi></mrow>
+                        </mfrac>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
-        竖向反力：R_A = R_B = q·l/2（与简支梁相同）
-        水平推力：H = q·l²/(8f)
-
-        其中 f 为矢高（拱顶到支座连线的竖向距离）
-        可见 H 与 1/f 成正比——拱越扁，推力越大</code></pre>
+        <p>式中 l 为跨度，f 为矢高（拱顶到两支座连线的竖向距离）。可见 H 与 1/f 成正比——<strong>拱越扁，推力越大</strong>。</p>
 
         <h2>拱的内力分析</h2>
 
@@ -92,6 +102,19 @@
             <li><strong>拱的剪力</strong> V = V<sub>0</sub>·cosθ - H·sinθ</li>
             <li><strong>拱的轴力</strong> N = V<sub>0</sub>·sinθ + H·cosθ</li>
         </ul>
+
+        <div class="math-equation" role="group" aria-label="拱的弯矩公式">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="拱弯矩公式，可横向滚动">
+                <math display="block" aria-label="拱截面弯矩 M 等于等效简支梁弯矩 M0 减去 H 乘 y">
+                    <mrow>
+                        <mi>M</mi><mo>=</mo>
+                        <msub><mi>M</mi><mn>0</mn></msub>
+                        <mo>−</mo>
+                        <mi>H</mi><mi>y</mi>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
         <p>其中M<sub>0</sub>和V<sub>0</sub>分别是"等效简支梁"在对应截面的弯矩和剪力，y是该截面的纵坐标（高于支座连线为正），θ是拱轴线的切线与水平线的夹角。</p>
 
@@ -188,6 +211,54 @@
             <strong>踩坑故事：</strong>2018年，意大利热那亚的<strong>莫兰迪大桥（Ponte Morandi）</strong>在暴雨中突然垮塌，造成43人死亡。这座桥建于1967年，是一座预应力混凝土斜拉桥。调查发现，桥梁的拉索（stay cable）由于长期缺乏维护和养护（特别是排水不畅导致的钢丝腐蚀），部分拉索的有效截面已经损失了超过50%。当一场暴雨来袭时，剩余截面无法承受拉力，拉索逐根断裂，最终导致整座桥坍塌。这个悲剧告诉我们：<strong>索结构的失效往往是"无声无息"的——拉索内部的锈蚀很难从外部发现。对于索结构，"定期检测"不是可选项，而是必选项。</strong>
         </div>
 
+        <figure>
+            <svg viewBox="0 0 720 320" role="img" aria-labelledby="fig-arc-title fig-arc-desc" xmlns="http://www.w3.org/2000/svg">
+                <title id="fig-arc-title">拱与悬索：一对互为镜像的受力形式</title>
+                <desc id="fig-arc-desc">左图三铰拱在竖向均布荷载下沿拱轴受压，支座产生向内的水平推力；右图悬索在竖向均布荷载下沿缆索受拉，锚碇承受向外的拉力。</desc>
+                <rect x="16" y="24" width="336" height="272" rx="16" fill="#fffbeb" stroke="#fcd34d"/>
+                <text x="184" y="50" text-anchor="middle" font-size="14" fill="#92400e">拱：竖向荷载 → 沿拱轴压力</text>
+                <path d="M70 250 Q185 40 300 250" fill="none" stroke="#b45309" stroke-width="7" stroke-linecap="round"/>
+                <line x1="70" y1="250" x2="300" y2="250" stroke="#d6d3d1" stroke-width="1.5" stroke-dasharray="5 5"/>
+                <circle cx="70" cy="250" r="6" fill="#f59e0b" stroke="#92400e"/>
+                <circle cx="300" cy="250" r="6" fill="#f59e0b" stroke="#92400e"/>
+                <circle cx="185" cy="145" r="6" fill="#f59e0b" stroke="#92400e"/>
+                <g stroke="#0ea5e9" stroke-width="2.5">
+                    <line x1="110" y1="68" x2="110" y2="96"/><line x1="150" y1="68" x2="150" y2="96"/>
+                    <line x1="190" y1="68" x2="190" y2="96"/><line x1="230" y1="68" x2="230" y2="96"/>
+                    <line x1="270" y1="68" x2="270" y2="96"/>
+                </g>
+                <text x="184" y="62" text-anchor="middle" font-size="12" fill="#0369a1">q（均布荷载）</text>
+                <line x1="38" y1="250" x2="64" y2="250" stroke="#b91c1c" stroke-width="3"/>
+                <polygon points="70,250 56,244 56,256" fill="#b91c1c"/>
+                <line x1="332" y1="250" x2="306" y2="250" stroke="#b91c1c" stroke-width="3"/>
+                <polygon points="300,250 314,244 314,256" fill="#b91c1c"/>
+                <text x="40" y="238" text-anchor="middle" font-size="12" fill="#b91c1c">H</text>
+                <text x="330" y="238" text-anchor="middle" font-size="12" fill="#b91c1c">H</text>
+                <text x="184" y="285" text-anchor="middle" font-size="11.5" fill="#475569">推力向内，拱轴以受压为主</text>
+                <rect x="368" y="24" width="336" height="272" rx="16" fill="#eff6ff" stroke="#93c5fd"/>
+                <text x="536" y="50" text-anchor="middle" font-size="14" fill="#1e40af">悬索：竖向荷载 → 沿缆索拉力</text>
+                <path d="M430 110 Q555 310 680 110" fill="none" stroke="#1d4ed8" stroke-width="7" stroke-linecap="round"/>
+                <line x1="430" y1="250" x2="680" y2="250" stroke="#94a3b8" stroke-width="6"/>
+                <line x1="492" y1="180" x2="492" y2="250" stroke="#94a3b8" stroke-width="2.5"/>
+                <line x1="555" y1="205" x2="555" y2="250" stroke="#94a3b8" stroke-width="2.5"/>
+                <line x1="618" y1="180" x2="618" y2="250" stroke="#94a3b8" stroke-width="2.5"/>
+                <circle cx="430" cy="110" r="6" fill="#f59e0b" stroke="#92400e"/>
+                <circle cx="680" cy="110" r="6" fill="#f59e0b" stroke="#92400e"/>
+                <line x1="430" y1="110" x2="404" y2="98" stroke="#b91c1c" stroke-width="3"/>
+                <polygon points="398,95 414,94 410,106" fill="#b91c1c"/>
+                <line x1="680" y1="110" x2="706" y2="98" stroke="#b91c1c" stroke-width="3"/>
+                <polygon points="712,95 696,94 700,106" fill="#b91c1c"/>
+                <text x="408" y="132" font-size="12" fill="#b91c1c">T</text>
+                <text x="660" y="132" font-size="12" fill="#b91c1c">T</text>
+                <g stroke="#0ea5e9" stroke-width="2.5">
+                    <line x1="470" y1="262" x2="470" y2="288"/><line x1="525" y1="262" x2="525" y2="288"/>
+                    <line x1="580" y1="262" x2="580" y2="288"/><line x1="635" y1="262" x2="635" y2="288"/>
+                </g>
+                <text x="536" y="308" text-anchor="middle" font-size="11.5" fill="#475569">拉力向外，缆索只受拉</text>
+            </svg>
+            <figcaption>拱与悬索是一对互为“镜像”的受力形式：同样承受竖向均布荷载，<strong>拱把荷载转化为沿拱轴的压力</strong>，支座产生向内的水平推力 H；<strong>悬索把荷载转化为沿缆索的拉力</strong>，锚碇承受向外的拉力 T。二者的平衡曲线完全同形（均为抛物线），只是内力正负相反。（图示为受力方向示意，不代表具体尺寸）</figcaption>
+        </figure>
+
         <h2>拱与悬索的对比总结</h2>
 
         <p>拱和悬索虽然在力学上互为"镜像"，但工程应用中的选择取决于多种因素：</p>
@@ -258,7 +329,7 @@
             <a href="index.html">📖 返回目录</a>
             <a href="06.html">下一章 →</a>
         </div>
-    </div>
+    </main>
 </div>
 </div>
 </body>
