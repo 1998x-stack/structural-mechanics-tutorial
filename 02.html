@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第2章 几何组成分析</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        pre { overflow-x: auto; max-width: 100%; }
+        table { max-width: 100%; }
+        @media (max-width: 768px) { table { display: block; overflow-x: auto; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="章节目录">
         <h3>🏗️ 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 绪论</a></li>
@@ -41,8 +46,13 @@
             <li><a href="27.html">第27章 大跨与高层结构</a></li>
             <li><a href="28.html">第28章 综合项目实战</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main id="content" class="main-content">
+
+        <header class="article-header">
+            <h1>第2章 几何组成分析：结构能不能"站得住"</h1>
+            <p class="dek">在计算任何内力之前，先回答一个更根本的问题——这个杆件体系能不能作为结构存在。本章建立自由度与约束的语言，给出三刚片、两刚片、二元体三条判定规则，并辨析最容易失手的瞬变体系。</p>
+        </header>
 
         <h2>开篇：一个"几乎稳定"的体育馆</h2>
 
@@ -126,14 +136,32 @@
 
         <p>体系自由度的计算公式为：</p>
 
-        <pre><code>W = 3m - (3g + 2h + r)
+        <div class="math-equation" role="group" aria-label="平面体系计算自由度公式">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="计算自由度公式，可横向滚动">
+                <math display="block" aria-label="W 等于 3m 减去括号内 3g 加 2h 加 r">
+                    <mrow>
+                        <mi>W</mi>
+                        <mo>=</mo>
+                        <mn>3</mn>
+                        <mi>m</mi>
+                        <mo>−</mo>
+                        <mrow>
+                            <mo>(</mo>
+                            <mn>3</mn><mi>g</mi><mo>+</mo><mn>2</mn><mi>h</mi><mo>+</mo><mi>r</mi>
+                            <mo>)</mo>
+                        </mrow>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
-其中：
-W — 体系的计算自由度
-m — 刚片数
-g — 刚结点数（每个相当于3个约束）
-h — 铰结点数（每个相当于2个约束）
-r — 支座链杆数（每根相当于1个约束）</code></pre>
+        <ul>
+            <li><code>W</code> — 体系的计算自由度（约束数减去自由度）</li>
+            <li><code>m</code> — 刚片数</li>
+            <li><code>g</code> — 刚结点数（每个相当于 3 个约束）</li>
+            <li><code>h</code> — 单铰结点数（每个相当于 2 个约束；复铰按连接刚片数折算）</li>
+            <li><code>r</code> — 支座链杆数（每根相当于 1 个约束）</li>
+        </ul>
 
         <p>当 W > 0 时，体系自由度大于约束数——<strong>几何可变</strong>。
         当 W = 0 时，约束数刚好等于自由度——可能是几何不变（但需要具体分析）。
@@ -187,6 +215,39 @@ r — 支座链杆数（每根相当于1个约束）</code></pre>
         <div class="highlight">
             <strong>关键洞察：</strong>瞬变体系为什么危险？因为它的"抵抗力"是在发生微小位移后才"启动"的。发生微小位移意味着结构已经产生了变形，而此时启动的"巨大抗力"往往超过了材料所能承受的极限——结构就会在极短的时间内破坏。这就是为什么规范中明确禁止使用瞬变体系。
         </div>
+
+        <figure>
+            <svg viewBox="0 0 720 340" role="img" aria-labelledby="fig-gc-title fig-gc-desc" xmlns="http://www.w3.org/2000/svg">
+                <title id="fig-gc-title">三刚片规则与瞬变体系对比</title>
+                <desc id="fig-gc-desc">左图三个刚片由三个不共线的铰两两相连，组成几何不变体系；右图三个铰位于同一直线上，属于瞬变体系，微小荷载即产生有限位移。</desc>
+                <rect x="12" y="24" width="336" height="292" rx="16" fill="#f0fdf4" stroke="#86efac"/>
+                <text x="180" y="52" text-anchor="middle" font-size="15" fill="#166534">三个铰不共线 → 几何不变 ✓</text>
+                <line x1="80" y1="250" x2="300" y2="250" stroke="#1e3a8a" stroke-width="8" stroke-linecap="round"/>
+                <line x1="300" y1="250" x2="190" y2="90" stroke="#1e3a8a" stroke-width="8" stroke-linecap="round"/>
+                <line x1="190" y1="90" x2="80" y2="250" stroke="#1e3a8a" stroke-width="8" stroke-linecap="round"/>
+                <text x="190" y="278" text-anchor="middle" font-size="13" fill="#1e3a8a">刚片 I</text>
+                <text x="272" y="162" text-anchor="middle" font-size="13" fill="#1e3a8a">刚片 II</text>
+                <text x="108" y="162" text-anchor="middle" font-size="13" fill="#1e3a8a">刚片 III</text>
+                <circle cx="80" cy="250" r="7" fill="#f59e0b" stroke="#92400e"/>
+                <circle cx="300" cy="250" r="7" fill="#f59e0b" stroke="#92400e"/>
+                <circle cx="190" cy="90" r="7" fill="#f59e0b" stroke="#92400e"/>
+                <text x="180" y="308" text-anchor="middle" font-size="12" fill="#475569">三个铰（橙点）两两相连，构成稳定的三角形</text>
+                <rect x="372" y="24" width="336" height="292" rx="16" fill="#fef2f2" stroke="#fca5a5"/>
+                <text x="540" y="52" text-anchor="middle" font-size="15" fill="#991b1b">三个铰共线 → 瞬变 ✗</text>
+                <line x1="420" y1="170" x2="680" y2="170" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="6 6"/>
+                <line x1="430" y1="170" x2="560" y2="170" stroke="#b91c1c" stroke-width="8" stroke-linecap="round"/>
+                <line x1="560" y1="170" x2="690" y2="170" stroke="#b91c1c" stroke-width="8" stroke-linecap="round"/>
+                <circle cx="430" cy="170" r="7" fill="#f59e0b" stroke="#92400e"/>
+                <circle cx="560" cy="170" r="7" fill="#f59e0b" stroke="#92400e"/>
+                <circle cx="690" cy="170" r="7" fill="#f59e0b" stroke="#92400e"/>
+                <line x1="560" y1="122" x2="560" y2="158" stroke="#0ea5e9" stroke-width="3"/>
+                <polygon points="560,166 553,152 567,152" fill="#0ea5e9"/>
+                <text x="560" y="114" text-anchor="middle" font-size="13" fill="#0369a1">微小荷载 P</text>
+                <path d="M560 182 Q604 262 688 194" fill="none" stroke="#b91c1c" stroke-width="2" stroke-dasharray="5 5"/>
+                <text x="540" y="308" text-anchor="middle" font-size="12" fill="#475569">瞬时几何可变，位移虽小却引发巨大内力</text>
+            </svg>
+            <figcaption>三刚片规则的两种命运：三个刚片由三个<strong>不共线</strong>的铰两两相连时，构成稳定的三角形，体系几何不变；一旦三个铰落在同一条直线上（图中虚线），体系便成为瞬变体系——瞬时几何可变，微小扰动即产生有限位移并引发巨大内力。</figcaption>
+        </figure>
 
         <h2>几何组成分析的一般步骤</h2>
 
@@ -250,7 +311,7 @@ r — 支座链杆数（每根相当于1个约束）</code></pre>
             <a href="index.html">📖 返回目录</a>
             <a href="03.html">下一章 →</a>
         </div>
-    </div>
+    </main>
 </div>
 </div>
 </body>
