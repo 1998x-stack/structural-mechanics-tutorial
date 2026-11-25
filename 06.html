@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第6章 静定组合结构</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        pre { overflow-x: auto; max-width: 100%; }
+        table { max-width: 100%; }
+        @media (max-width: 768px) { table { display: block; overflow-x: auto; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="章节目录">
         <h3>🏗️ 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 绪论</a></li>
@@ -41,8 +46,13 @@
             <li><a href="27.html">第27章 大跨与高层结构</a></li>
             <li><a href="28.html">第28章 综合项目实战</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main id="content" class="main-content">
+
+        <header class="article-header">
+            <h1>第6章 静定组合结构：让每种杆件做它最擅长的事</h1>
+            <p class="dek">组合结构把受弯的梁式杆与只受轴力的二力杆拼在一起，各司其职。本章讲清如何区分两类杆件、为什么可以先求二力杆再分析梁式杆，以及加劲梁“卸载”主梁的原理。</p>
+        </header>
 
         <h2>开篇：不让任何一种"武器"闲置</h2>
 
@@ -164,6 +174,21 @@
         第5步：绘制主梁的弯矩图和剪力图
         此时主梁的弯矩和剪力已经远小于"无加劲"的情况。</code></pre>
 
+        <div class="math-equation" role="group" aria-label="简支梁跨中最大弯矩公式">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="简支梁最大弯矩公式，可横向滚动">
+                <math display="block" aria-label="简支梁跨中最大弯矩 M max 等于 q 乘 l 平方除以 8">
+                    <mrow>
+                        <msub><mi>M</mi><mi>max</mi></msub>
+                        <mo>=</mo>
+                        <mfrac>
+                            <mrow><mi>q</mi><msup><mi>l</mi><mn>2</mn></msup></mrow>
+                            <mn>8</mn>
+                        </mfrac>
+                    </mrow>
+                </math>
+            </div>
+        </div>
+
         <p>这个例子展示了加劲梁的工作原理：不加劲的简支梁最大弯矩为 ql²/8 = 180 kN·m。加上桁架加劲后，主梁的跨中最大弯矩可能降低到原来的1/3到1/2。换句话说，<strong>加劲桁架承担了大部分荷载产生的弯矩和剪力，让主梁"轻松"了很多</strong>。</p>
 
         <div class="tip">
@@ -183,6 +208,34 @@
         <div class="warning">
             <strong>踩坑故事：</strong>我的一位研究生同学在做毕业设计时，分析了一个飞机库的屋盖结构——一个大型的拱-桁架组合结构。他用有限元软件分析后，发现某些弦杆的内力异常大，反复检查模型也没发现问题。后来他的导师看了一眼，说了一句："你把撑杆和主弦杆的连接做成了刚接，但实际它是铰接的。"就这么一个细节——在模型中把铰接做成了刚接——导致撑杆中出现了不应该有的弯矩，整个内力分布全错了。他花了整整两周才找到这个错误。这个教训是：<strong>在组合结构中，"结点类型的正确设定"比"计算的精度"重要得多。结点错了，算得再准也是白算。</strong>
         </div>
+
+        <figure>
+            <svg viewBox="0 0 720 300" role="img" aria-labelledby="fig-cs-title fig-cs-desc" xmlns="http://www.w3.org/2000/svg">
+                <title id="fig-cs-title">张弦梁：梁式杆与二力杆的组合</title>
+                <desc id="fig-cs-desc">上部是承受弯矩与压弯的拱形梁（梁式杆），下部是只受拉的拉索（二力杆），中间由只受轴力的竖撑杆相连。</desc>
+                <rect x="16" y="24" width="688" height="188" rx="16" fill="#f8fafc" stroke="#cbd5e1"/>
+                <path d="M80 150 Q360 96 640 150" fill="none" stroke="#1e3a8a" stroke-width="9" stroke-linecap="round"/>
+                <path d="M80 150 Q360 224 640 150" fill="none" stroke="#1d4ed8" stroke-width="5" stroke-linecap="round"/>
+                <line x1="220" y1="130" x2="220" y2="178" stroke="#64748b" stroke-width="4"/>
+                <line x1="360" y1="120" x2="360" y2="187" stroke="#64748b" stroke-width="4"/>
+                <line x1="500" y1="130" x2="500" y2="178" stroke="#64748b" stroke-width="4"/>
+                <line x1="80" y1="150" x2="80" y2="188" stroke="#334155" stroke-width="3"/>
+                <polygon points="80,196 68,178 92,178" fill="none" stroke="#334155" stroke-width="3"/>
+                <line x1="640" y1="150" x2="640" y2="188" stroke="#334155" stroke-width="3"/>
+                <polygon points="640,196 628,178 652,178" fill="none" stroke="#334155" stroke-width="3"/>
+                <g stroke="#0ea5e9" stroke-width="2.5">
+                    <line x1="140" y1="66" x2="140" y2="92"/><line x1="240" y1="66" x2="240" y2="92"/>
+                    <line x1="340" y1="60" x2="340" y2="86"/><line x1="440" y1="66" x2="440" y2="92"/>
+                    <line x1="540" y1="66" x2="540" y2="92"/>
+                </g>
+                <text x="360" y="52" text-anchor="middle" font-size="12" fill="#0369a1">外荷载 q</text>
+                <text x="360" y="112" text-anchor="middle" font-size="12.5" fill="#1e3a8a">拱形梁：梁式杆（受弯 + 受压）</text>
+                <text x="252" y="230" text-anchor="middle" font-size="12.5" fill="#1d4ed8">拉索：二力杆（只受拉）</text>
+                <text x="360" y="172" text-anchor="middle" font-size="11" fill="#475569">撑杆：二力杆</text>
+                <text x="360" y="266" text-anchor="middle" font-size="11.5" fill="#475569">粗线=梁式杆（受弯）；细线/灰色竖杆=二力杆（两端铰接，只受轴力）</text>
+            </svg>
+            <figcaption>张弦梁的构件分类：上部拱形梁是<strong>梁式杆</strong>，既承受弯矩又承受压力（粗线）；下部张紧的拉索是<strong>二力杆</strong>，只承受拉力；中间的竖撑杆两端铰接、无横向荷载，也属于二力杆。分析时先由结点平衡求出撑杆与拉索的轴力，再把它们当作已知荷载加到梁上，最后按梁的方法绘制内力图。（图示为构造示意，不代表实际比例）</figcaption>
+        </figure>
 
         <h2>从组合结构到结构优化</h2>
 
@@ -214,7 +267,7 @@
             <a href="index.html">📖 返回目录</a>
             <a href="07.html">下一章 →</a>
         </div>
-    </div>
+    </main>
 </div>
 </div>
 </body>
