@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第10章 位移法（一）</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        pre { overflow-x: auto; max-width: 100%; }
+        table { max-width: 100%; }
+        @media (max-width: 768px) { table { display: block; overflow-x: auto; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="章节目录">
         <h3>🏗️ 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 绪论</a></li>
@@ -41,8 +46,13 @@
             <li><a href="27.html">第27章 大跨与高层结构</a></li>
             <li><a href="28.html">第28章 综合项目实战</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main id="content" class="main-content">
+
+        <header class="article-header">
+            <h1>第10章 位移法（一）：以位移为未知量</h1>
+            <p class="dek">位移法反转了力法的提问方式——先求结点位移，再由转角位移方程反推内力。本章讲清基本未知量的确定、转角位移方程与固端弯矩，以及无侧移刚架的计算流程。</p>
+        </header>
 
         <h2>引言：换一个角度看世界</h2>
 
@@ -118,7 +128,13 @@
 
         <p>确定基本未知量个数的原则：</p>
 
-        <p style="text-align:center; font-size:1.2rem;"><strong>位移法基本未知量数 = 刚结点数 + 独立线位移数</strong></p>
+        <div class="math-equation" role="group" aria-label="位移法基本未知量数">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="位移法基本未知量公式，可横向滚动">
+                <math display="block" aria-label="基本未知量数等于刚结点数加独立线位移数">
+                    <mrow><mtext>基本未知量数</mtext><mo>=</mo><mtext>刚结点数</mtext><mo>+</mo><mtext>独立线位移数</mtext></mrow>
+                </math>
+            </div>
+        </div>
 
         <p>独立线位移数可以通过"铰化法"确定——把所有的刚结点都变成铰结点，然后判断这个铰结体系的<strong>几何可变性</strong>。这个铰结体系有多少个自由度，原结构就有多少个独立线位移。这本质上回到了第2章的几何组成分析。</p>
 
@@ -153,21 +169,23 @@
 
         <p>对于一根等截面直杆AB（EI = 常数），在忽略轴向变形的前提下，转角位移方程为：</p>
 
-        <p style="text-align:center; font-size:1.2rem;">
-        \[
-        \begin{aligned}
-        M_{AB} &= \frac{4EI}{l} \theta_A + \frac{2EI}{l} \theta_B - \frac{6EI}{l^2} \Delta_{AB} + M_{AB}^F \\
-        M_{BA} &= \frac{2EI}{l} \theta_A + \frac{4EI}{l} \theta_B - \frac{6EI}{l^2} \Delta_{AB} + M_{BA}^F
-        \end{aligned}
-        \]
-        </p>
+        <div class="math-equation" role="group" aria-label="转角位移方程">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="转角位移方程组，可横向滚动">
+                <math display="block" aria-label="杆端弯矩 M AB 与 M BA 的转角位移方程">
+                    <mtable columnalign="right">
+                        <mtr><mtd><msub><mi>M</mi><mrow><mi>A</mi><mi>B</mi></mrow></msub><mo>=</mo><mfrac><mrow><mn>4</mn><mi>E</mi><mi>I</mi></mrow><mi>l</mi></mfrac><msub><mi>θ</mi><mi>A</mi></msub><mo>+</mo><mfrac><mrow><mn>2</mn><mi>E</mi><mi>I</mi></mrow><mi>l</mi></mfrac><msub><mi>θ</mi><mi>B</mi></msub><mo>−</mo><mfrac><mrow><mn>6</mn><mi>E</mi><mi>I</mi></mrow><msup><mi>l</mi><mn>2</mn></msup></mfrac><msub><mi>Δ</mi><mrow><mi>A</mi><mi>B</mi></mrow></msub><mo>+</mo><msubsup><mi>M</mi><mrow><mi>A</mi><mi>B</mi></mrow><mi>F</mi></msubsup></mtd></mtr>
+                        <mtr><mtd><msub><mi>M</mi><mrow><mi>B</mi><mi>A</mi></mrow></msub><mo>=</mo><mfrac><mrow><mn>2</mn><mi>E</mi><mi>I</mi></mrow><mi>l</mi></mfrac><msub><mi>θ</mi><mi>A</mi></msub><mo>+</mo><mfrac><mrow><mn>4</mn><mi>E</mi><mi>I</mi></mrow><mi>l</mi></mfrac><msub><mi>θ</mi><mi>B</mi></msub><mo>−</mo><mfrac><mrow><mn>6</mn><mi>E</mi><mi>I</mi></mrow><msup><mi>l</mi><mn>2</mn></msup></mfrac><msub><mi>Δ</mi><mrow><mi>A</mi><mi>B</mi></mrow></msub><mo>+</mo><msubsup><mi>M</mi><mrow><mi>B</mi><mi>A</mi></mrow><mi>F</mi></msubsup></mtd></mtr>
+                    </mtable>
+                </math>
+            </div>
+        </div>
 
         <p>其中：</p>
         <ul>
-            <li>\(M_{AB}\)、\(M_{BA}\)——杆端弯矩（顺时针为正）</li>
-            <li>\(\theta_A\)、\(\theta_B\)——杆端转角（顺时针为正）</li>
-            <li>\(\Delta_{AB}\)——杆件两端垂直于杆轴方向的相对线位移（使杆件顺时针转动时为正）</li>
-            <li>\(M_{AB}^F\)、\(M_{BA}^F\)——<strong>固端弯矩（Fixed-End Moment, FEM）</strong>，即把杆件两端完全固定时，由跨间荷载产生的杆端弯矩</li>
+            <li><math class="math-inline" aria-label="M AB"><msub><mi>M</mi><mrow><mi>A</mi><mi>B</mi></mrow></msub></math>、<math class="math-inline" aria-label="M BA"><msub><mi>M</mi><mrow><mi>B</mi><mi>A</mi></mrow></msub></math>——杆端弯矩（顺时针为正）</li>
+            <li><math class="math-inline" aria-label="theta A"><msub><mi>θ</mi><mi>A</mi></msub></math>、<math class="math-inline" aria-label="theta B"><msub><mi>θ</mi><mi>B</mi></msub></math>——杆端转角（顺时针为正）</li>
+            <li><math class="math-inline" aria-label="Delta AB"><msub><mi>Δ</mi><mrow><mi>A</mi><mi>B</mi></mrow></msub></math>——杆件两端垂直于杆轴方向的相对线位移（使杆件顺时针转动时为正）</li>
+            <li><math class="math-inline" aria-label="M AB F"><msubsup><mi>M</mi><mrow><mi>A</mi><mi>B</mi></mrow><mi>F</mi></msubsup></math>、<math class="math-inline" aria-label="M BA F"><msubsup><mi>M</mi><mrow><mi>B</mi><mi>A</mi></mrow><mi>F</mi></msubsup></math>——<strong>固端弯矩（Fixed-End Moment, FEM）</strong>，即把杆件两端完全固定时，由跨间荷载产生的杆端弯矩</li>
         </ul>
 
         <p>注意上述公式中的正负号约定非常重要：<strong>所有角度和弯矩均以顺时针为正</strong>。这和材料力学中常用的"使梁下凸为正"的弯矩符号约定不同——务必要注意。</p>
@@ -179,28 +197,28 @@
                 <tr>
                     <th>荷载类型</th>
                     <th>图示</th>
-                    <th>\(M_{AB}^F\)</th>
-                    <th>\(M_{BA}^F\)</th>
+                    <th><math class="math-inline" aria-label="M AB F"><msubsup><mi>M</mi><mrow><mi>A</mi><mi>B</mi></mrow><mi>F</mi></msubsup></math></th>
+                    <th><math class="math-inline" aria-label="M BA F"><msubsup><mi>M</mi><mrow><mi>B</mi><mi>A</mi></mrow><mi>F</mi></msubsup></math></th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>均布荷载 q</td>
                     <td>两端固定梁受均布q</td>
-                    <td>\(-\frac{ql^2}{12}\)</td>
-                    <td>\(+\frac{ql^2}{12}\)</td>
+                    <td><math class="math-inline" aria-label="负 ql 平方除以 12"><mo>−</mo><mfrac><mrow><mi>q</mi><msup><mi>l</mi><mn>2</mn></msup></mrow><mn>12</mn></mfrac></math></td>
+                    <td><math class="math-inline" aria-label="正 ql 平方除以 12"><mo>+</mo><mfrac><mrow><mi>q</mi><msup><mi>l</mi><mn>2</mn></msup></mrow><mn>12</mn></mfrac></math></td>
                 </tr>
                 <tr>
                     <td>跨中集中力 P</td>
                     <td>两端固定梁跨中受P</td>
-                    <td>\(-\frac{Pl}{8}\)</td>
-                    <td>\(+\frac{Pl}{8}\)</td>
+                    <td><math class="math-inline" aria-label="负 Pl 除以 8"><mo>−</mo><mfrac><mrow><mi>P</mi><mi>l</mi></mrow><mn>8</mn></mfrac></math></td>
+                    <td><math class="math-inline" aria-label="正 Pl 除以 8"><mo>+</mo><mfrac><mrow><mi>P</mi><mi>l</mi></mrow><mn>8</mn></mfrac></math></td>
                 </tr>
                 <tr>
                     <td>任意位置集中力P</td>
                     <td>距离左端a、右端b</td>
-                    <td>\(-\frac{Pab^2}{l^2}\)</td>
-                    <td>\(+\frac{Pa^2b}{l^2}\)</td>
+                    <td><math class="math-inline" aria-label="负 P a b 平方除以 l 平方"><mo>−</mo><mfrac><mrow><mi>P</mi><mi>a</mi><msup><mi>b</mi><mn>2</mn></msup></mrow><msup><mi>l</mi><mn>2</mn></msup></mfrac></math></td>
+                    <td><math class="math-inline" aria-label="正 P a 平方 b 除以 l 平方"><mo>+</mo><mfrac><mrow><mi>P</mi><msup><mi>a</mi><mn>2</mn></msup><mi>b</mi></mrow><msup><mi>l</mi><mn>2</mn></msup></mfrac></math></td>
                 </tr>
             </tbody>
         </table>
@@ -209,32 +227,74 @@
             <strong>常见错误提醒：</strong>转角位移方程中的正负号是最容易搞混的地方。我读书时有一个同学考试时12分的位移法大题得了0分——他方程列对了，代入的数字也对了，但所有正负号都反了。为什么？因为他把"顺时针为正"的约定和"弯矩图绘在受拉侧"的习惯混在了一起。<strong>请记住：位移法计算时用的正负号约定（顺时针为正）和画弯矩图时的约定（画在受拉侧）是两个不同的"坐标系"。</strong>计算时用计算规则，画图时用画图规则——不要混为一谈。
         </div>
 
+        <figure>
+            <svg viewBox="0 0 720 300" role="img" aria-labelledby="fig-sd-title fig-sd-desc" xmlns="http://www.w3.org/2000/svg">
+                <title id="fig-sd-title">转角位移方程的三个位移量与固端弯矩</title>
+                <desc id="fig-sd-desc">左图表示杆件 AB 的两端转角与相对线位移；右图表示两端完全固定梁在均布荷载下的固端弯矩。</desc>
+                <defs>
+                    <marker id="sd-ah" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+                        <path d="M0 0 L7 3 L0 6 Z" fill="#b91c1c"/>
+                    </marker>
+                </defs>
+                <rect x="16" y="24" width="336" height="248" rx="16" fill="#eff6ff" stroke="#93c5fd"/>
+                <text x="184" y="50" text-anchor="middle" font-size="14" fill="#1e40af">三量决定杆端：θ_A、θ_B、Δ_AB</text>
+                <line x1="70" y1="175" x2="300" y2="175" stroke="#1e3a8a" stroke-width="9" stroke-linecap="round"/>
+                <circle cx="70" cy="175" r="6" fill="#f59e0b" stroke="#92400e"/>
+                <circle cx="300" cy="175" r="6" fill="#f59e0b" stroke="#92400e"/>
+                <path d="M55 148 Q72 126 94 146" fill="none" stroke="#b91c1c" stroke-width="2.5" marker-end="url(#sd-ah)"/>
+                <path d="M276 146 Q298 126 315 148" fill="none" stroke="#b91c1c" stroke-width="2.5" marker-end="url(#sd-ah)"/>
+                <text x="50" y="138" font-size="12" fill="#b91c1c">θ_A</text>
+                <text x="316" y="138" font-size="12" fill="#b91c1c">θ_B</text>
+                <line x1="300" y1="175" x2="300" y2="222" stroke="#b91c1c" stroke-width="2.5" marker-end="url(#sd-ah)"/>
+                <text x="312" y="215" font-size="12" fill="#b91c1c">Δ_AB</text>
+                <text x="184" y="258" text-anchor="middle" font-size="11.5" fill="#475569">两端转角与相对线位移——EI、l 为杆件刚度与长度</text>
+                <rect x="368" y="24" width="336" height="248" rx="16" fill="#fffbeb" stroke="#fcd34d"/>
+                <text x="536" y="50" text-anchor="middle" font-size="14" fill="#92400e">固端弯矩：两端完全固定</text>
+                <line x1="430" y1="110" x2="430" y2="232" stroke="#334155" stroke-width="6"/>
+                <line x1="650" y1="110" x2="650" y2="232" stroke="#334155" stroke-width="6"/>
+                <line x1="430" y1="175" x2="650" y2="175" stroke="#1e3a8a" stroke-width="9" stroke-linecap="round"/>
+                <g stroke="#0ea5e9" stroke-width="2.5">
+                    <line x1="465" y1="116" x2="465" y2="154"/><line x1="505" y1="116" x2="505" y2="154"/>
+                    <line x1="545" y1="116" x2="545" y2="154"/><line x1="585" y1="116" x2="585" y2="154"/>
+                    <line x1="625" y1="116" x2="625" y2="154"/>
+                </g>
+                <path d="M455 200 Q430 214 404 196" fill="none" stroke="#b91c1c" stroke-width="2.5" marker-end="url(#sd-ah)"/>
+                <path d="M625 200 Q650 214 676 196" fill="none" stroke="#b91c1c" stroke-width="2.5" marker-end="url(#sd-ah)"/>
+                <text x="470" y="222" font-size="12" fill="#b91c1c">M_AB^F = −ql²/12</text>
+                <text x="536" y="248" text-anchor="middle" font-size="12" fill="#b91c1c">M_BA^F = +ql²/12</text>
+                <text x="536" y="264" text-anchor="middle" font-size="11.5" fill="#475569">共轭端固端弯矩大小相等、方向相反（均布荷载 q）</text>
+            </svg>
+            <figcaption>转角位移方程把一根杆件的内力写成三个<strong>位移量</strong>的函数：两端转角 <math class="math-inline" aria-label="theta A"><msub><mi>θ</mi><mi>A</mi></msub></math>、<math class="math-inline" aria-label="theta B"><msub><mi>θ</mi><mi>B</mi></msub></math> 和相对线位移 <math class="math-inline" aria-label="Delta AB"><msub><mi>Δ</mi><mrow><mi>A</mi><mi>B</mi></mrow></msub></math>；再叠加上跨间荷载产生的<strong>固端弯矩</strong>。右图给出最常见的两端固定梁在均布荷载下的固端弯矩。（图示为量纲与正负号示意，非按比例）</figcaption>
+        </figure>
+
         <h2>10.4 基本体系与位移法方程</h2>
 
         <p>与力法类似，位移法也有<strong>基本体系</strong>的概念。位移法的基本体系是：在原结构的所有独立结点位移方向上施加<strong>附加约束</strong>，使所有结点位移为零。这样，原结构被分解为一组独立的<strong>单跨超静定梁</strong>。</p>
 
-        <p>在基本体系上施加荷载后，每个附加约束上都会产生<strong>反力</strong>（或反力矩），记为 \(R_{1P}, R_{2P}, \dots, R_{nP}\)。让结点分别产生单位位移 \(Z_1=1, Z_2=1, \dots, Z_n=1\)，可以得到刚度系数 \(r_{ij}\)——表示由 \(Z_j=1\) 引起的在第i个附加约束方向上的反力。</p>
+        <p>在基本体系上施加荷载后，每个附加约束上都会产生<strong>反力</strong>（或反力矩），记为 <math class="math-inline" aria-label="R1P 到 RnP"><msub><mi>R</mi><mrow><mn>1</mn><mi>P</mi></mrow></msub><mo>,</mo><msub><mi>R</mi><mrow><mn>2</mn><mi>P</mi></mrow></msub><mo>,</mo><mo>…</mo><mo>,</mo><msub><mi>R</mi><mrow><mi>n</mi><mi>P</mi></mrow></msub></math>。让结点分别产生单位位移 <math class="math-inline" aria-label="Z1 等于 1 到 Zn 等于 1"><msub><mi>Z</mi><mn>1</mn></msub><mo>=</mo><mn>1</mn><mo>,</mo><msub><mi>Z</mi><mn>2</mn></msub><mo>=</mo><mn>1</mn><mo>,</mo><mo>…</mo><mo>,</mo><msub><mi>Z</mi><mi>n</mi></msub><mo>=</mo><mn>1</mn></math>，可以得到刚度系数 <math class="math-inline" aria-label="rij"><msub><mi>r</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></math>——表示由 <math class="math-inline" aria-label="Zj 等于 1"><msub><mi>Z</mi><mi>j</mi></msub><mo>=</mo><mn>1</mn></math> 引起的在第i个附加约束方向上的反力。</p>
 
-        <p style="text-align:center; font-size:1.2rem;"><strong>
-        \[
-        \begin{cases}
-        r_{11}Z_1 + r_{12}Z_2 + \cdots + r_{1n}Z_n + R_{1P} = 0 \\
-        r_{21}Z_1 + r_{22}Z_2 + \cdots + r_{2n}Z_n + R_{2P} = 0 \\
-        \vdots \\
-        r_{n1}Z_1 + r_{n2}Z_2 + \cdots + r_{nn}Z_n + R_{nP} = 0
-        \end{cases}
-        \]
-        </strong></p>
+        <div class="math-equation" role="group" aria-label="位移法典型方程组">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="位移法典型方程组，可横向滚动">
+                <math display="block" aria-label="由 n 个结点平衡方程组成的位移法典型方程组">
+                    <mtable columnalign="right">
+                        <mtr><mtd><msub><mi>r</mi><mn>11</mn></msub><msub><mi>Z</mi><mn>1</mn></msub><mo>+</mo><msub><mi>r</mi><mn>12</mn></msub><msub><mi>Z</mi><mn>2</mn></msub><mo>+</mo><mo>⋯</mo><mo>+</mo><msub><mi>r</mi><mrow><mn>1</mn><mi>n</mi></mrow></msub><msub><mi>Z</mi><mi>n</mi></msub><mo>+</mo><msub><mi>R</mi><mrow><mn>1</mn><mi>P</mi></mrow></msub><mo>=</mo><mn>0</mn></mtd></mtr>
+                        <mtr><mtd><msub><mi>r</mi><mn>21</mn></msub><msub><mi>Z</mi><mn>1</mn></msub><mo>+</mo><msub><mi>r</mi><mn>22</mn></msub><msub><mi>Z</mi><mn>2</mn></msub><mo>+</mo><mo>⋯</mo><mo>+</mo><msub><mi>r</mi><mrow><mn>2</mn><mi>n</mi></mrow></msub><msub><mi>Z</mi><mi>n</mi></msub><mo>+</mo><msub><mi>R</mi><mrow><mn>2</mn><mi>P</mi></mrow></msub><mo>=</mo><mn>0</mn></mtd></mtr>
+                        <mtr><mtd><mo>⋮</mo></mtd></mtr>
+                        <mtr><mtd><msub><mi>r</mi><mrow><mi>n</mi><mn>1</mn></mrow></msub><msub><mi>Z</mi><mn>1</mn></msub><mo>+</mo><msub><mi>r</mi><mrow><mi>n</mi><mn>2</mn></mrow></msub><msub><mi>Z</mi><mn>2</mn></msub><mo>+</mo><mo>⋯</mo><mo>+</mo><msub><mi>r</mi><mrow><mi>n</mi><mi>n</mi></mrow></msub><msub><mi>Z</mi><mi>n</mi></msub><mo>+</mo><msub><mi>R</mi><mrow><mi>n</mi><mi>P</mi></mrow></msub><mo>=</mo><mn>0</mn></mtd></mtr>
+                    </mtable>
+                </math>
+            </div>
+        </div>
 
         <p>这就是<strong>位移法典型方程（Canonical Equations of Displacement Method）</strong>。注意：</p>
         <ul>
-            <li>\(r_{ij}\)——<strong>刚度系数（Stiffness Coefficient）</strong>，\(r_{ii} > 0\)，且 \(r_{ij} = r_{ji}\)（反力互等定理）</li>
-            <li>\(R_{iP}\)——荷载在基本体系中引起的附加约束反力</li>
+            <li><math class="math-inline" aria-label="rij"><msub><mi>r</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></math>——<strong>刚度系数（Stiffness Coefficient）</strong>，<math class="math-inline" aria-label="rii 大于 0"><msub><mi>r</mi><mrow><mi>i</mi><mi>i</mi></mrow></msub><mo>&gt;</mo><mn>0</mn></math>，且 <math class="math-inline" aria-label="rij 等于 rji"><msub><mi>r</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><msub><mi>r</mi><mrow><mi>j</mi><mi>i</mi></mrow></msub></math>（反力互等定理）</li>
+            <li><math class="math-inline" aria-label="RiP"><msub><mi>R</mi><mrow><mi>i</mi><mi>P</mi></mrow></msub></math>——荷载在基本体系中引起的附加约束反力</li>
             <li>方程的物理意义是：每个附加约束上的总反力为零——<strong>结点平衡</strong></li>
         </ul>
 
         <div class="highlight">
-            <strong>力法与位移法的对偶性：</strong>注意到没有？力法方程是 \(\delta_{ij}X_j + \Delta_{iP} = 0\)，位移法方程是 \(r_{ij}Z_j + R_{iP} = 0\)。它们的形式一模一样，只是"力"与"位移"互换了位置。\(\delta\)（柔度系数）和 \(r\)（刚度系数）在数学上是互逆矩阵的关系——\([r] = [\delta]^{-1}\)。这正是结构力学中著名的<strong>对偶原理（Duality Principle）</strong>。
+            <strong>力法与位移法的对偶性：</strong>注意到没有？力法方程是 <math class="math-inline" aria-label="δij Xj 加 ΔiP 等于 0"><msub><mi>δ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>X</mi><mi>j</mi></msub><mo>+</mo><msub><mi>Δ</mi><mrow><mi>i</mi><mi>P</mi></mrow></msub><mo>=</mo><mn>0</mn></math>，位移法方程是 <math class="math-inline" aria-label="rij Zj 加 RiP 等于 0"><msub><mi>r</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>Z</mi><mi>j</mi></msub><mo>+</mo><msub><mi>R</mi><mrow><mi>i</mi><mi>P</mi></mrow></msub><mo>=</mo><mn>0</mn></math>。它们的形式一模一样，只是"力"与"位移"互换了位置。<math class="math-inline" aria-label="delta"><mi>δ</mi></math>（柔度系数）和 <math class="math-inline" aria-label="r"><mi>r</mi></math>（刚度系数）在数学上是互逆矩阵的关系——<math class="math-inline" aria-label="r 矩阵等于 delta 矩阵的逆"><mo>[</mo><mi>r</mi><mo>]</mo><mo>=</mo><msup><mrow><mo>[</mo><mi>δ</mi><mo>]</mo></mrow><mrow><mo>−</mo><mn>1</mn></mrow></msup></math>。这正是结构力学中著名的<strong>对偶原理（Duality Principle）</strong>。
         </div>
 
         <h2>10.5 无侧移刚架的计算</h2>
@@ -253,7 +313,7 @@
         <ol>
             <li>确定基本未知量（就是所有刚结点的转角）；</li>
             <li>写出每根杆件的转角位移方程（含固端弯矩）；</li>
-            <li>对每个刚结点列力矩平衡方程（\(\sum M = 0\)）；</li>
+            <li>对每个刚结点列力矩平衡方程（<math class="math-inline" aria-label="sum M 等于 0"><mrow><mo>∑</mo><mi>M</mi><mo>=</mo><mn>0</mn></mrow></math>）；</li>
             <li>解方程组得到结点转角；</li>
             <li>回代到转角位移方程，得到各杆端弯矩；</li>
             <li>画弯矩图。</li>
@@ -296,8 +356,8 @@
         <ul>
             <li>位移法的基本思想——以结点位移为基本未知量，通过结点平衡建立方程；</li>
             <li>基本未知量的确定——刚结点数 + 独立线位移数；</li>
-            <li>转角位移方程的推导——\(M = f(\theta, \Delta) + M^F\)，这是位移法的"本构关系"；</li>
-            <li>位移法典型方程——\(r_{ij}Z_j + R_{iP} = 0\)，其物理意义是结点平衡；</li>
+            <li>转角位移方程的推导——<math class="math-inline" aria-label="M 等于 f theta Delta 加 M F"><mi>M</mi><mo>=</mo><mi>f</mi><mo>(</mo><mi>θ</mi><mo>,</mo><mi>Δ</mi><mo>)</mo><mo>+</mo><msup><mi>M</mi><mi>F</mi></msup></math>，这是位移法的"本构关系"；</li>
+            <li>位移法典型方程——<math class="math-inline" aria-label="rij Zj 加 RiP 等于 0"><msub><mi>r</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>Z</mi><mi>j</mi></msub><mo>+</mo><msub><mi>R</mi><mrow><mi>i</mi><mi>P</mi></mrow></msub><mo>=</mo><mn>0</mn></math>，其物理意义是结点平衡；</li>
             <li>无侧移刚架的计算——只有结点转角的最简情形。</li>
         </ul>
 
@@ -310,7 +370,7 @@
             <a href="index.html">📖 返回目录</a>
             <a href="11.html">下一章 →</a>
         </div>
-    </div>
+    </main>
 </div>
 </div>
 </body>
