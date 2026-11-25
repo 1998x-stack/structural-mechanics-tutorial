@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第8章 力法（一）</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        pre { overflow-x: auto; max-width: 100%; }
+        table { max-width: 100%; }
+        @media (max-width: 768px) { table { display: block; overflow-x: auto; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="章节目录">
         <h3>🏗️ 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 绪论</a></li>
@@ -41,12 +46,17 @@
             <li><a href="27.html">第27章 大跨与高层结构</a></li>
             <li><a href="28.html">第28章 综合项目实战</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main id="content" class="main-content">
+
+        <header class="article-header">
+            <h1>第8章 力法（一）：把超静定问题降维成静定问题</h1>
+            <p class="dek">力法以“力”为基本未知量：拆去多余约束得到静定的基本体系，再用变形协调条件把多余未知力解出来。本章讲清超静定次数判定、基本体系选择与力法典型方程。</p>
+        </header>
 
         <h2>引言：从静定到超静定——现实世界没有"恰好"</h2>
 
-        <p>同学们好，欢迎来到结构力学真正的"硬核"部分。在前七章中，我们处理的所有结构都有一个共同点：它们是<strong>静定结构</strong>。也就是说，仅仅依靠三个平衡方程（\(\sum F_x = 0\)、\(\sum F_y = 0\)、\(\sum M = 0\)），我们就能确定所有的支座反力和杆件内力。这是一个非常"舒服"的世界——一个方程、一个答案、清晰明了。</p>
+        <p>同学们好，欢迎来到结构力学真正的"硬核"部分。在前七章中，我们处理的所有结构都有一个共同点：它们是<strong>静定结构</strong>。也就是说，仅仅依靠三个平衡方程（<math class="math-inline" aria-label="sum F x 等于 0"><mrow><mo>∑</mo><msub><mi>F</mi><mi>x</mi></msub><mo>=</mo><mn>0</mn></mrow></math>、<math class="math-inline" aria-label="sum F y 等于 0"><mrow><mo>∑</mo><msub><mi>F</mi><mi>y</mi></msub><mo>=</mo><mn>0</mn></mrow></math>、<math class="math-inline" aria-label="sum M 等于 0"><mrow><mo>∑</mo><mi>M</mi><mo>=</mo><mn>0</mn></mrow></math>），我们就能确定所有的支座反力和杆件内力。这是一个非常"舒服"的世界——一个方程、一个答案、清晰明了。</p>
 
         <p>但现实世界从来不是一个"恰好"的世界。同学们有没有想过一个问题：为什么实际工程中几乎不存在静定结构？你看一座连续梁桥——它有好几个桥墩，每一跨都延续过去。一个简支梁桥，支座坏了桥就塌了；但连续梁桥的一个支座沉降了，其他支座会分担荷载，结构不一定倒塌。这就是超静定结构的<strong>冗余度（Redundancy）</strong>——它有多余的约束，因而有更强的安全性。工程规范通常要求主要承重结构具有一定的冗余度，就是基于这个道理。</p>
 
@@ -74,7 +84,13 @@
 
         <p>对于平面体系，每个构件有3个独立平衡方程。更系统的做法是利用<strong>几何组成分析</strong>的结论：</p>
 
-        <p style="text-align:center; font-size:1.2rem;"><strong>n = W + m</strong></p>
+        <div class="math-equation" role="group" aria-label="超静定次数与自由度的关系">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="超静定次数关系式，可横向滚动">
+                <math display="block" aria-label="超静定次数 n 等于计算自由度 W 加多余约束数 m">
+                    <mrow><mi>n</mi><mo>=</mo><mi>W</mi><mo>+</mo><mi>m</mi></mrow>
+                </math>
+            </div>
+        </div>
 
         <p>其中，n为超静定次数，W为计算自由度（第2章的内容），m为多余约束数。但更常用的方法是直接"数": 把结构中所有多余约束的数量加起来。</p>
 
@@ -114,7 +130,13 @@
 
         <p>更通用的计算公式为：</p>
 
-        <p style="text-align:center; font-size:1.1rem;"><strong>n = 3m - (3g + 2h + r)</strong></p>
+        <div class="math-equation" role="group" aria-label="超静定次数通用计算公式">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="超静定次数通用公式，可横向滚动">
+                <math display="block" aria-label="超静定次数 n 等于 3m 减去括号内 3g 加 2h 加 r">
+                    <mrow><mi>n</mi><mo>=</mo><mn>3</mn><mi>m</mi><mo>−</mo><mrow><mo>(</mo><mn>3</mn><mi>g</mi><mo>+</mo><mn>2</mn><mi>h</mi><mo>+</mo><mi>r</mi><mo>)</mo></mrow></mrow>
+                </math>
+            </div>
+        </div>
 
         <p>其中 m 为刚片（杆件）数，g 为刚结点数，h 为铰结点数（注意：连接n根杆的铰相当于n-1个单铰），r 为支座链杆数。这个公式来自几何组成分析的"搭积木"思想——每根杆件引入3个自由度，每个约束扣除相应的自由度数。</p>
 
@@ -158,12 +180,12 @@
 
         <ul>
             <li><strong>第一步：拆</strong>——去掉多余约束，得到一个静定结构，称为<strong>基本体系（Primary System）</strong>或<strong>力法基本结构</strong>。</li>
-            <li><strong>第二步：补</strong>——把去掉的多余约束以"未知力"的形式加回去，设为 \(X_1, X_2, \dots, X_n\)。</li>
+            <li><strong>第二步：补</strong>——把去掉的多余约束以"未知力"的形式加回去，设为 <math class="math-inline" aria-label="X1 到 Xn"><msub><mi>X</mi><mn>1</mn></msub><mo>,</mo><msub><mi>X</mi><mn>2</mn></msub><mo>,</mo><mo>…</mo><mo>,</mo><msub><mi>X</mi><mi>n</mi></msub></math>。</li>
             <li><strong>第三步：等</strong>——基本体系在荷载和这些未知力的共同作用下，在去掉约束处的位移应该等于原结构在该处的实际位移（一般是零，除非有支座移动）。由此建立方程。</li>
         </ul>
 
         <div class="highlight">
-            <strong>力法的灵魂：</strong>力法本质上是在"恢复"原结构的变形状态。你拆掉的约束越多，基本体系就越"软"（静定），它在荷载下的变形就越大。你要找的那些多余未知力 \(X_i\)，就是那些"恰好把变形拉回到原结构状态"的力。这就是著名的<strong>变形协调条件（Compatibility Condition）</strong>。
+            <strong>力法的灵魂：</strong>力法本质上是在"恢复"原结构的变形状态。你拆掉的约束越多，基本体系就越"软"（静定），它在荷载下的变形就越大。你要找的那些多余未知力 <math class="math-inline" aria-label="Xi"><msub><mi>X</mi><mi>i</mi></msub></math>，就是那些"恰好把变形拉回到原结构状态"的力。这就是著名的<strong>变形协调条件（Compatibility Condition）</strong>。
         </div>
 
         <h2>8.4 基本体系与原结构</h2>
@@ -195,30 +217,75 @@
   基本体系的变形条件：
   θ_A = 0, θ_B = 0, Δ_AB = 0</code></pre>
 
+        <figure>
+            <svg viewBox="0 0 720 300" role="img" aria-labelledby="fig-fm-title fig-fm-desc" xmlns="http://www.w3.org/2000/svg">
+                <title id="fig-fm-title">力法示意：从原结构到基本体系</title>
+                <desc id="fig-fm-desc">左图为固定端加端部滚支座的 1 次超静定梁；右图去掉端部竖向约束后得到静定悬臂梁，并在该处代以多余未知力 X 1。</desc>
+                <rect x="16" y="24" width="336" height="248" rx="16" fill="#fffbeb" stroke="#fcd34d"/>
+                <text x="184" y="50" text-anchor="middle" font-size="14" fill="#92400e">原结构：1 次超静定</text>
+                <line x1="70" y1="96" x2="70" y2="216" stroke="#334155" stroke-width="6"/>
+                <g stroke="#94a3b8" stroke-width="2">
+                    <line x1="70" y1="100" x2="52" y2="116"/><line x1="70" y1="126" x2="52" y2="142"/>
+                    <line x1="70" y1="152" x2="52" y2="168"/><line x1="70" y1="178" x2="52" y2="194"/>
+                    <line x1="70" y1="204" x2="52" y2="220"/>
+                </g>
+                <line x1="70" y1="160" x2="330" y2="160" stroke="#1e3a8a" stroke-width="9" stroke-linecap="round"/>
+                <line x1="330" y1="160" x2="330" y2="186" stroke="#334155" stroke-width="3"/>
+                <polygon points="330,196 318,176 342,176" fill="none" stroke="#334155" stroke-width="3"/>
+                <circle cx="322" cy="202" r="4" fill="#334155"/><circle cx="338" cy="202" r="4" fill="#334155"/>
+                <g stroke="#0ea5e9" stroke-width="2.5">
+                    <line x1="120" y1="100" x2="120" y2="146"/><line x1="170" y1="100" x2="170" y2="146"/>
+                    <line x1="220" y1="100" x2="220" y2="146"/><line x1="270" y1="100" x2="270" y2="146"/>
+                </g>
+                <text x="200" y="90" text-anchor="middle" font-size="12" fill="#0369a1">荷载 q</text>
+                <text x="184" y="250" text-anchor="middle" font-size="11.5" fill="#475569">固定端 3 个约束 + 滚支座 1 个约束 − 3 = 1</text>
+                <rect x="368" y="24" width="336" height="248" rx="16" fill="#eff6ff" stroke="#93c5fd"/>
+                <text x="536" y="50" text-anchor="middle" font-size="14" fill="#1e40af">基本体系：去掉约束，代以 X₁（静定）</text>
+                <line x1="420" y1="96" x2="420" y2="216" stroke="#334155" stroke-width="6"/>
+                <g stroke="#94a3b8" stroke-width="2">
+                    <line x1="420" y1="100" x2="402" y2="116"/><line x1="420" y1="126" x2="402" y2="142"/>
+                    <line x1="420" y1="152" x2="402" y2="168"/><line x1="420" y1="178" x2="402" y2="194"/>
+                    <line x1="420" y1="204" x2="402" y2="220"/>
+                </g>
+                <line x1="420" y1="160" x2="680" y2="160" stroke="#1e3a8a" stroke-width="9" stroke-linecap="round"/>
+                <g stroke="#0ea5e9" stroke-width="2.5">
+                    <line x1="470" y1="100" x2="470" y2="146"/><line x1="520" y1="100" x2="520" y2="146"/>
+                    <line x1="570" y1="100" x2="570" y2="146"/>
+                </g>
+                <line x1="680" y1="160" x2="680" y2="104" stroke="#b91c1c" stroke-width="3"/>
+                <polygon points="680,96 673,112 687,112" fill="#b91c1c"/>
+                <text x="664" y="96" text-anchor="middle" font-size="13" fill="#b91c1c">X₁</text>
+                <text x="536" y="250" text-anchor="middle" font-size="11.5" fill="#475569">悬臂梁可算出任意荷载下的变形，使其端部位移 = 0 即得 X₁</text>
+            </svg>
+            <figcaption>力法的“拆—补—等”三步曲：从原超静定结构出发，去掉多余约束（端部竖向支座），得到静定的<strong>基本体系</strong>（悬臂梁）；把去掉的约束化为多余未知力 <math class="math-inline" aria-label="X1"><msub><mi>X</mi><mn>1</mn></msub></math> 重新加上；再要求基本体系在该处的位移与原结构一致（此为 0），即得<strong>变形协调条件</strong>。（图示为原理示意，不代表实际尺寸）</figcaption>
+        </figure>
+
         <h2>8.5 力法典型方程</h2>
 
-        <p>现在我们来建立力法的核心方程。假设一个结构有n次超静定，我们去掉n个多余约束，得到基本体系。在基本体系中，多余未知力记为 \(X_1, X_2, \dots, X_n\)。</p>
+        <p>现在我们来建立力法的核心方程。假设一个结构有n次超静定，我们去掉n个多余约束，得到基本体系。在基本体系中，多余未知力记为 <math class="math-inline" aria-label="X1 到 Xn"><msub><mi>X</mi><mn>1</mn></msub><mo>,</mo><msub><mi>X</mi><mn>2</mn></msub><mo>,</mo><mo>…</mo><mo>,</mo><msub><mi>X</mi><mi>n</mi></msub></math>。</p>
 
-        <p>变形协调条件是：在荷载和所有多余未知力共同作用下，基本体系沿每个 \(X_i\) 方向的位移等于原结构在该方向的位移（通常为零）。</p>
+        <p>变形协调条件是：在荷载和所有多余未知力共同作用下，基本体系沿每个 <math class="math-inline" aria-label="Xi"><msub><mi>X</mi><mi>i</mi></msub></math> 方向的位移等于原结构在该方向的位移（通常为零）。</p>
 
         <p>利用叠加原理（Superposition Principle），我们可以写出：</p>
 
-        <p style="text-align:center; font-size:1.2rem;"><strong>
-        \[
-        \begin{cases}
-        \delta_{11}X_1 + \delta_{12}X_2 + \cdots + \delta_{1n}X_n + \Delta_{1P} = 0 \\
-        \delta_{21}X_1 + \delta_{22}X_2 + \cdots + \delta_{2n}X_n + \Delta_{2P} = 0 \\
-        \vdots \\
-        \delta_{n1}X_1 + \delta_{n2}X_2 + \cdots + \delta_{nn}X_n + \Delta_{nP} = 0
-        \end{cases}
-        \]
-        </strong></p>
+        <div class="math-equation" role="group" aria-label="力法典型方程组">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="力法典型方程组，可横向滚动">
+                <math display="block" aria-label="由 n 个变形协调方程组成的力法典型方程组">
+                    <mtable columnalign="right">
+                        <mtr><mtd><msub><mi>δ</mi><mn>11</mn></msub><msub><mi>X</mi><mn>1</mn></msub><mo>+</mo><msub><mi>δ</mi><mn>12</mn></msub><msub><mi>X</mi><mn>2</mn></msub><mo>+</mo><mo>⋯</mo><mo>+</mo><msub><mi>δ</mi><mrow><mn>1</mn><mi>n</mi></mrow></msub><msub><mi>X</mi><mi>n</mi></msub><mo>+</mo><msub><mi>Δ</mi><mrow><mn>1</mn><mi>P</mi></mrow></msub><mo>=</mo><mn>0</mn></mtd></mtr>
+                        <mtr><mtd><msub><mi>δ</mi><mn>21</mn></msub><msub><mi>X</mi><mn>1</mn></msub><mo>+</mo><msub><mi>δ</mi><mn>22</mn></msub><msub><mi>X</mi><mn>2</mn></msub><mo>+</mo><mo>⋯</mo><mo>+</mo><msub><mi>δ</mi><mrow><mn>2</mn><mi>n</mi></mrow></msub><msub><mi>X</mi><mi>n</mi></msub><mo>+</mo><msub><mi>Δ</mi><mrow><mn>2</mn><mi>P</mi></mrow></msub><mo>=</mo><mn>0</mn></mtd></mtr>
+                        <mtr><mtd><mo>⋮</mo></mtd></mtr>
+                        <mtr><mtd><msub><mi>δ</mi><mrow><mi>n</mi><mn>1</mn></mrow></msub><msub><mi>X</mi><mn>1</mn></msub><mo>+</mo><msub><mi>δ</mi><mrow><mi>n</mi><mn>2</mn></mrow></msub><msub><mi>X</mi><mn>2</mn></msub><mo>+</mo><mo>⋯</mo><mo>+</mo><msub><mi>δ</mi><mrow><mi>n</mi><mi>n</mi></mrow></msub><msub><mi>X</mi><mi>n</mi></msub><mo>+</mo><msub><mi>Δ</mi><mrow><mi>n</mi><mi>P</mi></mrow></msub><mo>=</mo><mn>0</mn></mtd></mtr>
+                    </mtable>
+                </math>
+            </div>
+        </div>
 
         <p>这就是<strong>力法典型方程（Canonical Equations of Force Method）</strong>。其中：</p>
 
         <ul>
-            <li>\(\delta_{ij}\)——<strong>柔度系数（Flexibility Coefficient）</strong>，表示基本体系中，由 \(X_j = 1\) 引起的沿 \(X_i\) 方向的位移。\(\delta_{ii}\) 称为主系数，恒为正。根据<strong>位移互等定理</strong>，\(\delta_{ij} = \delta_{ji}\)。</li>
-            <li>\(\Delta_{iP}\)——<strong>荷载项（Load Term）</strong>，表示基本体系中，由实际荷载引起的沿 \(X_i\) 方向的位移。</li>
+            <li><math class="math-inline" aria-label="delta ij"><msub><mi>δ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></math>——<strong>柔度系数（Flexibility Coefficient）</strong>，表示基本体系中，由 <math class="math-inline" aria-label="Xj 等于 1"><msub><mi>X</mi><mi>j</mi></msub><mo>=</mo><mn>1</mn></math> 引起的沿 <math class="math-inline" aria-label="Xi"><msub><mi>X</mi><mi>i</mi></msub></math> 方向的位移。<math class="math-inline" aria-label="delta ii"><msub><mi>δ</mi><mrow><mi>i</mi><mi>i</mi></mrow></msub></math> 称为主系数，恒为正。根据<strong>位移互等定理</strong>，<math class="math-inline" aria-label="delta ij 等于 delta ji"><msub><mi>δ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><msub><mi>δ</mi><mrow><mi>j</mi><mi>i</mi></mrow></msub></math>。</li>
+            <li><math class="math-inline" aria-label="Delta iP"><msub><mi>Δ</mi><mrow><mi>i</mi><mi>P</mi></mrow></msub></math>——<strong>荷载项（Load Term）</strong>，表示基本体系中，由实际荷载引起的沿 <math class="math-inline" aria-label="Xi"><msub><mi>X</mi><mi>i</mi></msub></math> 方向的位移。</li>
         </ul>
 
         <div class="tip">
@@ -227,9 +294,20 @@
 
         <p>所有系数和自由项都可以通过我们第7章学过的<strong>单位荷载法</strong>或<strong>图乘法</strong>来计算：</p>
 
-        <p style="text-align:center; font-size:1.1rem;">
-        \(\delta_{ij} = \int \frac{\bar{M}_i \bar{M}_j}{EI} \mathrm{d}s + \int \frac{k \bar{F}_{Qi} \bar{F}_{Qj}}{GA} \mathrm{d}s + \int \frac{\bar{F}_{Ni} \bar{F}_{Nj}}{EA} \mathrm{d}s\)
-        </p>
+        <div class="math-equation" role="group" aria-label="柔度系数的一般表达式">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="柔度系数积分表达式，可横向滚动">
+                <math display="block" aria-label="柔度系数等于弯矩项、剪力项与轴力项三个积分之和">
+                    <mrow>
+                        <msub><mi>δ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo>
+                        <mo>∫</mo><mfrac><mrow><msub><mover><mi>M</mi><mo>‾</mo></mover><mi>i</mi></msub><msub><mover><mi>M</mi><mo>‾</mo></mover><mi>j</mi></msub></mrow><mrow><mi>E</mi><mi>I</mi></mrow></mfrac><mi>d</mi><mi>s</mi>
+                        <mo>+</mo>
+                        <mo>∫</mo><mfrac><mrow><mi>k</mi><msub><mover><mi>F</mi><mo>‾</mo></mover><mi>i</mi></msub><msub><mover><mi>F</mi><mo>‾</mo></mover><mi>j</mi></msub></mrow><mrow><mi>G</mi><mi>A</mi></mrow></mfrac><mi>d</mi><mi>s</mi>
+                        <mo>+</mo>
+                        <mo>∫</mo><mfrac><mrow><msub><mover><mi>N</mi><mo>‾</mo></mover><mi>i</mi></msub><msub><mover><mi>N</mi><mo>‾</mo></mover><mi>j</mi></msub></mrow><mrow><mi>E</mi><mi>A</mi></mrow></mfrac><mi>d</mi><mi>s</mi>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
         <p>对于梁和刚架，弯曲变形占主导，通常只保留弯矩项。</p>
 
@@ -243,9 +321,9 @@
             <li><strong>确定超静定次数</strong>——数清楚有多少个多余约束。</li>
             <li><strong>选择基本体系</strong>——去掉多余约束，代之以未知力。</li>
             <li><strong>列出力法典型方程</strong>——n次超静定就有n个方程。</li>
-            <li><strong>计算系数和自由项</strong>——画单位内力图（\(\bar{M}_i, \bar{F}_{Qi}, \bar{F}_{Ni}\)）和荷载内力图（\(M_P, F_{QP}, F_{NP}\)），用图乘法或积分求\(\delta_{ij}\)和\(\Delta_{iP}\)。</li>
+            <li><strong>计算系数和自由项</strong>——画单位内力图（<math class="math-inline" aria-label="M bar i, F bar Qi, N bar i"><msub><mover><mi>M</mi><mo>‾</mo></mover><mi>i</mi></msub><mo>,</mo><msub><mover><mi>F</mi><mo>‾</mo></mover><mrow><mi>Q</mi><mi>i</mi></mrow></msub><mo>,</mo><msub><mover><mi>N</mi><mo>‾</mo></mover><mi>i</mi></msub></math>）和荷载内力图（<math class="math-inline" aria-label="M P, F QP, N P"><msub><mi>M</mi><mi>P</mi></msub><mo>,</mo><msub><mi>F</mi><mrow><mi>Q</mi><mi>P</mi></mrow></msub><mo>,</mo><msub><mi>N</mi><mi>P</mi></msub></math>），用图乘法或积分求<math class="math-inline" aria-label="delta ij"><msub><mi>δ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></math>和<math class="math-inline" aria-label="Delta iP"><msub><mi>Δ</mi><mrow><mi>i</mi><mi>P</mi></mrow></msub></math>。</li>
             <li><strong>求解多余未知力</strong>——解线性方程组。</li>
-            <li><strong>求最终内力</strong>——利用叠加公式：\(M = \bar{M}_1 X_1 + \bar{M}_2 X_2 + \cdots + \bar{M}_n X_n + M_P\)。</li>
+            <li><strong>求最终内力</strong>——利用叠加公式：<math class="math-inline" aria-label="M 等于 M bar 1 X1 加 M bar 2 X2 加 … 加 M bar n Xn 加 M P"><mi>M</mi><mo>=</mo><msub><mover><mi>M</mi><mo>‾</mo></mover><mn>1</mn></msub><msub><mi>X</mi><mn>1</mn></msub><mo>+</mo><msub><mover><mi>M</mi><mo>‾</mo></mover><mn>2</mn></msub><msub><mi>X</mi><mn>2</mn></msub><mo>+</mo><mo>⋯</mo><mo>+</mo><msub><mover><mi>M</mi><mo>‾</mo></mover><mi>n</mi></msub><msub><mi>X</mi><mi>n</mi></msub><mo>+</mo><msub><mi>M</mi><mi>P</mi></msub></math>。</li>
             <li><strong>画最终内力图</strong>——弯矩图、剪力图、轴力图。</li>
         </ol>
 
@@ -267,7 +345,7 @@
         <p>该梁有2个固定铰支座（A、C各2个约束）和1个活动铰支座（B处1个约束）= 共5个约束。平衡方程3个，超静定次数 = 5 - 3 = 2次？且慢——这是一个连续梁，C支座为活动铰。实际上是A处固定铰（2约束）+ B、C处活动铰（各1约束） = 4个约束，超静定次数 = 4 - 3 = 1次。</p>
 
         <p><strong>第二步：选择基本体系</strong></p>
-        <p>去掉B支座处的竖向约束，代之以未知力 \(X_1\)，得到基本体系：</p>
+        <p>去掉B支座处的竖向约束，代之以未知力 <math class="math-inline" aria-label="X1"><msub><mi>X</mi><mn>1</mn></msub></math>，得到基本体系：</p>
 
         <pre><code>基本体系：简支梁（在A和C处铰支）+ 未知力 X₁
   ┌──────────────────────────────────┐
@@ -278,27 +356,66 @@
 
         <p><strong>第三步：力法方程</strong></p>
         <p>变形协调条件：基本体系在B点的竖向位移 = 0（原结构B支座没有沉降）。</p>
-        <p style="text-align:center;"><strong>\(\delta_{11} X_1 + \Delta_{1P} = 0\)</strong></p>
+        <div class="math-equation" role="group" aria-label="变形协调方程">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="变形协调方程，可横向滚动">
+                <math display="block" aria-label="δ11 乘 X1 加 Δ1P 等于 0">
+                    <mrow>
+                        <msub><mi>δ</mi><mn>11</mn></msub><msub><mi>X</mi><mn>1</mn></msub>
+                        <mo>+</mo><msub><mi>Δ</mi><mrow><mn>1</mn><mi>P</mi></mrow></msub>
+                        <mo>=</mo><mn>0</mn>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
         <p><strong>第四步：计算系数</strong></p>
-        <p>先画单位弯矩图 \(\bar{M}_1\)（在B点加单位力 \(X_1 = 1\) 时的弯矩图）：</p>
+        <p>先画单位弯矩图 <math class="math-inline" aria-label="M bar 1"><msub><mover><mi>M</mi><mo>‾</mo></mover><mn>1</mn></msub></math>（在B点加单位力 <math class="math-inline" aria-label="X1 等于 1"><msub><mi>X</mi><mn>1</mn></msub><mo>=</mo><mn>1</mn></math> 时的弯矩图）：</p>
         <p>单位力在B点，作简支梁在单位集中力下的弯矩图。利用图乘法：</p>
-        <p>\(\delta_{11} = \int \frac{\bar{M}_1^2}{EI} \mathrm{d}s = \frac{1}{EI} \times (\text{弯矩图自乘})\)</p>
-        <p>等截面梁，通过图乘法计算得：\(\delta_{11} = \frac{4l^3}{243EI}\)（其中l为总跨度）</p>
+        <div class="math-equation" role="group" aria-label="柔度系数 δ11 的计算">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="柔度系数 δ11 的计算式，可横向滚动">
+                <math display="block" aria-label="δ11 等于 M bar 1 的平方除以 EI 的积分，等于 EI 分之一乘弯矩图自乘">
+                    <mrow>
+                        <msub><mi>δ</mi><mn>11</mn></msub><mo>=</mo>
+                        <mo>∫</mo><mfrac><msubsup><mover><mi>M</mi><mo>‾</mo></mover><mn>1</mn><mn>2</mn></msubsup><mrow><mi>E</mi><mi>I</mi></mrow></mfrac><mi>d</mi><mi>s</mi>
+                        <mo>=</mo><mfrac><mn>1</mn><mrow><mi>E</mi><mi>I</mi></mrow></mfrac><mo>×</mo><mtext>（弯矩图自乘）</mtext>
+                    </mrow>
+                </math>
+            </div>
+        </div>
+        <p>等截面梁，通过图乘法计算得：<math class="math-inline" aria-label="δ11 等于 4 l 立方除以 243 EI"><msub><mi>δ</mi><mn>11</mn></msub><mo>=</mo><mfrac><mrow><mn>4</mn><msup><mi>l</mi><mn>3</mn></msup></mrow><mrow><mn>243</mn><mi>E</mi><mi>I</mi></mrow></mfrac></math>（其中l为总跨度）</p>
 
-        <p>再画荷载弯矩图 \(M_P\)（只有荷载q作用下的弯矩图）：</p>
-        <p>\(\Delta_{1P} = \int \frac{M_P \bar{M}_1}{EI} \mathrm{d}s = \frac{1}{EI} \times (\text{两图相乘})\)</p>
+        <p>再画荷载弯矩图 <math class="math-inline" aria-label="M P"><msub><mi>M</mi><mi>P</mi></msub></math>（只有荷载q作用下的弯矩图）：</p>
+        <div class="math-equation" role="group" aria-label="荷载项 Δ1P 的计算">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="荷载项 Δ1P 的计算式，可横向滚动">
+                <math display="block" aria-label="Δ1P 等于 M P 乘 M bar 1 除以 EI 的积分，等于 EI 分之一乘两图相乘">
+                    <mrow>
+                        <msub><mi>Δ</mi><mrow><mn>1</mn><mi>P</mi></mrow></msub><mo>=</mo>
+                        <mo>∫</mo><mfrac><mrow><msub><mi>M</mi><mi>P</mi></msub><msub><mover><mi>M</mi><mo>‾</mo></mover><mn>1</mn></msub></mrow><mrow><mi>E</mi><mi>I</mi></mrow></mfrac><mi>d</mi><mi>s</mi>
+                        <mo>=</mo><mfrac><mn>1</mn><mrow><mi>E</mi><mi>I</mi></mrow></mfrac><mo>×</mo><mtext>（两图相乘）</mtext>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
-        <p><strong>第五步：求 \(X_1\)</strong></p>
-        <p>\(X_1 = -\Delta_{1P} / \delta_{11}\)</p>
+        <p><strong>第五步：求 <math class="math-inline" aria-label="X1"><msub><mi>X</mi><mn>1</mn></msub></math></strong></p>
+        <div class="math-equation" role="group" aria-label="多余未知力 X1 的求解">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="多余未知力 X1 的求解式，可横向滚动">
+                <math display="block" aria-label="X1 等于负的 Δ1P 除以 δ11">
+                    <mrow>
+                        <msub><mi>X</mi><mn>1</mn></msub><mo>=</mo>
+                        <mo>−</mo><mfrac><msub><mi>Δ</mi><mrow><mn>1</mn><mi>P</mi></mrow></msub><msub><mi>δ</mi><mn>11</mn></msub></mfrac>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
-        <p>代入具体数值计算即可得到B支座反力。注意符号：如果 \(\Delta_{1P}\) 为正（向下位移），则 \(X_1\) 为负（向上），表示B支座实际承受向上的压力。</p>
+        <p>代入具体数值计算即可得到B支座反力。注意符号：如果 <math class="math-inline" aria-label="Δ1P"><msub><mi>Δ</mi><mrow><mn>1</mn><mi>P</mi></mrow></msub></math> 为正（向下位移），则 <math class="math-inline" aria-label="X1"><msub><mi>X</mi><mn>1</mn></msub></math> 为负（向上），表示B支座实际承受向上的压力。</p>
 
         <p><strong>第六步：叠加求最终弯矩</strong></p>
-        <p>\(M = \bar{M}_1 X_1 + M_P\)，即可画出梁的最终弯矩图。</p>
+        <p><math class="math-inline" aria-label="M 等于 M bar 1 X1 加 M P"><mi>M</mi><mo>=</mo><msub><mover><mi>M</mi><mo>‾</mo></mover><mn>1</mn></msub><msub><mi>X</mi><mn>1</mn></msub><mo>+</mo><msub><mi>M</mi><mi>P</mi></msub></math>，即可画出梁的最终弯矩图。</p>
 
         <div class="highlight">
-            <strong>力法计算的一个关键细节：</strong>很多初学者算出 \(X_1\) 之后就直接下结论了。请一定记住——\(X_1\) 只是多余约束力（在这里是B支座的竖向反力），你还需要用叠加公式 \(M = \bar{M}_1 X_1 + M_P\) 计算出每个截面的总弯矩，画出最终的弯矩图。没有弯矩图，你无法判断哪个截面需要多大的配筋。而画弯矩图是结构分析的核心产出之一。
+            <strong>力法计算的一个关键细节：</strong>很多初学者算出 <math class="math-inline" aria-label="X1"><msub><mi>X</mi><mn>1</mn></msub></math> 之后就直接下结论了。请一定记住——<math class="math-inline" aria-label="X1"><msub><mi>X</mi><mn>1</mn></msub></math> 只是多余约束力（在这里是B支座的竖向反力），你还需要用叠加公式 <math class="math-inline" aria-label="M 等于 M bar 1 X1 加 M P"><mi>M</mi><mo>=</mo><msub><mover><mi>M</mi><mo>‾</mo></mover><mn>1</mn></msub><msub><mi>X</mi><mn>1</mn></msub><mo>+</mo><msub><mi>M</mi><mi>P</mi></msub></math> 计算出每个截面的总弯矩，画出最终的弯矩图。没有弯矩图，你无法判断哪个截面需要多大的配筋。而画弯矩图是结构分析的核心产出之一。
         </div>
 
         <h2>8.7 力法的适用范围</h2>
@@ -349,7 +466,7 @@
             <li>超静定次数的判定——数清楚多余约束的数量，这是力法的第一步；</li>
             <li>力法的基本原理——"拆除多余约束、代以未知力、利用变形协调条件"；</li>
             <li>基本体系与原结构——基本体系的选择方法；</li>
-            <li>力法典型方程——\(\delta_{ij} X_j + \Delta_{iP} = 0\)，以及柔度系数的概念；</li>
+            <li>力法典型方程——<math class="math-inline" aria-label="δij Xj 加 ΔiP 等于 0"><msub><mi>δ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>X</mi><mi>j</mi></msub><mo>+</mo><msub><mi>Δ</mi><mrow><mi>i</mi><mi>P</mi></mrow></msub><mo>=</mo><mn>0</mn></math>，以及柔度系数的概念；</li>
             <li>力法标准计算步骤——从确定次数到画内力图；</li>
             <li>一个完整的一次超静定梁例题。</li>
         </ul>
@@ -363,7 +480,7 @@
             <a href="index.html">📖 返回目录</a>
             <a href="09.html">下一章 →</a>
         </div>
-    </div>
+    </main>
 </div>
 </div>
 </body>
