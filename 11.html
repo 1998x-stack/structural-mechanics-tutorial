@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第11章 位移法（二）</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        pre { overflow-x: auto; max-width: 100%; }
+        table { max-width: 100%; }
+        @media (max-width: 768px) { table { display: block; overflow-x: auto; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="章节目录">
         <h3>🏗️ 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 绪论</a></li>
@@ -41,8 +46,13 @@
             <li><a href="27.html">第27章 大跨与高层结构</a></li>
             <li><a href="28.html">第28章 综合项目实战</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main id="content" class="main-content">
+
+        <header class="article-header">
+            <h1>第11章 位移法（二）：侧移、直接平衡法与斜杆</h1>
+            <p class="dek">现实框架几乎都有侧移。本章讲清对称性取半在位移法中的用法、跳过基本体系的直接平衡法、含斜杆刚架的坐标变换，以及力法与位移法的全面对比。</p>
+        </header>
 
         <h2>引言：当刚架"侧移"的时候</h2>
 
@@ -63,8 +73,8 @@
         <p>在位移法中，取半结构的规则与力法相同：</p>
 
         <ul>
-            <li><strong>对称荷载</strong>：对称轴截面无转角（\(\theta=0\)），但可以有垂直于对称轴的位移。取半结构时用定向支座模拟。</li>
-            <li><strong>反对称荷载</strong>：对称轴截面无垂直于对称轴的位移（\(u=0\)），但可以有转角。取半结构时用链杆支座模拟。</li>
+            <li><strong>对称荷载</strong>：对称轴截面无转角（<math class="math-inline" aria-label="theta 等于 0"><mi>θ</mi><mo>=</mo><mn>0</mn></math>），但可以有垂直于对称轴的位移。取半结构时用定向支座模拟。</li>
+            <li><strong>反对称荷载</strong>：对称轴截面无垂直于对称轴的位移（<math class="math-inline" aria-label="u 等于 0"><mi>u</mi><mo>=</mo><mn>0</mn></math>），但可以有转角。取半结构时用链杆支座模拟。</li>
         </ul>
 
         <p>用位移法分析对称结构的关键好处是：取半结构后，<strong>基本未知量的数量大幅减少</strong>——原来两个结点的转角变成一个，原来两个结点的水平位移变成一个或消失。</p>
@@ -108,13 +118,13 @@
 
         <ol>
             <li>确定基本未知量（结点转角和独立线位移）；</li>
-            <li>对每个有转角自由度的刚结点，用力矩平衡方程 \(\sum M = 0\)；</li>
-            <li>对每个有线位移自由度的方向，用截面平衡方程（一般为\(\sum F_x = 0\)或\(\sum F_y = 0\)，视位移方向而定）.</li>
+            <li>对每个有转角自由度的刚结点，用力矩平衡方程 <math class="math-inline" aria-label="sum M 等于 0"><mrow><mo>∑</mo><mi>M</mi><mo>=</mo><mn>0</mn></mrow></math>；</li>
+            <li>对每个有线位移自由度的方向，用截面平衡方程（一般为<math class="math-inline" aria-label="sum F x 等于 0"><mrow><mo>∑</mo><msub><mi>F</mi><mi>x</mi></msub><mo>=</mo><mn>0</mn></mrow></math>或<math class="math-inline" aria-label="sum F y 等于 0"><mrow><mo>∑</mo><msub><mi>F</mi><mi>y</mi></msub><mo>=</mo><mn>0</mn></mrow></math>，视位移方向而定）.</li>
             <li>联立求解位移；</li>
             <li>回代求杆端力。</li>
         </ol>
 
-        <p>与"基本体系法"相比，直接平衡法省去了画单位变形图和求刚度系数\(r_{ij}\)的步骤——你直接列方程，一步到位。对于有侧移刚架，直接平衡法特别方便，因为侧移方向的平衡方程本质上是"楼层剪力平衡"。</p>
+        <p>与"基本体系法"相比，直接平衡法省去了画单位变形图和求刚度系数<math class="math-inline" aria-label="rij"><msub><mi>r</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></math>的步骤——你直接列方程，一步到位。对于有侧移刚架，直接平衡法特别方便，因为侧移方向的平衡方程本质上是"楼层剪力平衡"。</p>
 
         <pre><code>直接平衡法示例：单层单跨刚架，水平力 P
 
@@ -144,15 +154,75 @@
 
         <p>对于有侧移刚架，除了结点的力矩平衡，还需要建立<strong>楼层剪力平衡方程</strong>。取某一层以上的所有结构为隔离体，水平方向的剪力平衡方程为：</p>
 
-        <p style="text-align:center; font-size:1.2rem;"><strong>\(\sum F_{Q\text{柱}} = \sum F_{H\text{水平外力}}\)</strong></p>
+        <div class="math-equation" role="group" aria-label="楼层剪力平衡方程">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="楼层剪力平衡方程，可横向滚动">
+                <math display="block" aria-label="各柱剪力之和等于该层水平外力之和">
+                    <mrow>
+                        <mo>∑</mo><msub><mi>F</mi><mrow><mi>Q</mi><mtext>柱</mtext></mrow></msub>
+                        <mo>=</mo>
+                        <mo>∑</mo><msub><mi>F</mi><mrow><mi>H</mi><mtext>水平外力</mtext></mrow></msub>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
         <p>每一根柱子对楼层的剪力贡献，可以通过该柱的杆端弯矩来表达：</p>
 
-        <p style="text-align:center; font-size:1.1rem;">
-        \(F_{Q\text{柱}} = -\frac{M_{上} + M_{下}}{h}\)
-        </p>
+        <div class="math-equation" role="group" aria-label="柱剪力用杆端弯矩表示">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="柱剪力公式，可横向滚动">
+                <math display="block" aria-label="柱剪力 F Q 等于负的括上端弯矩加下端弯矩除以柱高 h">
+                    <mrow>
+                        <msub><mi>F</mi><mrow><mi>Q</mi><mtext>柱</mtext></mrow></msub><mo>=</mo>
+                        <mo>−</mo><mfrac><mrow><msub><mi>M</mi><mtext>上</mtext></msub><mo>+</mo><msub><mi>M</mi><mtext>下</mtext></msub></mrow><mi>h</mi></mfrac>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
-        <p>其中 \(M_{上}\) 和 \(M_{下}\) 分别是柱上端和下端的弯矩（顺时针为正），\(h\) 为柱高。这个关系来自柱隔离体的力矩平衡。</p>
+        <p>其中 <math class="math-inline" aria-label="M 上"><msub><mi>M</mi><mtext>上</mtext></msub></math> 和 <math class="math-inline" aria-label="M 下"><msub><mi>M</mi><mtext>下</mtext></msub></math> 分别是柱上端和下端的弯矩（顺时针为正），<math class="math-inline" aria-label="h"><mi>h</mi></math> 为柱高。这个关系来自柱隔离体的力矩平衡。</p>
+
+        <figure>
+            <svg viewBox="0 0 720 300" role="img" aria-labelledby="fig-sw-title fig-sw-desc" xmlns="http://www.w3.org/2000/svg">
+                <title id="fig-sw-title">有侧移刚架与楼层剪力平衡</title>
+                <desc id="fig-sw-desc">左图为水平荷载下产生侧移的刚架，柱顶相对柱底水平偏移 Δ；右图取柱顶以上部分为隔离体，水平向平衡给出柱剪力之和等于外荷载 P。</desc>
+                <defs>
+                    <marker id="sw-ah" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+                        <path d="M0 0 L7 3 L0 6 Z" fill="#b91c1c"/>
+                    </marker>
+                </defs>
+                <rect x="16" y="24" width="336" height="248" rx="16" fill="#eff6ff" stroke="#93c5fd"/>
+                <text x="184" y="50" text-anchor="middle" font-size="14" fill="#1e40af">水平荷载 → 柱顶侧移 Δ</text>
+                <line x1="50" y1="242" x2="320" y2="242" stroke="#94a3b8" stroke-width="4"/>
+                <g stroke="#94a3b8" stroke-width="2" stroke-dasharray="5 5">
+                    <line x1="100" y1="242" x2="100" y2="140"/><line x1="280" y1="242" x2="280" y2="140"/>
+                    <line x1="100" y1="140" x2="280" y2="140"/>
+                </g>
+                <line x1="100" y1="242" x2="130" y2="140" stroke="#1e3a8a" stroke-width="7" stroke-linecap="round"/>
+                <line x1="280" y1="242" x2="310" y2="140" stroke="#1e3a8a" stroke-width="7" stroke-linecap="round"/>
+                <line x1="130" y1="140" x2="310" y2="140" stroke="#1e3a8a" stroke-width="7" stroke-linecap="round"/>
+                <line x1="100" y1="126" x2="130" y2="126" stroke="#b91c1c" stroke-width="2.5" marker-end="url(#sw-ah)"/>
+                <text x="100" y="118" font-size="12" fill="#b91c1c">Δ</text>
+                <line x1="40" y1="140" x2="104" y2="140" stroke="#0ea5e9" stroke-width="3" marker-end="url(#sw-ah)"/>
+                <text x="40" y="132" font-size="12" fill="#0369a1">P</text>
+                <text x="184" y="264" text-anchor="middle" font-size="11.5" fill="#475569">柱顶相对柱底的侧移 Δ 是位移法的基本未知量之一</text>
+                <rect x="368" y="24" width="336" height="248" rx="16" fill="#fffbeb" stroke="#fcd34d"/>
+                <text x="536" y="50" text-anchor="middle" font-size="14" fill="#92400e">取柱顶以上为隔离体：楼层剪力平衡</text>
+                <line x1="400" y1="196" x2="672" y2="196" stroke="#b91c1c" stroke-width="2" stroke-dasharray="7 5"/>
+                <text x="404" y="212" font-size="11" fill="#b91c1c">截面</text>
+                <line x1="440" y1="196" x2="460" y2="120" stroke="#1e3a8a" stroke-width="7" stroke-linecap="round"/>
+                <line x1="600" y1="196" x2="620" y2="120" stroke="#1e3a8a" stroke-width="7" stroke-linecap="round"/>
+                <line x1="460" y1="120" x2="620" y2="120" stroke="#1e3a8a" stroke-width="7" stroke-linecap="round"/>
+                <line x1="440" y1="196" x2="396" y2="196" stroke="#b91c1c" stroke-width="3" marker-end="url(#sw-ah)"/>
+                <line x1="600" y1="196" x2="556" y2="196" stroke="#b91c1c" stroke-width="3" marker-end="url(#sw-ah)"/>
+                <text x="404" y="188" font-size="12" fill="#b91c1c">F_Q1</text>
+                <text x="564" y="188" font-size="12" fill="#b91c1c">F_Q2</text>
+                <line x1="620" y1="120" x2="684" y2="120" stroke="#0ea5e9" stroke-width="3" marker-end="url(#sw-ah)"/>
+                <text x="666" y="112" font-size="12" fill="#0369a1">P</text>
+                <text x="536" y="248" text-anchor="middle" font-size="12" fill="#b91c1c">ΣF_Q柱 = P（水平外力）</text>
+                <text x="536" y="264" text-anchor="middle" font-size="11.5" fill="#475569">柱剪力用杆端弯矩表示，即得侧移平衡方程</text>
+            </svg>
+            <figcaption>有侧移刚架的两个基本方程：对每个刚结点列<strong>力矩平衡</strong>（<math class="math-inline" aria-label="sum M 等于 0"><mrow><mo>∑</mo><mi>M</mi><mo>=</mo><mn>0</mn></mrow></math>），再对每个侧移方向列<strong>楼层剪力平衡</strong>——取柱顶以上部分为隔离体，各柱剪力之和等于该层水平外力（右图）。柱剪力可由杆端弯矩换算：<math class="math-inline" aria-label="F Q 等于负的 M 上 加 M 下 除以 h"><msub><mi>F</mi><mi>Q</mi></msub><mo>=</mo><mo>−</mo><mfrac><mrow><msub><mi>M</mi><mtext>上</mtext></msub><mo>+</mo><msub><mi>M</mi><mtext>下</mtext></msub></mrow><mi>h</mi></mfrac></math>。（图示为受力平衡示意，非按比例）</figcaption>
+        </figure>
 
         <h2>11.3 含斜杆刚架的处理</h2>
 
@@ -162,7 +232,7 @@
 
         <p>斜杆的处理分两步：</p>
         <ol>
-            <li>将斜杆两个端点的线位移 \(\Delta_x\)、\(\Delta_y\) 分解为沿杆轴方向（轴向变形）和垂直于杆轴方向（弯曲变形）的两个分量；</li>
+            <li>将斜杆两个端点的线位移 <math class="math-inline" aria-label="Delta x"><msub><mi>Δ</mi><mi>x</mi></msub></math>、<math class="math-inline" aria-label="Delta y"><msub><mi>Δ</mi><mi>y</mi></msub></math> 分解为沿杆轴方向（轴向变形）和垂直于杆轴方向（弯曲变形）的两个分量；</li>
             <li>将垂直于杆轴方向的分量代入转角位移方程计算杆端弯矩。</li>
         </ol>
 
@@ -193,7 +263,7 @@
      有贡献——需要额外考虑</code></pre>
 
         <div class="warning">
-            <strong>踩坑故事：</strong>我曾经在分析一个坡屋面厂房时，在斜杆的处理上犯了一个低级错误。我把斜杆当作水平杆来处理，直接用水平位移代入转角位移方程——完全忘了斜杆的垂直线位移分量需要乘以 \(\cos\alpha\)。结果算出来的斜杆弯矩比正确值大了40%，导致我把斜梁的截面选得过厚。后来被审图公司打回来重算，不但浪费了时间，还让甲方对设计团队的能力产生了质疑。这个教训让我记住了：<strong>含斜杆的结构，每一步都要问自己——这个位移方向是和杆件垂直还是平行？</strong>
+            <strong>踩坑故事：</strong>我曾经在分析一个坡屋面厂房时，在斜杆的处理上犯了一个低级错误。我把斜杆当作水平杆来处理，直接用水平位移代入转角位移方程——完全忘了斜杆的垂直线位移分量需要乘以 <math class="math-inline" aria-label="cos alpha"><mi>cos</mi><mi>α</mi></math>。结果算出来的斜杆弯矩比正确值大了40%，导致我把斜梁的截面选得过厚。后来被审图公司打回来重算，不但浪费了时间，还让甲方对设计团队的能力产生了质疑。这个教训让我记住了：<strong>含斜杆的结构，每一步都要问自己——这个位移方向是和杆件垂直还是平行？</strong>
         </div>
 
         <h3>含斜杆结构的简化策略</h3>
@@ -312,7 +382,7 @@
             <a href="index.html">📖 返回目录</a>
             <a href="12.html">下一章 →</a>
         </div>
-    </div>
+    </main>
 </div>
 </div>
 </body>
