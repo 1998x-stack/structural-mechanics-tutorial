@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第9章 力法（二）</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        pre { overflow-x: auto; max-width: 100%; }
+        table { max-width: 100%; }
+        @media (max-width: 768px) { table { display: block; overflow-x: auto; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="章节目录">
         <h3>🏗️ 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 绪论</a></li>
@@ -41,8 +46,13 @@
             <li><a href="27.html">第27章 大跨与高层结构</a></li>
             <li><a href="28.html">第28章 综合项目实战</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main id="content" class="main-content">
+
+        <header class="article-header">
+            <h1>第9章 力法（二）：对称、温度与支座移动</h1>
+            <p class="dek">力法的进阶场景：对称结构如何取半结构把超静定次数减半，温度变化与支座移动如何改写力法方程，以及解完之后怎样做位移校核。</p>
+        </header>
 
         <h2>引言：对称是结构工程师最好的朋友</h2>
 
@@ -129,7 +139,45 @@
 
         <h3>对称性的进一步利用：基本体系的对称化</h3>
 
-        <p>即使无法取半结构（比如荷载不是严格对称或反对称），我们仍然可以通过对称性来简化力法方程。方法是：将多余未知力分组为<strong>对称组（Symmetric Group）</strong>和<strong>反对称组（Antisymmetric Group）</strong>。此时，柔度矩阵会呈现分块对角化的特点——对称组的系数与反对称组的系数互不影响（\(\delta_{ij} = 0\)，当i和j分属不同组时）。这相当于把一个大方程组分解为两个小方程组，计算量大大降低。</p>
+        <p>即使无法取半结构（比如荷载不是严格对称或反对称），我们仍然可以通过对称性来简化力法方程。方法是：将多余未知力分组为<strong>对称组（Symmetric Group）</strong>和<strong>反对称组（Antisymmetric Group）</strong>。此时，柔度矩阵会呈现分块对角化的特点——对称组的系数与反对称组的系数互不影响（<math class="math-inline" aria-label="δij 等于 0"><msub><mi>δ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mn>0</mn></math>，当i和j分属不同组时）。这相当于把一个大方程组分解为两个小方程组，计算量大大降低。</p>
+
+        <figure>
+            <svg viewBox="0 0 720 300" role="img" aria-labelledby="fig-hs-title fig-hs-desc" xmlns="http://www.w3.org/2000/svg">
+                <title id="fig-hs-title">利用对称性取半结构</title>
+                <desc id="fig-hs-desc">左图为对称三跨连续梁，中点处有对称轴；右图取半结构，在对称轴处用定向支座模拟转角为零的边界条件，超静定次数下降。</desc>
+                <rect x="16" y="24" width="336" height="248" rx="16" fill="#fffbeb" stroke="#fcd34d"/>
+                <text x="184" y="50" text-anchor="middle" font-size="14" fill="#92400e">原结构：对称，高次超静定</text>
+                <line x1="60" y1="180" x2="320" y2="180" stroke="#1e3a8a" stroke-width="9" stroke-linecap="round"/>
+                <line x1="190" y1="62" x2="190" y2="240" stroke="#b91c1c" stroke-width="2" stroke-dasharray="6 6"/>
+                <text x="190" y="238" text-anchor="middle" font-size="11" fill="#b91c1c">对称轴</text>
+                <g fill="none" stroke="#334155" stroke-width="2.5">
+                    <polygon points="60,190 48,170 72,170"/><polygon points="147,190 135,170 159,170"/>
+                    <polygon points="233,190 221,170 245,170"/><polygon points="320,190 308,170 332,170"/>
+                </g>
+                <g stroke="#0ea5e9" stroke-width="2.5">
+                    <line x1="85" y1="84" x2="85" y2="128"/><line x1="125" y1="84" x2="125" y2="128"/>
+                    <line x1="165" y1="84" x2="165" y2="128"/><line x1="215" y1="84" x2="215" y2="128"/>
+                    <line x1="255" y1="84" x2="255" y2="128"/><line x1="295" y1="84" x2="295" y2="128"/>
+                </g>
+                <text x="184" y="76" text-anchor="middle" font-size="12" fill="#0369a1">对称荷载 q</text>
+                <text x="184" y="262" text-anchor="middle" font-size="11.5" fill="#475569">结构、支座、刚度均关于中轴对称</text>
+                <rect x="368" y="24" width="336" height="248" rx="16" fill="#eff6ff" stroke="#93c5fd"/>
+                <text x="536" y="50" text-anchor="middle" font-size="14" fill="#1e40af">取半结构：超静定次数大幅下降</text>
+                <line x1="410" y1="180" x2="588" y2="180" stroke="#1e3a8a" stroke-width="9" stroke-linecap="round"/>
+                <g fill="none" stroke="#334155" stroke-width="2.5">
+                    <polygon points="410,190 398,170 422,170"/><polygon points="500,190 488,170 512,170"/>
+                </g>
+                <line x1="620" y1="120" x2="620" y2="240" stroke="#334155" stroke-width="5"/>
+                <circle cx="610" cy="162" r="6" fill="#fff" stroke="#334155" stroke-width="2.5"/>
+                <circle cx="610" cy="198" r="6" fill="#fff" stroke="#334155" stroke-width="2.5"/>
+                <g stroke="#0ea5e9" stroke-width="2.5">
+                    <line x1="440" y1="84" x2="440" y2="128"/><line x1="480" y1="84" x2="480" y2="128"/>
+                    <line x1="520" y1="84" x2="520" y2="128"/><line x1="560" y1="84" x2="560" y2="128"/>
+                </g>
+                <text x="500" y="262" text-anchor="middle" font-size="11.5" fill="#475569">对称轴处用定向支座模拟：转角为零，可竖向位移</text>
+            </svg>
+            <figcaption>取半结构：对称荷载下的对称结构，在对称轴截面<strong>转角为零</strong>，因此可以用<strong>定向支座</strong>（对称轴处只允许竖向位移、不允许转动）来模拟半个结构。原来需要联立多个方程的高次超静定问题，往往降为 1 次甚至静定，手算变得可行。（图示为取半结构原理示意，未按真实跨度比例）</figcaption>
+        </figure>
 
         <h2>9.2 温度变化时的力法计算</h2>
 
@@ -139,23 +187,42 @@
 
         <h3>温度变化的力法方程</h3>
 
-        <p>力法典型方程在温度作用下的形式与荷载作用完全相同，只是自由项 \(\Delta_{iP}\) 要替换为温度变化引起的位移 \(\Delta_{it}\)：</p>
+        <p>力法典型方程在温度作用下的形式与荷载作用完全相同，只是自由项 <math class="math-inline" aria-label="ΔiP"><msub><mi>Δ</mi><mrow><mi>i</mi><mi>P</mi></mrow></msub></math> 要替换为温度变化引起的位移 <math class="math-inline" aria-label="Δit"><msub><mi>Δ</mi><mrow><mi>i</mi><mi>t</mi></mrow></msub></math>：</p>
 
-        <p style="text-align:center; font-size:1.2rem;"><strong>\(\delta_{ij} X_j + \Delta_{it} = 0\)</strong></p>
+        <div class="math-equation" role="group" aria-label="温度作用下的力法典型方程">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="温度作用下的力法方程，可横向滚动">
+                <math display="block" aria-label="δij 乘 Xj 加 Δit 等于 0">
+                    <mrow>
+                        <msub><mi>δ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>X</mi><mi>j</mi></msub>
+                        <mo>+</mo><msub><mi>Δ</mi><mrow><mi>i</mi><mi>t</mi></mrow></msub>
+                        <mo>=</mo><mn>0</mn>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
-        <p>其中 \(\Delta_{it}\) 是基本体系中，仅由温度变化引起的沿 \(X_i\) 方向的位移。计算方法来自第7章的内容：</p>
+        <p>其中 <math class="math-inline" aria-label="Δit"><msub><mi>Δ</mi><mrow><mi>i</mi><mi>t</mi></mrow></msub></math> 是基本体系中，仅由温度变化引起的沿 <math class="math-inline" aria-label="Xi"><msub><mi>X</mi><mi>i</mi></msub></math> 方向的位移。计算方法来自第7章的内容：</p>
 
-        <p style="text-align:center; font-size:1.1rem;">
-        \(\Delta_{it} = \sum \alpha t_0 \int \bar{F}_N \mathrm{d}s + \sum \frac{\alpha \Delta t}{h} \int \bar{M} \mathrm{d}s\)
-        </p>
+        <div class="math-equation" role="group" aria-label="温度变化引起的位移 Δit">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="温度位移 Δit 的计算式，可横向滚动">
+                <math display="block" aria-label="Δit 等于轴力项与弯矩项两个带和的积分之和">
+                    <mrow>
+                        <msub><mi>Δ</mi><mrow><mi>i</mi><mi>t</mi></mrow></msub><mo>=</mo>
+                        <mo>∑</mo><mi>α</mi><msub><mi>t</mi><mn>0</mn></msub><mo>∫</mo><msub><mover><mi>F</mi><mo>‾</mo></mover><mi>N</mi></msub><mi>d</mi><mi>s</mi>
+                        <mo>+</mo>
+                        <mo>∑</mo><mfrac><mrow><mi>α</mi><mi>Δ</mi><mi>t</mi></mrow><mi>h</mi></mfrac><mo>∫</mo><mover><mi>M</mi><mo>‾</mo></mover><mi>d</mi><mi>s</mi>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
         <p>其中：</p>
         <ul>
-            <li>\(\alpha\)——材料的线膨胀系数（钢材约1.2×10⁻⁵/°C，混凝土约1.0×10⁻⁵/°C）</li>
-            <li>\(t_0\)——轴线处的温度变化值</li>
-            <li>\(\Delta t\)——截面上下缘的温度差</li>
-            <li>\(h\)——截面高度</li>
-            <li>\(\bar{F}_N\) 和 \(\bar{M}\)——单位未知力在基本体系中引起的轴力和弯矩</li>
+            <li><math class="math-inline" aria-label="alpha"><mi>α</mi></math>——材料的线膨胀系数（钢材约1.2×10⁻⁵/°C，混凝土约1.0×10⁻⁵/°C）</li>
+            <li><math class="math-inline" aria-label="t0"><msub><mi>t</mi><mn>0</mn></msub></math>——轴线处的温度变化值</li>
+            <li><math class="math-inline" aria-label="Δt"><mi>Δ</mi><mi>t</mi></math>——截面上下缘的温度差</li>
+            <li><math class="math-inline" aria-label="h"><mi>h</mi></math>——截面高度</li>
+            <li><math class="math-inline" aria-label="F bar N 和 M bar"><msub><mover><mi>F</mi><mo>‾</mo></mover><mi>N</mi></msub></math> 和 <math class="math-inline" aria-label="M bar"><mover><mi>M</mi><mo>‾</mo></mover></math>——单位未知力在基本体系中引起的轴力和弯矩</li>
         </ul>
 
         <div class="warning">
@@ -168,15 +235,35 @@
 
         <p>支座移动的力法方程变为：</p>
 
-        <p style="text-align:center; font-size:1.2rem;"><strong>\(\delta_{ij} X_j + \Delta_{ic} = -\bar{R}_{ic} \cdot c\)</strong></p>
+        <div class="math-equation" role="group" aria-label="支座移动时的力法方程（带支座反力项）">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="支座移动力法方程，可横向滚动">
+                <math display="block" aria-label="δij 乘 Xj 加 Δic 等于负的 R bar ic 乘 c">
+                    <mrow>
+                        <msub><mi>δ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>X</mi><mi>j</mi></msub>
+                        <mo>+</mo><msub><mi>Δ</mi><mrow><mi>i</mi><mi>c</mi></mrow></msub>
+                        <mo>=</mo><mo>−</mo><msub><mover><mi>R</mi><mo>‾</mo></mover><mrow><mi>i</mi><mi>c</mi></mrow></msub><mo>·</mo><mi>c</mi>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
         <p>或者更标准的形式：</p>
 
-        <p style="text-align:center; font-size:1.2rem;"><strong>\(\delta_{ij} X_j + \Delta_{ic} = -c_i\)</strong></p>
+        <div class="math-equation" role="group" aria-label="支座移动时的力法方程（标准形式）">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="支座移动力法方程标准形式，可横向滚动">
+                <math display="block" aria-label="δij 乘 Xj 加 Δic 等于负的 ci">
+                    <mrow>
+                        <msub><mi>δ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>X</mi><mi>j</mi></msub>
+                        <mo>+</mo><msub><mi>Δ</mi><mrow><mi>i</mi><mi>c</mi></mrow></msub>
+                        <mo>=</mo><mo>−</mo><msub><mi>c</mi><mi>i</mi></msub>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
-        <p>其中 \(c_i\) 是原结构在第i个多余约束方向的已知位移（支座沉降量）。右边不再自动为零——它等于支座移动的实际值。</p>
+        <p>其中 <math class="math-inline" aria-label="ci"><msub><mi>c</mi><mi>i</mi></msub></math> 是原结构在第i个多余约束方向的已知位移（支座沉降量）。右边不再自动为零——它等于支座移动的实际值。</p>
 
-        <p>在求解过程中，\(\Delta_{ic}\) 表示基本体系中，实际支座移动引起的沿 \(X_i\) 方向的位移。它可以通过单位荷载法计算。</p>
+        <p>在求解过程中，<math class="math-inline" aria-label="Δic"><msub><mi>Δ</mi><mrow><mi>i</mi><mi>c</mi></mrow></msub></math> 表示基本体系中，实际支座移动引起的沿 <math class="math-inline" aria-label="Xi"><msub><mi>X</mi><mi>i</mi></msub></math> 方向的位移。它可以通过单位荷载法计算。</p>
 
         <pre><code>例：一端固定、一端铰支梁，中间支座发生沉降 Δ
 
@@ -217,9 +304,20 @@
         <p><strong>方法一：利用虚功原理（单位荷载法）</strong></p>
         <p>这是通用方法。把已经求出的最终弯矩图M与单位荷载下的弯矩图相乘即可。但注意——在超静定结构中，单位荷载需要施加在<strong>原结构</strong>上（而不是基本体系上），因为我们需要的是原结构的真实变形。</p>
 
-        <p style="text-align:center; font-size:1.1rem;">
-        \(\Delta = \int \frac{M \cdot \bar{M}}{EI} \mathrm{d}s + \int \frac{k F_Q \cdot \bar{F}_Q}{GA} \mathrm{d}s + \int \frac{F_N \cdot \bar{F}_N}{EA} \mathrm{d}s\)
-        </p>
+        <div class="math-equation" role="group" aria-label="单位荷载法计算位移的一般公式">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="位移计算公式，可横向滚动">
+                <math display="block" aria-label="位移 Δ 等于弯矩项、剪力项与轴力项三个积分之和">
+                    <mrow>
+                        <mi>Δ</mi><mo>=</mo>
+                        <mo>∫</mo><mfrac><mrow><mi>M</mi><mo>·</mo><mover><mi>M</mi><mo>‾</mo></mover></mrow><mrow><mi>E</mi><mi>I</mi></mrow></mfrac><mi>d</mi><mi>s</mi>
+                        <mo>+</mo>
+                        <mo>∫</mo><mfrac><mrow><mi>k</mi><msub><mi>F</mi><mi>Q</mi></msub><mo>·</mo><msub><mover><mi>F</mi><mo>‾</mo></mover><mi>Q</mi></msub></mrow><mrow><mi>G</mi><mi>A</mi></mrow></mfrac><mi>d</mi><mi>s</mi>
+                        <mo>+</mo>
+                        <mo>∫</mo><mfrac><mrow><msub><mi>F</mi><mi>N</mi></msub><mo>·</mo><msub><mover><mi>F</mi><mo>‾</mo></mover><mi>N</mi></msub></mrow><mrow><mi>E</mi><mi>A</mi></mrow></mfrac><mi>d</mi><mi>s</mi>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
         <p><strong>方法二：利用力法计算结果直接计算</strong></p>
         <p>位移也可以由力法的柔度系数间接得到——但这个方法不如单位荷载法直观，不常用。</p>
@@ -229,7 +327,7 @@
         <p>一个好的校核应该满足以下条件：</p>
 
         <ul>
-            <li><strong>平衡校核</strong>——最终内力图必须满足结点的静力平衡条件。取任何隔离体，\(\sum F_x = 0\)、\(\sum F_y = 0\)、\(\sum M = 0\)。</li>
+            <li><strong>平衡校核</strong>——最终内力图必须满足结点的静力平衡条件。取任何隔离体，<math class="math-inline" aria-label="sum F x 等于 0"><mrow><mo>∑</mo><msub><mi>F</mi><mi>x</mi></msub><mo>=</mo><mn>0</mn></mrow></math>、<math class="math-inline" aria-label="sum F y 等于 0"><mrow><mo>∑</mo><msub><mi>F</mi><mi>y</mi></msub><mo>=</mo><mn>0</mn></mrow></math>、<math class="math-inline" aria-label="sum M 等于 0"><mrow><mo>∑</mo><mi>M</mi><mo>=</mo><mn>0</mn></mrow></math>。</li>
             <li><strong>变形协调校核</strong>——原结构中被去掉的约束处的位移应该等于零（或给定的支座移动值）。这是用力法求解时已经满足的条件，但可用于检查计算是否有误。</li>
             <li><strong>对称性校核</strong>——如果结构和荷载都是对称的，内力图也应该满足相应的对称/反对称关系。若不对称，说明计算有误。</li>
         </ul>
@@ -246,12 +344,12 @@
                 <tr>
                     <td>平衡校核</td>
                     <td>结点是否满足力的平衡</td>
-                    <td>\(\sum F = 0\)、\(\sum M = 0\)</td>
+                    <td><math class="math-inline" aria-label="sum F 等于 0, sum M 等于 0"><mrow><mo>∑</mo><mi>F</mi><mo>=</mo><mn>0</mn></mrow><mo>,</mo><mrow><mo>∑</mo><mi>M</mi><mo>=</mo><mn>0</mn></mrow></math></td>
                 </tr>
                 <tr>
                     <td>变形协调校核</td>
                     <td>多余约束处位移是否为给定值</td>
-                    <td>\(\delta_{ij}X_j + \Delta_{iP} = \) 已知位移</td>
+                    <td><math class="math-inline" aria-label="δij Xj 加 ΔiP 等于已知位移"><msub><mi>δ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>X</mi><mi>j</mi></msub><mo>+</mo><msub><mi>Δ</mi><mrow><mi>i</mi><mi>P</mi></mrow></msub><mo>=</mo></math>已知位移</td>
                 </tr>
                 <tr>
                     <td>对称性校核</td>
@@ -295,7 +393,7 @@
             <a href="index.html">📖 返回目录</a>
             <a href="10.html">下一章 →</a>
         </div>
-    </div>
+    </main>
 </div>
 </div>
 </body>
