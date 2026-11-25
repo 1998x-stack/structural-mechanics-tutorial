@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第4章 静定桁架</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        pre { overflow-x: auto; max-width: 100%; }
+        table { max-width: 100%; }
+        @media (max-width: 768px) { table { display: block; overflow-x: auto; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="章节目录">
         <h3>🏗️ 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 绪论</a></li>
@@ -41,8 +46,13 @@
             <li><a href="27.html">第27章 大跨与高层结构</a></li>
             <li><a href="28.html">第28章 综合项目实战</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main id="content" class="main-content">
+
+        <header class="article-header">
+            <h1>第4章 静定桁架：把材料送到力流上去</h1>
+            <p class="dek">桁架用“只受轴力的二力杆”把弯矩降为零，是结构效率的典范。本章从理想桁架的三条假设出发，讲清零杆判别、结点法与截面法，并给出两者的联合策略。</p>
+        </header>
 
         <h2>开篇：用最少的材料，撑起最大的空间</h2>
 
@@ -82,21 +92,36 @@
             <li><strong>规则三（K形结点对称）</strong>：在对称桁架承受对称荷载时，对称轴上K形结点的两侧斜杆内力大小相等、符号相反。若此时无水平荷载作用，则两侧斜杆可判定为零杆。</li>
         </ul>
 
-        <pre><code>零杆判别示例：
-
-        (1) L形结点：
-            A——B          A和B是两根不共线杆件，
-            |             结点处无外荷载→两根均为零杆
-            C
-
-        (2) T形结点：
-            A——B——C        杆DB与AB、BC不共线
-                |         结点B无外荷载→DB为零杆
-                D
-
-        (3) 对称性：
-            对称桁架、对称荷载
-            对称轴处的斜杆可能为零杆</code></pre>
+        <figure>
+            <svg viewBox="0 0 720 300" role="img" aria-labelledby="fig-zt-title fig-zt-desc" xmlns="http://www.w3.org/2000/svg">
+                <title id="fig-zt-title">零杆判别：L 形结点与 T 形结点</title>
+                <desc id="fig-zt-desc">左图无荷载结点上两杆不共线，两杆均为零杆；右图无荷载结点上两杆共线，与它们不平行的第三根杆为零杆。</desc>
+                <rect x="16" y="24" width="336" height="252" rx="16" fill="#f0fdf4" stroke="#86efac"/>
+                <text x="184" y="50" text-anchor="middle" font-size="14" fill="#166534">L 形结点：两杆不共线 → 均为零杆</text>
+                <line x1="150" y1="200" x2="150" y2="95" stroke="#64748b" stroke-width="6" stroke-linecap="round"/>
+                <line x1="150" y1="200" x2="290" y2="200" stroke="#64748b" stroke-width="6" stroke-linecap="round"/>
+                <circle cx="150" cy="200" r="6" fill="#f59e0b" stroke="#92400e"/>
+                <text x="150" y="84" text-anchor="middle" font-size="13" fill="#334155">A</text>
+                <text x="310" y="205" text-anchor="middle" font-size="13" fill="#334155">C</text>
+                <text x="130" y="222" text-anchor="middle" font-size="13" fill="#334155">B</text>
+                <text x="184" y="142" text-anchor="middle" font-size="12" fill="#b91c1c">F=0</text>
+                <text x="215" y="190" text-anchor="middle" font-size="12" fill="#b91c1c">F=0</text>
+                <text x="184" y="262" text-anchor="middle" font-size="11.5" fill="#475569">结点无外荷载，两个平衡方程只能都为零</text>
+                <rect x="368" y="24" width="336" height="252" rx="16" fill="#eff6ff" stroke="#93c5fd"/>
+                <text x="536" y="50" text-anchor="middle" font-size="14" fill="#1e40af">T 形结点：两杆共线 → 第三杆为零杆</text>
+                <line x1="420" y1="200" x2="536" y2="200" stroke="#3b82f6" stroke-width="6" stroke-linecap="round"/>
+                <line x1="536" y1="200" x2="652" y2="200" stroke="#3b82f6" stroke-width="6" stroke-linecap="round"/>
+                <line x1="536" y1="200" x2="536" y2="100" stroke="#64748b" stroke-width="6" stroke-linecap="round"/>
+                <circle cx="536" cy="200" r="6" fill="#f59e0b" stroke="#92400e"/>
+                <text x="408" y="205" text-anchor="middle" font-size="13" fill="#334155">A</text>
+                <text x="664" y="205" text-anchor="middle" font-size="13" fill="#334155">C</text>
+                <text x="536" y="88" text-anchor="middle" font-size="13" fill="#334155">D</text>
+                <text x="516" y="222" text-anchor="middle" font-size="13" fill="#334155">B</text>
+                <text x="570" y="152" text-anchor="middle" font-size="12" fill="#b91c1c">F_BD = 0</text>
+                <text x="536" y="262" text-anchor="middle" font-size="11.5" fill="#475569">垂直于共线方向的投影方程给出第三杆力为零</text>
+            </svg>
+            <figcaption>两条最常用的零杆判别规则：<strong>L 形结点</strong>——无荷载结点上只有两根不共线的杆，两杆都为零杆；<strong>T 形结点</strong>——无荷载结点上有三根杆且其中两根共线，则与他俩不平行的第三根杆为零杆。先用这两条规则“扫”一遍桁架，再开始计算。（图示为原理示意，不代表具体尺寸）</figcaption>
+        </figure>
 
         <div class="tip">
             <strong>实用建议：</strong>拿到一个桁架题目后，别急着列方程。先用30秒扫一遍——找到所有L形和T形结点，把零杆标记出来。往往你标完零杆后，需要计算的杆件就少了一半。这是一个非常实用的"先减后算"策略。
@@ -115,6 +140,22 @@
             <li>每个结点列两个平衡方程：∑F<sub>x</sub> = 0 和 ∑F<sub>y</sub> = 0；</li>
             <li>将求出的杆力传递到相邻结点，直到所有杆件求解完毕。</li>
         </ol>
+
+        <div class="math-equation" role="group" aria-label="无荷载结点的平衡方程">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="结点平衡方程，可横向滚动">
+                <math display="block" aria-label="无荷载结点上，水平与竖向投影方程均等于零">
+                    <mrow>
+                        <munder><mo>∑</mo><mi>x</mi></munder>
+                        <msub><mi>F</mi><mi>x</mi></msub>
+                        <mo>=</mo><mn>0</mn>
+                        <mo>,</mo>
+                        <munder><mo>∑</mo><mi>y</mi></munder>
+                        <msub><mi>F</mi><mi>y</mi></msub>
+                        <mo>=</mo><mn>0</mn>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
         <p>关键技巧：<strong>始终假定未知杆力为拉力（背离结点）</strong>。如果计算结果为正，则该杆受拉（tension）；结果为负，则该杆受压（compression）。这个"统一假定法"可以避免符号混乱。</p>
 
@@ -224,7 +265,7 @@
             <a href="index.html">📖 返回目录</a>
             <a href="05.html">下一章 →</a>
         </div>
-    </div>
+    </main>
 </div>
 </div>
 </body>
