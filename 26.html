@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第26章 AI赋能结构分析</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        pre { overflow-x: auto; max-width: 100%; }
+        table { max-width: 100%; }
+        @media (max-width: 768px) { table { display: block; overflow-x: auto; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="章节目录">
         <h3>🏗️ 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 绪论</a></li>
@@ -41,8 +46,13 @@
             <li><a href="27.html">第27章 大跨与高层结构</a></li>
             <li><a href="28.html">第28章 综合项目实战</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main id="content" class="main-content">
+
+        <header class="article-header">
+            <h1>第26章 AI赋能结构分析：知识图谱、损伤识别与拓扑优化</h1>
+            <p class="dek">人工智能不是要取代有限元，而是补上它在效率、逆问题与知识组织上的短板。本章讲清代理模型（surrogate model）的工作流与适用边界，介绍知识图谱如何组织结构力学知识、机器学习如何做损伤识别与拓扑优化，并强调数据、泛化与可解释性带来的局限。文中涉及的外部研究结论均按原文叙述转述。</p>
+        </header>
 
         <h2>开篇：当结构力学遇见人工智能</h2>
 
@@ -67,6 +77,60 @@
         </ul>
 
         <p>打个比方：传统有限元方法像是"精确但缓慢的工匠"，而AI模型则像是"快速但近似的老手"。在方案阶段，你需要的是快速试错——这时候AI的优势无可替代。到了施工图阶段，你需要精确计算——这时候还得靠有限元。</p>
+
+        <figure>
+            <svg viewBox="0 0 720 236" role="img" aria-labelledby="fig-ai-title fig-ai-desc" xmlns="http://www.w3.org/2000/svg">
+                <title id="fig-ai-title">代理模型工作流：离线训练与在线预测</title>
+                <desc id="fig-ai-desc">上半部分为离线阶段：参数化建模后批量生成有限元样本，用来训练代理模型；下半部分为在线阶段：给定新参数由代理模型毫秒级预测，并用少量有限元抽检校核。右侧标注精度与速度的取舍。</desc>
+                <defs>
+                    <marker id="ai-ah" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#475569"/></marker>
+                </defs>
+                <text x="24" y="24" font-size="12" fill="#1e40af">离线阶段（慢，一次性）</text>
+                <g font-size="11.5" text-anchor="middle">
+                    <rect x="24" y="34" width="150" height="60" rx="10" fill="#eff6ff" stroke="#93c5fd"/>
+                    <text x="99" y="60" fill="#1e40af">参数化建模</text>
+                    <text x="99" y="80" font-size="10" fill="#475569">几何 / 荷载参数</text>
+                    <rect x="196" y="34" width="150" height="60" rx="10" fill="#fffbeb" stroke="#fcd34d"/>
+                    <text x="271" y="60" fill="#92400e">有限元批量采样</text>
+                    <text x="271" y="80" font-size="10" fill="#475569">生成训练标签</text>
+                    <rect x="368" y="34" width="150" height="60" rx="10" fill="#f0fdf4" stroke="#86efac"/>
+                    <text x="443" y="60" fill="#166534">训练代理模型</text>
+                    <text x="443" y="80" font-size="10" fill="#475569">神经网络 / 回归</text>
+                    <rect x="540" y="30" width="160" height="68" rx="10" fill="#f5f3ff" stroke="#c4b5fd"/>
+                    <text x="620" y="56" fill="#5b21b6">精度目标</text>
+                    <text x="620" y="76" font-size="10" fill="#475569">误差需与有限元</text>
+                    <text x="620" y="90" font-size="10" fill="#475569">结果量级相当</text>
+                </g>
+                <g stroke="#475569" stroke-width="2" marker-end="url(#ai-ah)">
+                    <line x1="174" y1="64" x2="194" y2="64"/>
+                    <line x1="346" y1="64" x2="366" y2="64"/>
+                    <line x1="518" y1="64" x2="538" y2="64"/>
+                </g>
+                <text x="24" y="140" font-size="12" fill="#92400e">在线阶段（快，反复调用）</text>
+                <g font-size="11.5" text-anchor="middle">
+                    <rect x="24" y="152" width="150" height="60" rx="10" fill="#eff6ff" stroke="#93c5fd"/>
+                    <text x="99" y="178" fill="#1e40af">新设计参数</text>
+                    <text x="99" y="198" font-size="10" fill="#475569">方案迭代输入</text>
+                    <rect x="196" y="152" width="150" height="60" rx="10" fill="#f0fdf4" stroke="#86efac"/>
+                    <text x="271" y="178" fill="#166534">代理模型预测</text>
+                    <text x="271" y="198" font-size="10" fill="#475569">毫秒级输出</text>
+                    <rect x="368" y="152" width="150" height="60" rx="10" fill="#fef2f2" stroke="#fca5a5"/>
+                    <text x="443" y="178" fill="#b91c1c">抽检校核</text>
+                    <text x="443" y="198" font-size="10" fill="#475569">少量有限元复核</text>
+                    <rect x="540" y="148" width="160" height="68" rx="10" fill="#f5f3ff" stroke="#c4b5fd"/>
+                    <text x="620" y="174" fill="#5b21b6">速度收益</text>
+                    <text x="620" y="194" font-size="10" fill="#475569">支持大规模方案搜索</text>
+                </g>
+                <g stroke="#475569" stroke-width="2" marker-end="url(#ai-ah)">
+                    <line x1="174" y1="182" x2="194" y2="182"/>
+                    <line x1="346" y1="182" x2="366" y2="182"/>
+                    <line x1="518" y1="182" x2="538" y2="182"/>
+                    <line x1="443" y1="152" x2="443" y2="98" stroke-dasharray="4 3"/>
+                </g>
+                <text x="360" y="230" text-anchor="middle" font-size="10.5" fill="#b91c1c">虚线：在线抽检回到有限元复核。代理模型只在训练分布内可靠，外推结果不可信</text>
+            </svg>
+            <figcaption>代理模型的两阶段工作流：<strong>离线</strong>阶段用有限元批量生成样本训练模型（一次性、较慢），<strong>在线</strong>阶段对新参数毫秒级预测（反复调用、很快）。虚线箭头强调工程上必须保留少量有限元抽检；代理模型只在训练分布内可靠，对训练集之外的参数外推时精度没有保证。</figcaption>
+        </figure>
 
         <h3>AI在结构工程中的主要应用场景</h3>
 
@@ -312,7 +376,7 @@
             <a href="index.html">📖 返回目录</a>
             <a href="27.html">下一章 →</a>
         </div>
-    </div>
+    </main>
 </div>
 </div>
 </body>
