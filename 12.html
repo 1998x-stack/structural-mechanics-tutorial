@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第12章 力矩分配法</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        pre { overflow-x: auto; max-width: 100%; }
+        table { max-width: 100%; }
+        @media (max-width: 768px) { table { display: block; overflow-x: auto; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="章节目录">
         <h3>🏗️ 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 绪论</a></li>
@@ -41,8 +46,13 @@
             <li><a href="27.html">第27章 大跨与高层结构</a></li>
             <li><a href="28.html">第28章 综合项目实战</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main id="content" class="main-content">
+
+        <header class="article-header">
+            <h1>第12章 力矩分配法：让弯矩在结点间“流动”</h1>
+            <p class="dek">不用解联立方程，只需在结点上反复做“分配—传递—再分配”，就能逐步逼近精确解。本章讲清转动刚度、分配系数、传递系数三大参数，并用单结点与多结点算例演示力矩如何在杆件间流动。全文以线弹性、小变形、等截面直杆的手算场景为准。</p>
+        </header>
 
         <h2>引言：不用解方程的方法</h2>
 
@@ -77,7 +87,7 @@
 
         <h3>转动刚度（Stiffness Factor）</h3>
 
-        <p>转动刚度 \(S_{AB}\) 的定义是：当A端产生单位转角时，在A端需要施加的弯矩大小。它反映了杆件对结点转动的"抵抗"程度。</p>
+        <p>转动刚度 <math class="math-inline" aria-label="S A B"><msub><mi>S</mi><mrow><mi>A</mi><mi>B</mi></mrow></msub></math> 的定义是：当A端产生单位转角时，在A端需要施加的弯矩大小。它反映了杆件对结点转动的“抵抗”程度。</p>
 
         <p>不同远端约束条件下的转动刚度：</p>
 
@@ -85,49 +95,67 @@
             <thead>
                 <tr>
                     <th>远端约束</th>
-                    <th>转动刚度 \(S_{AB}\)</th>
+                    <th>转动刚度 <math class="math-inline" aria-label="S A B"><msub><mi>S</mi><mrow><mi>A</mi><mi>B</mi></mrow></msub></math></th>
                     <th>说明</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>远端固定</td>
-                    <td>\(4i\)</td>
+                    <td><math class="math-inline" aria-label="4 i"><mn>4</mn><mi>i</mi></math></td>
                     <td>标准刚接框架中最常见</td>
                 </tr>
                 <tr>
                     <td>远端铰支</td>
-                    <td>\(3i\)</td>
+                    <td><math class="math-inline" aria-label="3 i"><mn>3</mn><mi>i</mi></math></td>
                     <td>远端为铰接时</td>
                 </tr>
                 <tr>
                     <td>远端滑动（定向）</td>
-                    <td>\(i\)</td>
+                    <td><math class="math-inline" aria-label="i"><mi>i</mi></math></td>
                     <td>远端为定向支座时</td>
                 </tr>
                 <tr>
                     <td>远端自由</td>
-                    <td>\(0\)</td>
+                    <td><math class="math-inline" aria-label="0"><mn>0</mn></math></td>
                     <td>悬臂端</td>
                 </tr>
             </tbody>
         </table>
 
-        <p>其中 \(i = EI/l\) 称为杆件的<strong>线刚度（Linear Stiffness）</strong>。</p>
+        <p>其中 <math class="math-inline" aria-label="i 等于 E I 除以 l"><mi>i</mi><mo>=</mo><mi>E</mi><mi>I</mi><mo>/</mo><mi>l</mi></math> 称为杆件的<strong>线刚度（Linear Stiffness）</strong>。</p>
 
         <h3>分配系数（Distribution Factor）</h3>
 
-        <p>当一个结点上有n根杆件交汇，结点处的不平衡力矩 \(M_{unbal}\) 会按照各杆转动刚度的比例分配到每根杆件上。</p>
+        <p>当一个结点上有n根杆件交汇，结点处的不平衡力矩 <math class="math-inline" aria-label="M unbal"><msub><mi>M</mi><mtext>unbal</mtext></msub></math> 会按照各杆转动刚度的比例分配到每根杆件上。</p>
 
-        <p style="text-align:center; font-size:1.2rem;"><strong>
-        \[
-        \mu_{Aj} = \frac{S_{Aj}}{\sum S_{Ak}}
-        \]
-        </strong></p>
+        <div class="math-equation" role="group" aria-label="分配系数公式">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="分配系数公式，可横向滚动">
+                <math display="block" aria-label="mu A j 等于 S A j 除以 sigma S A k">
+                    <mrow>
+                        <msub><mi>μ</mi><mrow><mi>A</mi><mi>j</mi></mrow></msub><mo>=</mo>
+                        <mfrac>
+                            <msub><mi>S</mi><mrow><mi>A</mi><mi>j</mi></mrow></msub>
+                            <mrow><mo>∑</mo><msub><mi>S</mi><mrow><mi>A</mi><mi>k</mi></mrow></msub></mrow>
+                        </mfrac>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
-        <p>其中 \(\mu_{Aj}\) 是杆件Aj在A结点上的分配系数。分配到杆件Aj近端（A端）的弯矩为：</p>
+        <p>其中 <math class="math-inline" aria-label="mu A j"><msub><mi>μ</mi><mrow><mi>A</mi><mi>j</mi></mrow></msub></math> 是杆件Aj在A结点上的分配系数。分配到杆件Aj近端（A端）的弯矩为：</p>
 
-        <p style="text-align:center; font-size:1.1rem;"><strong>\(M_{Aj}^{dist} = \mu_{Aj} \times (-M_{unbal})\)</strong></p>
+        <div class="math-equation" role="group" aria-label="近端分配弯矩公式">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="近端分配弯矩公式，可横向滚动">
+                <math display="block" aria-label="M A j 的分配弯矩等于 mu A j 乘以负的 M unbal">
+                    <mrow>
+                        <msubsup><mi>M</mi><mrow><mi>A</mi><mi>j</mi></mrow><mtext>dist</mtext></msubsup><mo>=</mo>
+                        <msub><mi>μ</mi><mrow><mi>A</mi><mi>j</mi></mrow></msub><mo>×</mo>
+                        <mrow><mo>(</mo><mo>−</mo><msub><mi>M</mi><mtext>unbal</mtext></msub><mo>)</mo></mrow>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
         <p>注意分配的是<strong>不平衡力矩的相反数</strong>——因为放松结点的目的是消除不平衡力矩，所以要加一个与之相反的力矩。</p>
 
@@ -160,11 +188,53 @@
             <strong>直觉理解：</strong>分配系数就像是"分蛋糕"时各人拿到的比例——线刚度越大的杆件越"僵硬"，越能"抢"到更多的不平衡力矩。想想看：你在一个弹簧群中转动一个结点——弹簧越硬，你转动它需要的力就越大，因此它"分摊"到的弯矩也就越大。这很合理，对吗？
         </div>
 
+        <figure>
+            <svg viewBox="0 0 720 300" role="img" aria-labelledby="fig-md-title fig-md-desc" xmlns="http://www.w3.org/2000/svg">
+                <title id="fig-md-title">三杆交汇结点的不平衡力矩分配</title>
+                <desc id="fig-md-desc">三根杆件在刚结点 O 交汇，左杆、上杆、下杆线刚度分别为 3、2、1，远端均固定，转动刚度分别为 12、8、4，总和 24，分配系数为 0.500、0.333、0.167。</desc>
+                <rect x="16" y="20" width="688" height="260" rx="16" fill="#f8fafc" stroke="#cbd5e1"/>
+                <line x1="120" y1="150" x2="360" y2="150" stroke="#1e3a8a" stroke-width="8" stroke-linecap="round"/>
+                <line x1="360" y1="150" x2="360" y2="50" stroke="#1e3a8a" stroke-width="8" stroke-linecap="round"/>
+                <line x1="360" y1="150" x2="360" y2="250" stroke="#1e3a8a" stroke-width="8" stroke-linecap="round"/>
+                <g fill="#facc15" stroke="#a16207" stroke-width="2">
+                    <rect x="108" y="138" width="24" height="24" rx="4"/>
+                    <rect x="348" y="38" width="24" height="24" rx="4"/>
+                    <rect x="348" y="238" width="24" height="24" rx="4"/>
+                </g>
+                <text x="120" y="120" font-size="13" fill="#1e3a8a">B　i₁=3</text>
+                <text x="310" y="40" font-size="13" fill="#1e3a8a">C　i₂=2</text>
+                <text x="310" y="290" font-size="13" fill="#1e3a8a">D　i₃=1</text>
+                <circle cx="360" cy="150" r="11" fill="#b91c1c"/>
+                <text x="360" y="183" text-anchor="middle" font-size="13" fill="#b91c1c">O（刚结点）</text>
+                <text x="380" y="130" font-size="12.5" fill="#0f172a">Sᵢ = 4iᵢ（远端固定）</text>
+                <text x="380" y="150" font-size="12.5" fill="#0f172a">S = 12, 8, 4　ΣS = 24</text>
+                <text x="380" y="170" font-size="12.5" fill="#0f172a">μ = 0.500, 0.333, 0.167</text>
+                <rect x="380" y="188" width="212" height="18" rx="4" fill="#fde68a"/>
+                <rect x="380" y="188" width="106" height="18" fill="#60a5fa"/>
+                <rect x="486" y="188" width="71" height="18" fill="#34d399"/>
+                <text x="380" y="224" font-size="11.5" fill="#475569">蓝 / 绿 / 黄 = 各杆分摊到的力矩比例</text>
+                <text x="184" y="262" text-anchor="middle" font-size="11.5" fill="#475569">线刚度越大的杆件越“硬”，越能抢到更多不平衡力矩</text>
+            </svg>
+            <figcaption>三杆交汇刚结点 O 的不平衡力矩按<strong>转动刚度比例</strong>分配。远端固定时 <math class="math-inline" aria-label="S 等于 4 i"><mi>S</mi><mo>=</mo><mn>4</mn><mi>i</mi></math>，故 <math class="math-inline" aria-label="S 分别为 12 8 4"><mi>S</mi><mo>=</mo><mn>12</mn><mo>,</mo><mn>8</mn><mo>,</mo><mn>4</mn></math>，分配系数为 0.500、0.333、0.167。此图与本节正文算例取同一组线刚度，便于对照。（线刚度数值为教学取值，非具体工程实例）</figcaption>
+        </figure>
+
         <h2>12.3 传递系数</h2>
 
-        <p>在力矩分配法中，当我们把分配弯矩加到杆件的A端时，这个弯矩的一部分会"传递"到杆件的B端。传递系数（Carry-over Factor）\(C_{AB}\) 定义为：</p>
+        <p>在力矩分配法中，当我们把分配弯矩加到杆件的A端时，这个弯矩的一部分会“传递”到杆件的B端。传递系数（Carry-over Factor）<math class="math-inline" aria-label="C A B"><msub><mi>C</mi><mrow><mi>A</mi><mi>B</mi></mrow></msub></math> 定义为：</p>
 
-        <p style="text-align:center; font-size:1.2rem;"><strong>\(C_{AB} = \frac{M_{BA}}{M_{AB}}\)</strong></p>
+        <div class="math-equation" role="group" aria-label="传递系数公式">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="传递系数公式，可横向滚动">
+                <math display="block" aria-label="C A B 等于 M B A 除以 M A B">
+                    <mrow>
+                        <msub><mi>C</mi><mrow><mi>A</mi><mi>B</mi></mrow></msub><mo>=</mo>
+                        <mfrac>
+                            <msub><mi>M</mi><mrow><mi>B</mi><mi>A</mi></mrow></msub>
+                            <msub><mi>M</mi><mrow><mi>A</mi><mi>B</mi></mrow></msub>
+                        </mfrac>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
         <p>不同远端约束的传递系数：</p>
 
@@ -172,7 +242,7 @@
             <thead>
                 <tr>
                     <th>远端约束</th>
-                    <th>传递系数 \(C\)</th>
+                    <th>传递系数 <math class="math-inline" aria-label="C"><mi>C</mi></math></th>
                     <th>说明</th>
                 </tr>
             </thead>
@@ -319,7 +389,7 @@
 
         <ul>
             <li>基本概念——力矩分配法是一种渐进的迭代法，不需要解联立方程；</li>
-            <li>转动刚度与分配系数——\(S = 4i\)（远端固定）、\(S = 3i\)（远端铰支），分配系数是各杆转动刚度的比例；</li>
+            <li>转动刚度与分配系数——<math class="math-inline" aria-label="S 等于 4 i"><mi>S</mi><mo>=</mo><mn>4</mn><mi>i</mi></math>（远端固定）、<math class="math-inline" aria-label="S 等于 3 i"><mi>S</mi><mo>=</mo><mn>3</mn><mi>i</mi></math>（远端铰支），分配系数是各杆转动刚度的比例；</li>
             <li>传递系数——远端固定时C=1/2；</li>
             <li>单结点分配——一次分配加传递即可得精确解；</li>
             <li>多结点逐次分配——需要2-3轮迭代收敛到工程精度；</li>
@@ -333,7 +403,7 @@
             <a href="index.html">📖 返回目录</a>
             <a href="13.html">下一章 →</a>
         </div>
-    </div>
+    </main>
 </div>
 </div>
 </body>
