@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第24章 SAP2000/ANSYS入门</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        pre { overflow-x: auto; max-width: 100%; }
+        table { max-width: 100%; }
+        @media (max-width: 768px) { table { display: block; overflow-x: auto; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="章节目录">
         <h3>🏗️ 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 绪论</a></li>
@@ -41,8 +46,13 @@
             <li><a href="27.html">第27章 大跨与高层结构</a></li>
             <li><a href="28.html">第28章 综合项目实战</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main id="content" class="main-content">
+
+        <header class="article-header">
+            <h1>第24章 SAP2000/ANSYS入门：从教学工具到工业标准</h1>
+            <p class="dek">通用有限元软件求解正确不等于模型正确。本章讲清 SAP2000 的五步建模流程与 ANSYS 的 Workbench/APDL 两条路径，用三层钢框架实战演示材料、截面、约束、荷载的定义，并强调荷载组合规范与“手算验证机算”的校核习惯。全文以杆系结构、线弹性静力分析为准，教学示意数据均已注明。</p>
+        </header>
 
         <h2>开篇：从教学工具到工业标准</h2>
 
@@ -61,6 +71,47 @@
         <h2>SAP2000基本界面与操作流程</h2>
 
         <p>SAP2000由美国Computers and Structures, Inc.（CSI）公司开发，起源于加州大学伯克利分校Wilson教授在20世纪70年代的研究成果。它经过近50年的发展，已经成为建筑结构设计领域最广泛使用的有限元软件之一。</p>
+
+        <figure>
+            <svg viewBox="0 0 720 200" role="img" aria-labelledby="fig-sap-flow-title fig-sap-flow-desc" xmlns="http://www.w3.org/2000/svg">
+                <title id="fig-sap-flow-title">SAP2000 的五步建模工作流程</title>
+                <desc id="fig-sap-flow-desc">从左到右五个阶段：建模（材料、截面、几何）、施加荷载、运行分析、查看结果、截面设计，每个阶段都有对应的模型校核要点。</desc>
+                <defs>
+                    <marker id="sap-ah" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#475569"/></marker>
+                </defs>
+                <g font-size="12.5" text-anchor="middle">
+                    <rect x="14" y="46" width="126" height="100" rx="12" fill="#eff6ff" stroke="#93c5fd"/>
+                    <text x="77" y="70" fill="#1e40af">① 建模</text>
+                    <text x="77" y="92" font-size="10.5" fill="#475569">材料 / 截面</text>
+                    <text x="77" y="110" font-size="10.5" fill="#475569">结点 / 单元</text>
+                    <text x="77" y="130" font-size="10" fill="#b91c1c">约束方向最易错</text>
+                    <rect x="156" y="46" width="126" height="100" rx="12" fill="#fffbeb" stroke="#fcd34d"/>
+                    <text x="219" y="70" fill="#92400e">② 施加荷载</text>
+                    <text x="219" y="92" font-size="10.5" fill="#475569">恒 / 活 / 风 / 地震</text>
+                    <text x="219" y="110" font-size="10.5" fill="#475569">荷载工况</text>
+                    <rect x="298" y="46" width="126" height="100" rx="12" fill="#f0fdf4" stroke="#86efac"/>
+                    <text x="361" y="70" fill="#166534">③ 运行分析</text>
+                    <text x="361" y="92" font-size="10.5" fill="#475569">静力 / 组合</text>
+                    <text x="361" y="110" font-size="10.5" fill="#475569">求解方程组</text>
+                    <rect x="440" y="46" width="126" height="100" rx="12" fill="#fdf2f8" stroke="#f9a8d4"/>
+                    <text x="503" y="70" fill="#9d174d">④ 查看结果</text>
+                    <text x="503" y="92" font-size="10.5" fill="#475569">内力 / 位移</text>
+                    <text x="503" y="110" font-size="10.5" fill="#475569">与手算对比</text>
+                    <rect x="582" y="46" width="124" height="100" rx="12" fill="#f5f3ff" stroke="#c4b5fd"/>
+                    <text x="644" y="70" fill="#5b21b6">⑤ 截面设计</text>
+                    <text x="644" y="92" font-size="10.5" fill="#475569">应力比校核</text>
+                    <text x="644" y="110" font-size="10.5" fill="#475569">迭代调整</text>
+                </g>
+                <g stroke="#475569" stroke-width="2" marker-end="url(#sap-ah)">
+                    <line x1="140" y1="96" x2="154" y2="96"/>
+                    <line x1="282" y1="96" x2="296" y2="96"/>
+                    <line x1="424" y1="96" x2="438" y2="96"/>
+                    <line x1="566" y1="96" x2="580" y2="96"/>
+                </g>
+                <text x="360" y="176" text-anchor="middle" font-size="11" fill="#475569">每一步都可回退修改：软件只负责求解你建立的方程，模型正确性始终由工程师负责</text>
+            </svg>
+            <figcaption>SAP2000 的五步建模工作流程：<strong>建模</strong>（材料、截面、几何）→<strong>施加荷载</strong>→<strong>运行分析</strong>→<strong>查看结果</strong>→<strong>截面设计</strong>。其中建模阶段的约束方向、荷载阶段的工况组合、结果阶段的手算校核，是工程判断的关键环节。</figcaption>
+        </figure>
 
         <h3>界面概览</h3>
 
@@ -477,7 +528,7 @@ PRESOL, SMISC, 6, 7                          ! 打印单元弯矩 (BEAM188)</cod
             <a href="index.html">📖 返回目录</a>
             <a href="25.html">下一章 →</a>
         </div>
-    </div>
+    </main>
 </div>
 </div>
 </body>
