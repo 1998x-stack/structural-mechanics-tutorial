@@ -236,9 +236,9 @@
         <p>具体来说：</p>
 
         <ul>
-            <li>要画弯矩 <math class="math-inline" aria-label="M"><mi>M</mi></math> 的影响线 → 在相应截面<strong>插入铰</strong>（释放转动约束），在铰两侧施加一对单位转角 <math class="math-inline" aria-label="θ = 1"><mo>θ</mo><mo>=</mo><mn>1</mn></math>，体系的位移图即为影响线。</li>
-            <li>要画剪力 <math class="math-inline" aria-label="Q"><mi>Q</mi></math> 的影响线 → 在相应截面<strong>切断</strong>（释放竖向约束），让两侧产生单位相对竖向位移 <math class="math-inline" aria-label="= 1"><mi>delta</mi><mo>=</mo><mn>1</mn></math>，体系的位移图即为影响线。</li>
-            <li>要画反力 <math class="math-inline" aria-label="R"><mi>R</mi></math> 的影响线 → <strong>去掉支座</strong>（释放平动约束），沿反力方向施加单位位移 <math class="math-inline" aria-label="= 1"><mi>delta</mi><mo>=</mo><mn>1</mn></math>，体系的位移图即为影响线。</li>
+            <li>要画弯矩 <math class="math-inline" aria-label="M"><mi>M</mi></math> 的影响线 → 在相应截面<strong>插入铰</strong>（释放转动约束），在铰两侧施加一对单位转角 <math class="math-inline" aria-label="θ = 1"><mi>θ</mi><mo>=</mo><mn>1</mn></math>，体系的位移图即为影响线。</li>
+            <li>要画剪力 <math class="math-inline" aria-label="Q"><mi>Q</mi></math> 的影响线 → 在相应截面<strong>切断</strong>（释放竖向约束），让两侧产生单位相对竖向位移 <math class="math-inline" aria-label="δ = 1"><mi>δ</mi><mo>=</mo><mn>1</mn></math>，体系的位移图即为影响线。</li>
+            <li>要画反力 <math class="math-inline" aria-label="R"><mi>R</mi></math> 的影响线 → <strong>去掉支座</strong>（释放平动约束），沿反力方向施加单位位移 <math class="math-inline" aria-label="δ = 1"><mi>δ</mi><mo>=</mo><mn>1</mn></math>，体系的位移图即为影响线。</li>
         </ul>
 
         <div class="warning">
@@ -251,11 +251,11 @@
 
         <p>第一步，在截面 <math class="math-inline" aria-label="C"><mi>C</mi></math> 处插入一个铰（释放转动约束），在铰两侧施加一对单位转角。原来的简支梁变成一个"带铰的机构"。</p>
 
-        <p>第二步，在铰左侧施加逆时针转角 <math class="math-inline" aria-label="θ = 1"><mo>θ</mo><mo>=</mo><mn>1</mn></math>，右侧施加顺时针转角 <math class="math-inline" aria-label="θ = 1"><mo>θ</mo><mo>=</mo><mn>1</mn></math>。因为转角是"单位"转角，铰左侧的梁段绕左端转动，右侧的梁段绕右端转动。</p>
+        <p>第二步，在铰左侧施加逆时针转角 <math class="math-inline" aria-label="θ = 1"><mi>θ</mi><mo>=</mo><mn>1</mn></math>，右侧施加顺时针转角 <math class="math-inline" aria-label="θ = 1"><mi>θ</mi><mo>=</mo><mn>1</mn></math>。因为转角是"单位"转角，铰左侧的梁段绕左端转动，右侧的梁段绕右端转动。</p>
 
         <p>第三步，画出机构的位移图。由于梁段是刚性的（静定结构在去掉约束后变成刚性杆组成的机构），位移图由直线段组成。左段从 <math class="math-inline" aria-label="A"><mi>A</mi></math> 到 <math class="math-inline" aria-label="C"><mi>C</mi></math> 是一条直线（绕 <math class="math-inline" aria-label="A"><mi>A</mi></math> 转动），右段从 <math class="math-inline" aria-label="C"><mi>C</mi></math> 到 <math class="math-inline" aria-label="B"><mi>B</mi></math> 是一条直线（绕 <math class="math-inline" aria-label="B"><mi>B</mi></math> 转动）。在 <math class="math-inline" aria-label="C"><mi>C</mi></math> 处，两条直线相交，形成一个尖点。</p>
 
-        <p>这个位移图的形状——三角形，顶点在 <math class="math-inline" aria-label="C"><mi>C</mi></math>——正是 <math class="math-inline" aria-label="M C"><msub><mi>M</mi><mi>C</mi></msub></math> 影响线的形状。而顶点的纵坐标值可以通过单位转角条件确定：左侧梁段在 <math class="math-inline" aria-label="C"><mi>C</mi></math> 处的竖向位移为 <math class="math-inline" aria-label="a × 1 = a"><mi>a</mi><mo>×</mo><mn>1</mn><mo>=</mo><mi>a</mi></math>，但注意这个"1"是转角而非位移。实际计算时，如果规定两侧转角之和为 <math class="math-inline" aria-label="1"><mn>1</mn></math>（即 <math class="math-inline" aria-label="θ L + θ R = 1"><msub><mo>θ</mo><mi>L</mi></msub><mo>+</mo><msub><mo>θ</mo><mi>R</mi></msub><mo>=</mo><mn>1</mn></math>），则 <math class="math-inline" aria-label="C"><mi>C</mi></math> 点位移满足几何关系。</p>
+        <p>这个位移图的形状——三角形，顶点在 <math class="math-inline" aria-label="C"><mi>C</mi></math>——正是 <math class="math-inline" aria-label="M C"><msub><mi>M</mi><mi>C</mi></msub></math> 影响线的形状。而顶点的纵坐标值可以通过单位转角条件确定：左侧梁段在 <math class="math-inline" aria-label="C"><mi>C</mi></math> 处的竖向位移为 <math class="math-inline" aria-label="a × 1 = a"><mi>a</mi><mo>×</mo><mn>1</mn><mo>=</mo><mi>a</mi></math>，但注意这个"1"是转角而非位移。实际计算时，如果规定两侧转角之和为 <math class="math-inline" aria-label="1"><mn>1</mn></math>（即 <math class="math-inline" aria-label="θ L + θ R = 1"><msub><mi>θ</mi><mi>L</mi></msub><mo>+</mo><msub><mi>θ</mi><mi>R</mi></msub><mo>=</mo><mn>1</mn></math>），则 <math class="math-inline" aria-label="C"><mi>C</mi></math> 点位移满足几何关系。</p>
 
         <div class="tip">
             <strong>快捷口诀：</strong>"求什么，拆什么；拆完了，给位移；位移图，就是它。" 用机动法作影响线，本质上是"以几何代代数"——用机构的位移形态代替代数函数的推导。这不光快，而且直观，能帮你建立"荷载移到哪里最不利"的直觉。
