@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第21章 多自由度体系振动</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        pre { overflow-x: auto; max-width: 100%; }
+        table { max-width: 100%; }
+        @media (max-width: 768px) { table { display: block; overflow-x: auto; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="章节目录">
         <h3>🏗️ 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 绪论</a></li>
@@ -41,10 +46,15 @@
             <li><a href="27.html">第27章 大跨与高层结构</a></li>
             <li><a href="28.html">第28章 综合项目实战</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main id="content" class="main-content">
 
-        <h2>第二十一章 多自由度体系振动</h2>
+        <header class="article-header">
+            <h1>第21章 多自由度体系振动</h1>
+            <p class="dek">如果单自由度是一把小提琴，多自由度就是一支交响乐团。本章用剪切型框架讲清运动方程的矩阵形式、广义特征值问题、振型正交性、振型叠加法的五步实施，以及邓克利法与瑞利法两个手算近似工具。全文以线弹性、集中质量、黏滞阻尼的剪切型模型为准。</p>
+        </header>
+
+        <h2>引言：从“独奏”到“交响”</h2>
 
         <p>如果单自由度体系是一把小提琴——只有一根弦、一个音。那么多自由度体系就是一支交响乐团——几十种乐器、几十个声部，它们各自振动，又相互影响，共同奏出复杂的乐章。</p>
 
@@ -79,15 +89,20 @@
 
         <p>和SDOF一样，MDOF的自由振动分析从无阻尼自由振动方程开始：</p>
 
-        <pre><code>    M·ü(t) + K·u(t) = 0
+        <p>假设简谐振动形式 <math class="math-inline" aria-label="u t 等于 phi 乘以 sin omega t 加 alpha"><mi>u</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><mi>φ</mi><mo>·</mo><mi>sin</mi><mo>(</mo><mi>ω</mi><mi>t</mi><mo>+</mo><mi>α</mi><mo>)</mo></math>，代入无阻尼自由振动方程，得到<strong>广义特征值问题（Generalized Eigenvalue Problem）</strong>：</p>
 
-    假设简谐振动形式 u(t) = φ·sin(ωt + α)，代入得：
-    (K - ω²·M) · φ = 0
+        <div class="math-equation" role="group" aria-label="广义特征值问题">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="广义特征值问题，可横向滚动">
+                <math display="block" aria-label="括 K 减 omega 平方乘 M 括 乘 phi 等于 0">
+                    <mrow>
+                        <mo>(</mo><mi>K</mi><mo>−</mo><msup><mi>ω</mi><mn>2</mn></msup><mi>M</mi><mo>)</mo>
+                        <mi>φ</mi><mo>=</mo><mn>0</mn>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
-    这就是广义特征值问题（Generalized Eigenvalue Problem）。
-    其中：
-    ω² —— 特征值（Eigenvalue），对应自振圆频率的平方
-    φ  —— 特征向量（Eigenvector），对应振型（Mode Shape）</code></pre>
+        <p>其中 <math class="math-inline" aria-label="omega 平方"><msup><mi>ω</mi><mn>2</mn></msup></math> 是特征值（自振圆频率的平方），<math class="math-inline" aria-label="phi"><mi>φ</mi></math> 是特征向量（振型）。
 
         <p>因为φ不能为零向量，所以系数矩阵的行列式必须为零：</p>
 
@@ -106,6 +121,8 @@
         <h3>三层框架的手算示例</h3>
 
         <p>假设一个三层剪切型框架，每层质量相同m=100t，每层刚度相同k=200MN/m：</p>
+
+        <p class="note">（教学示意：本算例采用底端自由、无基础约束的质量-弹簧链模型，故刚度矩阵奇异、含一个零频刚体模态。真实建筑底端与基础相连，刚度矩阵不奇异，基频不为零。）</p>
 
         <pre><code>    质量矩阵 M = m·I，刚度矩阵 K = k·[1 -1 0; -1 2 -1; 0 -1 1]
 
@@ -166,8 +183,37 @@
             </tbody>
         </table>
 
+        <figure>
+            <svg viewBox="0 0 720 300" role="img" aria-labelledby="fig-ms-title fig-ms-desc" xmlns="http://www.w3.org/2000/svg">
+                <title id="fig-ms-title">三层剪切型框架的三阶振型</title>
+                <desc id="fig-ms-desc">左图为刚体模态，三层与基础同向等幅；中图为一阶弹性振型，上下反向、中间楼层为节点；右图为二阶振型，呈 S 形，中间层反向。虚线为变形前的参考位置。</desc>
+                <g stroke="#cbd5e1" stroke-dasharray="4 4">
+                    <line x1="130" y1="80" x2="130" y2="250"/><line x1="360" y1="80" x2="360" y2="250"/><line x1="590" y1="80" x2="590" y2="250"/>
+                </g>
+                <g stroke="#e2e8f0">
+                    <line x1="40" y1="250" x2="230" y2="250"/><line x1="270" y1="250" x2="460" y2="250"/><line x1="500" y1="250" x2="690" y2="250"/>
+                </g>
+                <g stroke="#1e3a8a" stroke-width="3" fill="none">
+                    <polyline points="155,250 155,200 155,150 155,100"/>
+                    <polyline points="360,250 385,200 360,150 335,100"/>
+                    <polyline points="590,250 610,200 570,150 590,100"/>
+                </g>
+                <g fill="#b91c1c">
+                    <circle cx="155" cy="200" r="5"/><circle cx="155" cy="150" r="5"/><circle cx="155" cy="100" r="5"/>
+                    <circle cx="385" cy="200" r="5"/><circle cx="360" cy="150" r="5"/><circle cx="335" cy="100" r="5"/>
+                    <circle cx="610" cy="200" r="5"/><circle cx="570" cy="150" r="5"/><circle cx="590" cy="100" r="5"/>
+                </g>
+                <g font-size="12" text-anchor="middle">
+                    <text x="135" y="276" fill="#1e3a8a">φ₁=[1,1,1]ᵀ（刚体）</text>
+                    <text x="360" y="276" fill="#1e3a8a">φ₂=[1,0,−1]ᵀ（一阶）</text>
+                    <text x="590" y="276" fill="#1e3a8a">φ₃=[1,−2,1]ᵀ（S 形）</text>
+                </g>
+            </svg>
+            <figcaption>三层剪切型框架的三阶振型：不同阶振型的“结点”（位移为零处的楼层）越来越多，这与琴弦的高次谐波同理。图示为本节手算算例的形状指纹（已归一化），横坐标位移为定性比例，非按比例绘制。</figcaption>
+        </figure>
+
         <div class="tip">
-            <strong>一个有趣的观察：</strong>振型并不需要"归一化"——它的绝对值大小没有意义（因为它是特征向量，尺度是任意的），但各分量之间的相对比例是有意义的。比如振型[1,0,-1]ᵀ和[2,0,-2]ᵀ代表同一种振动形态。在实际应用中，我们通常会将振型归一化——按最大位移归一或按质量矩阵归一（使φᵀMφ=1）。
+            <strong>一个有趣的观察：</strong>振型并不需要“归一化”--它的绝对值大小没有意义(因为它是特征向量,尺度是任意的),但各分量之间的相对比例是有意义的。比如振型[1,0,-1]T和[2,0,-2]T代表同一种振动形态。在实际应用中,我们通常会将振型归一化--按最大位移归一或按质量矩阵归一(使φTMφ=1)。
         </div>
 
         <h2>主振型的正交性</h2>
@@ -345,7 +391,7 @@
             <a href="index.html">📖 返回目录</a>
             <a href="22.html">下一章 →</a>
         </div>
-    </div>
+    </main>
 </div>
 </div>
 </body>
