@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第28章 综合项目实战</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        pre { overflow-x: auto; max-width: 100%; }
+        table { max-width: 100%; }
+        @media (max-width: 768px) { table { display: block; overflow-x: auto; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="章节目录">
         <h3>🏗️ 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 绪论</a></li>
@@ -41,8 +46,13 @@
             <li><a href="27.html">第27章 大跨与高层结构</a></li>
             <li><a href="28.html" class="active">第28章 综合项目实战</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main id="content" class="main-content">
+
+        <header class="article-header">
+            <h1>第28章 综合项目实战：从方案比选到设计报告</h1>
+            <p class="dek">把前27章的知识串成一条可执行的设计流水线。本章用一个四层钢框架办公楼的模拟项目，完整走一遍方案比选、计算简图与荷载取值、内力分析与截面设计、变形与稳定校核、优化与报告撰写的全部环节，重点演示“先画草图、手算校核、再信机算”的工作习惯。项目为教学模拟，数据均标注为教学示意。</p>
+        </header>
 
         <h2>开篇：从学生到工程师的"最后一公里"</h2>
 
@@ -53,6 +63,48 @@
         <p>这件事揭示了一个深刻的事实：软件可以帮你算，但<strong>不能替你想</strong>。真正的结构设计，是从"画草图"开始的——手绘计算简图、手算初估截面、手校关键内力。软件只是工具，而结构力学才是你的"大脑"。</p>
 
         <p>本章我们将模拟一个完整的工程项目——一个四层钢框架办公楼的设计全过程。这不是一个真实项目的全部细节（真实的施工图设计要复杂得多），但涵盖了从方案到优化最核心的力学分析流程。请你跟随这个流程，把前27章的知识一一串联起来。</p>
+
+        <figure>
+            <svg viewBox="0 0 720 214" role="img" aria-labelledby="fig-cap-title fig-cap-desc" xmlns="http://www.w3.org/2000/svg">
+                <title id="fig-cap-title">综合项目的结构设计流水线</title>
+                <desc id="fig-cap-desc">五个阶段：方案比选与结构选型、建立计算简图与荷载取值、内力分析与截面设计、变形与稳定校核、优化与设计报告。下方注明手算校核贯穿全流程，机算结果必须与手算相互验证。</desc>
+                <defs>
+                    <marker id="cap-ah" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#475569"/></marker>
+                </defs>
+                <g font-size="12" text-anchor="middle">
+                    <rect x="14" y="34" width="130" height="104" rx="12" fill="#eff6ff" stroke="#93c5fd"/>
+                    <text x="79" y="58" fill="#1e40af">① 方案比选</text>
+                    <text x="79" y="80" font-size="10.5" fill="#475569">结构选型</text>
+                    <text x="79" y="98" font-size="10.5" fill="#475569">体系 / 跨度</text>
+                    <rect x="158" y="34" width="130" height="104" rx="12" fill="#fffbeb" stroke="#fcd34d"/>
+                    <text x="223" y="58" fill="#92400e">② 计算简图</text>
+                    <text x="223" y="80" font-size="10.5" fill="#475569">荷载取值</text>
+                    <text x="223" y="98" font-size="10.5" fill="#475569">工况组合</text>
+                    <rect x="302" y="34" width="130" height="104" rx="12" fill="#f0fdf4" stroke="#86efac"/>
+                    <text x="367" y="58" fill="#166534">③ 内力·截面</text>
+                    <text x="367" y="80" font-size="10.5" fill="#475569">内力分析</text>
+                    <text x="367" y="98" font-size="10.5" fill="#475569">截面设计</text>
+                    <rect x="446" y="34" width="130" height="104" rx="12" fill="#fdf2f8" stroke="#f9a8d4"/>
+                    <text x="511" y="58" fill="#9d174d">④ 校核</text>
+                    <text x="511" y="80" font-size="10.5" fill="#475569">挠度验算</text>
+                    <text x="511" y="98" font-size="10.5" fill="#475569">稳定验算</text>
+                    <rect x="590" y="34" width="118" height="104" rx="12" fill="#f5f3ff" stroke="#c4b5fd"/>
+                    <text x="649" y="58" fill="#5b21b6">⑤ 优化·报告</text>
+                    <text x="649" y="80" font-size="10.5" fill="#475569">迭代优化</text>
+                    <text x="649" y="98" font-size="10.5" fill="#475569">设计报告</text>
+                </g>
+                <g stroke="#475569" stroke-width="2" marker-end="url(#cap-ah)">
+                    <line x1="144" y1="86" x2="156" y2="86"/>
+                    <line x1="288" y1="86" x2="300" y2="86"/>
+                    <line x1="432" y1="86" x2="444" y2="86"/>
+                    <line x1="576" y1="86" x2="588" y2="86"/>
+                </g>
+                <rect x="14" y="152" width="694" height="44" rx="10" fill="#fef2f2" stroke="#fca5a5"/>
+                <text x="361" y="172" text-anchor="middle" font-size="11.5" fill="#b91c1c">手算校核贯穿全流程：每阶段都用简化手算（力法 / 弯矩分配 / 图乘法）与机算结果对比</text>
+                <text x="361" y="189" text-anchor="middle" font-size="11" fill="#475569">结果异常时先回查计算简图与边界条件，而不是盲目调整截面</text>
+            </svg>
+            <figcaption>综合项目的结构设计流水线：<strong>方案比选 → 计算简图与荷载 → 内力分析与截面设计 → 变形与稳定校核 → 优化与报告</strong>。这条流水线把前27章的零散知识串成可执行的工作顺序；关键在于每个阶段都要用手算做快速合理性校核，机算结果与手算相互印证后才进入下一阶段。</figcaption>
+        </figure>
 
         <h2>项目背景与设计要求</h2>
 
@@ -441,7 +493,7 @@ N / (φA) = 2600×10³ / (0.87×9460) ≈ 316 N/mm² > 305 N/mm²
             <a href="index.html">📖 返回目录</a>
             <a href="javascript:void(0)">下一章 →</a>
         </div>
-    </div>
+    </main>
 </div>
 </div>
 </body>
