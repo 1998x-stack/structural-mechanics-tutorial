@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第15章 影响线</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        pre { overflow-x: auto; max-width: 100%; }
+        table { max-width: 100%; }
+        @media (max-width: 768px) { table { display: block; overflow-x: auto; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="章节目录">
         <h3>🏗️ 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 绪论</a></li>
@@ -41,8 +46,13 @@
             <li><a href="27.html">第27章 大跨与高层结构</a></li>
             <li><a href="28.html">第28章 综合项目实战</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main id="content" class="main-content">
+
+        <header class="article-header">
+            <h1>第15章 影响线：让移动荷载“全息成像”</h1>
+            <p class="dek">当荷载是移动的，一个固定截面的内力会随荷载位置不断变化。影响线用单位移动荷载把“所有可能的位置”压缩成一条曲线，从而一眼看出最不利荷载布置。本章用静力法推导简支梁反力、弯矩、剪力影响线，再讲机动法的虚功原理依据，最后给出最不利荷载位置与最大内力的计算流程。</p>
+        </header>
 
         <h2>移动的荷与不变的影响</h2>
 
@@ -56,7 +66,7 @@
 
         <h3>什么是影响线</h3>
 
-        <p>简单来说，<strong>影响线</strong>描述的是：当一个单位集中荷载 \(P = 1\) 在结构上移动时，结构上某一指定位置的某一力学量（反力、剪力、弯矩）随荷载位置变化而变化的规律。</p>
+        <p>简单来说，<strong>影响线</strong>描述的是：当一个单位集中荷载 <math class="math-inline" aria-label="P = 1"><mi>P</mi><mo>=</mo><mn>1</mn></math> 在结构上移动时，结构上某一指定位置的某一力学量（反力、剪力、弯矩）随荷载位置变化而变化的规律。</p>
 
         <p>关键在于理解"影响线"和"内力图"之间的区别——这是初学者最容易混淆的地方：</p>
 
@@ -72,7 +82,7 @@
                 <tr>
                     <td>荷载</td>
                     <td>固定位置、固定大小</td>
-                    <td>单位移动荷载 \(P=1\)</td>
+                    <td>单位移动荷载 <math class="math-inline" aria-label="P=1"><mi>P</mi><mo>=</mo><mn>1</mn></math></td>
                 </tr>
                 <tr>
                     <td>横坐标</td>
@@ -111,15 +121,15 @@
 
         <h2>静力法作影响线</h2>
 
-        <p>静力法（Static Method）是作影响线最基本的方法。它的思路很简单：把移动荷载放在任意位置 \(x\) 处，利用静力平衡条件求出指定量的表达式（关于 \(x\) 的函数），然后画出该函数的图形。这个图形就是影响线。</p>
+        <p>静力法（Static Method）是作影响线最基本的方法。它的思路很简单：把移动荷载放在任意位置 <math class="math-inline" aria-label="x"><mi>x</mi></math> 处，利用静力平衡条件求出指定量的表达式（关于 <math class="math-inline" aria-label="x"><mi>x</mi></math> 的函数），然后画出该函数的图形。这个图形就是影响线。</p>
 
         <h3>简支梁的影响线</h3>
 
-        <p>我们先从最简单的简支梁开始。考虑一根跨度 \(l\) 的简支梁，上有一个单位移动荷载 \(P=1\)，距左端距离为 \(x\)。</p>
+        <p>我们先从最简单的简支梁开始。考虑一根跨度 <math class="math-inline" aria-label="l"><mi>l</mi></math> 的简支梁，上有一个单位移动荷载 <math class="math-inline" aria-label="P=1"><mi>P</mi><mo>=</mo><mn>1</mn></math>，距左端距离为 <math class="math-inline" aria-label="x"><mi>x</mi></math>。</p>
 
-        <p><strong>支座反力 \(R_A\) 的影响线。</strong></p>
+        <p><strong>支座反力 <math class="math-inline" aria-label="R A"><msub><mi>R</mi><mi>A</mi></msub></math> 的影响线。</strong></p>
 
-        <p>由整体平衡 \(\sum M_B = 0\)：</p>
+        <p>由整体平衡 <math class="math-inline" aria-label="Σ M B = 0"><mo>∑</mo><msub><mi>M</mi><mi>B</mi></msub><mo>=</mo><mn>0</mn></math>：</p>
 
         <pre><code>R_A · l - 1 · (l - x) = 0
 → R_A = (l - x) / l
@@ -127,53 +137,91 @@
 当 x = 0（荷载在左端）时，R_A = 1
 当 x = l（荷载在右端）时，R_A = 0</code></pre>
 
-        <p>所以 \(R_A\) 的影响线是一条从 \((0, 1)\) 到 \((l, 0)\) 的直线。类似地，\(R_B\) 的影响线（由 \(\sum M_A = 0\)）是一条从 \((0, 0)\) 到 \((l, 1)\) 的直线。</p>
+        <p>所以 <math class="math-inline" aria-label="R A"><msub><mi>R</mi><mi>A</mi></msub></math> 的影响线是一条从 <math class="math-inline" aria-label="(0, 1)"><mo>(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo>)</mo></math> 到 <math class="math-inline" aria-label="(l, 0)"><mo>(</mo><mi>l</mi><mo>,</mo><mn>0</mn><mo>)</mo></math> 的直线。类似地，<math class="math-inline" aria-label="R B"><msub><mi>R</mi><mi>B</mi></msub></math> 的影响线（由 <math class="math-inline" aria-label="Σ M A = 0"><mo>∑</mo><msub><mi>M</mi><mi>A</mi></msub><mo>=</mo><mn>0</mn></math>）是一条从 <math class="math-inline" aria-label="(0, 0)"><mo>(</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo>)</mo></math> 到 <math class="math-inline" aria-label="(l, 1)"><mo>(</mo><mi>l</mi><mo>,</mo><mn>1</mn><mo>)</mo></math> 的直线。</p>
 
-        <p><strong>跨中截面 C 的弯矩 \(M_C\) 影响线。</strong></p>
+        <p><strong>跨中截面 C 的弯矩 <math class="math-inline" aria-label="M C"><msub><mi>M</mi><mi>C</mi></msub></math> 影响线。</strong></p>
 
-        <p>假设截面 C 距左端距离为 \(a\)，距右端距离为 \(b\)，\(a + b = l\)。用截面法，有两种情况：</p>
+        <p>假设截面 C 距左端距离为 <math class="math-inline" aria-label="a"><mi>a</mi></math>，距右端距离为 <math class="math-inline" aria-label="b"><mi>b</mi></math>，<math class="math-inline" aria-label="a + b = l"><mi>a</mi><mo>+</mo><mi>b</mi><mo>=</mo><mi>l</mi></math>。用截面法，有两种情况：</p>
 
-        <p>情况一：荷载在 C 左侧（\(0 \le x \le a\)），取 C 右侧隔离体：</p>
+        <p>情况一：荷载在 C 左侧（<math class="math-inline" aria-label="0 ≤ x ≤ a"><mn>0</mn><mo>≤</mo><mi>x</mi><mo>≤</mo><mi>a</mi></math>），取 C 右侧隔离体：</p>
 
         <pre><code>M_C = R_B · b = (x/l) · b
 
 当 x = 0 时，M_C = 0
 当 x = a 时，M_C = a·b/l（最大值）</code></pre>
 
-        <p>情况二：荷载在 C 右侧（\(a \le x \le l\)），取 C 左侧隔离体：</p>
+        <p>情况二：荷载在 C 右侧（<math class="math-inline" aria-label="a ≤ x ≤ l"><mi>a</mi><mo>≤</mo><mi>x</mi><mo>≤</mo><mi>l</mi></math>），取 C 左侧隔离体：</p>
 
         <pre><code>M_C = R_A · a = ((l - x)/l) · a
 
 当 x = a 时，M_C = a·b/l（最大值）
 当 x = l 时，M_C = 0</code></pre>
 
-        <p>所以 \(M_C\) 的影响线是一个三角形，顶点在 C 截面处，最大值为 \(ab/l\)。如果 C 在跨中（\(a = b = l/2\)），则最大值为 \(l/4\)。</p>
+        <p>所以 <math class="math-inline" aria-label="M C"><msub><mi>M</mi><mi>C</mi></msub></math> 的影响线是一个三角形，顶点在 C 截面处，最大值为 <math class="math-inline" aria-label="ab/l"><mi>a</mi><mi>b</mi><mo>/</mo><mi>l</mi></math>。如果 C 在跨中（<math class="math-inline" aria-label="a = b = l/2"><mi>a</mi><mo>=</mo><mi>b</mi><mo>=</mo><mi>l</mi><mo>/</mo><mn>2</mn></math>），则最大值为 <math class="math-inline" aria-label="l/4"><mi>l</mi><mo>/</mo><mn>4</mn></math>。</p>
 
-        <p><strong>剪力 \(Q_C\) 的影响线。</strong></p>
+        <p><strong>剪力 <math class="math-inline" aria-label="Q C"><msub><mi>Q</mi><mi>C</mi></msub></math> 的影响线。</strong></p>
 
         <p>剪力影响线稍稍复杂一点。当荷载移动到 C 截面左侧和右侧时，剪力的符号会发生变化——这是影响线和内力图最有趣的区别之一。</p>
 
-        <p>情况一：荷载在 C 左侧（\(0 \le x < a\)），取 C 右侧隔离体：</p>
+        <p>情况一：荷载在 C 左侧（<math class="math-inline" aria-label="0 ≤ x &lt; a"><mn>0</mn><mo>≤</mo><mi>x</mi><mo>&lt;</mo><mi>a</mi></math>），取 C 右侧隔离体：</p>
 
         <pre><code>Q_C = -R_B = -x/l</code></pre>
 
-        <p>情况二：荷载在 C 右侧（\(a < x \le l\)），取 C 左侧隔离体：</p>
+        <p>情况二：荷载在 C 右侧（<math class="math-inline" aria-label="a &lt; x ≤ l"><mi>a</mi><mo>&lt;</mo><mi>x</mi><mo>≤</mo><mi>l</mi></math>），取 C 左侧隔离体：</p>
 
         <pre><code>Q_C = +R_A = (l - x)/l</code></pre>
 
-        <p>到这一步，细心的人会注意到：当 \(x = a\) 时，Q_C 存在一个"跳变"——从左侧的 \(-a/l\) 跳到右侧的 \((l - a)/l = b/l\)。这个跳跃的幅度恰好是 1，即单位荷载本身。这是剪力影响线的固有特征。</p>
+        <p>到这一步，细心的人会注意到：当 <math class="math-inline" aria-label="x = a"><mi>x</mi><mo>=</mo><mi>a</mi></math> 时，Q_C 存在一个"跳变"——从左侧的 <math class="math-inline" aria-label="-a/l"><mo>−</mo><mi>a</mi><mo>/</mo><mi>l</mi></math> 跳到右侧的 <math class="math-inline" aria-label="(l - a)/l = b/l"><mo>(</mo><mi>l</mi><mo>−</mo><mi>a</mi><mo>)</mo><mo>/</mo><mi>l</mi><mo>=</mo><mi>b</mi><mo>/</mo><mi>l</mi></math>。这个跳跃的幅度恰好是 1，即单位荷载本身。这是剪力影响线的固有特征。</p>
 
         <div class="highlight">
-            <strong>定性提示：</strong>请记住一个重要的规律——静定结构的影响线都是由<strong>直线段</strong>组成的。这是因为静定结构的反力和内力都可以用静力平衡方程表示为荷载位置 \(x\) 的线性函数。超静定结构的影响线则是<strong>曲线</strong>，因为需要考虑变形协调条件使问题变得复杂了。
+            <strong>定性提示：</strong>请记住一个重要的规律——静定结构的影响线都是由<strong>直线段</strong>组成的。这是因为静定结构的反力和内力都可以用静力平衡方程表示为荷载位置 <math class="math-inline" aria-label="x"><mi>x</mi></math> 的线性函数。超静定结构的影响线则是<strong>曲线</strong>，因为需要考虑变形协调条件使问题变得复杂了。
         </div>
 
         <h3>伸臂梁与多跨梁的影响线</h3>
 
-        <p>伸臂梁（Cantilever Beam）的影响线画法和简支梁本质上是一样的——仍然用静力法，把荷载放在任意位置 \(x\)，列平衡方程求指定量的表达式。区别在于，荷载可以移动到悬臂段上，所以影响线的范围需要覆盖整个梁长（包括悬臂部分）。</p>
+        <p>伸臂梁（Cantilever Beam）的影响线画法和简支梁本质上是一样的——仍然用静力法，把荷载放在任意位置 <math class="math-inline" aria-label="x"><mi>x</mi></math>，列平衡方程求指定量的表达式。区别在于，荷载可以移动到悬臂段上，所以影响线的范围需要覆盖整个梁长（包括悬臂部分）。</p>
 
         <p>对于多跨静定梁，情况稍微复杂一些。多跨梁由基本部分和附属部分组成。基本部分的力学量影响线只在基本部分及其附属部分有值；而附属部分的力学量影响线仅在附属部分有值。用一句话概括：<strong>附属部分影响线不向基本部分传递</strong>——因为荷载作用在基本部分时，附属部分不受力（附属部分靠基本部分支撑，但反过来不成立）。</p>
 
         <p>具体作图时，我们一般先画出各跨简支梁对应的影响线，然后根据多跨梁的传力路径进行修正。这个方法在结构力学教材中通常被称为"联合法"或"分段法"。</p>
+
+        <figure>
+            <svg viewBox="0 0 720 340" role="img" aria-labelledby="fig-il-title fig-il-desc" xmlns="http://www.w3.org/2000/svg">
+                <title id="fig-il-title">简支梁支座反力、跨中弯矩与剪力影响线</title>
+                <desc id="fig-il-desc">简支梁跨度 l，单位移动荷载 P=1 距左端 x。上方为梁与截面 C；下方三条图依次为反力 R A 影响线（由 1 降到 0 的直线）、截面 C 弯矩影响线（顶点在 C、峰值为 ab/l 的三角形）、截面 C 剪力影响线（在 C 处由负跳到正的折线）。</desc>
+                <line x1="60" y1="60" x2="660" y2="60" stroke="#1e3a8a" stroke-width="6" stroke-linecap="round"/>
+                <line x1="60" y1="52" x2="60" y2="68" stroke="#1e3a8a" stroke-width="3"/>
+                <line x1="660" y1="52" x2="660" y2="68" stroke="#1e3a8a" stroke-width="3"/>
+                <line x1="420" y1="48" x2="420" y2="72" stroke="#b91c1c" stroke-width="2.5"/>
+                <text x="420" y="42" text-anchor="middle" font-size="12" fill="#b91c1c">C</text>
+                <line x1="300" y1="34" x2="300" y2="56" stroke="#0ea5e9" stroke-width="3" marker-end="url(#il-ah)"/>
+                <text x="300" y="28" text-anchor="middle" font-size="12" fill="#0369a1">P=1</text>
+                <text x="54" y="82" font-size="12" fill="#1e3a8a">A</text><text x="658" y="82" font-size="12" fill="#1e3a8a">B</text>
+                <text x="360" y="82" text-anchor="middle" font-size="11" fill="#475569">x</text>
+                <text x="16" y="122" font-size="12" fill="#475569">R_A</text>
+                <line x1="60" y1="120" x2="660" y2="120" stroke="#cbd5e1" stroke-dasharray="4 4"/>
+                <line x1="60" y1="80" x2="660" y2="120" stroke="#2563eb" stroke-width="3"/>
+                <text x="66" y="76" font-size="11" fill="#2563eb">1</text>
+                <text x="16" y="216" font-size="12" fill="#475569">M_C</text>
+                <line x1="60" y1="210" x2="660" y2="210" stroke="#cbd5e1" stroke-dasharray="4 4"/>
+                <line x1="60" y1="210" x2="420" y2="170" stroke="#16a34a" stroke-width="3"/>
+                <line x1="420" y1="170" x2="660" y2="210" stroke="#16a34a" stroke-width="3"/>
+                <text x="426" y="166" font-size="11" fill="#166534">ab/l</text>
+                <text x="16" y="308" font-size="12" fill="#475569">Q_C</text>
+                <line x1="60" y1="300" x2="660" y2="300" stroke="#cbd5e1" stroke-dasharray="4 4"/>
+                <line x1="60" y1="300" x2="420" y2="324" stroke="#d97706" stroke-width="3"/>
+                <line x1="420" y1="284" x2="660" y2="300" stroke="#d97706" stroke-width="3"/>
+                <line x1="420" y1="284" x2="420" y2="324" stroke="#d97706" stroke-width="1.5" stroke-dasharray="3 3"/>
+                <text x="426" y="332" font-size="11" fill="#b45309">在 C 处跳变幅度 = 1</text>
+                <text x="230" y="216" font-size="11" fill="#94a3b8">反力与弯矩影响线均为直线段</text>
+                <defs>
+                    <marker id="il-ah" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+                        <path d="M0 0 L7 3 L0 6 Z" fill="#0ea5e9"/>
+                    </marker>
+                </defs>
+            </svg>
+            <figcaption>简支梁三条典型影响线（单位移动荷载 <math class="math-inline" aria-label="P 等于 1"><mi>P</mi><mo>=</mo><mn>1</mn></math>）：<strong>反力 R_A</strong> 由 1 线性降到 0；<strong>截面 C 弯矩</strong> 呈三角峰，峰值 <math class="math-inline" aria-label="a b 除以 l"><mi>a</mi><mi>b</mi><mo>/</mo><mi>l</mi></math>，当 C 在跨中时等于 <math class="math-inline" aria-label="l 除以 4"><mi>l</mi><mo>/</mo><mn>4</mn></math>；<strong>截面 C 剪力</strong> 在 C 处由 <math class="math-inline" aria-label="负 a 除以 l"><mo>−</mo><mi>a</mi><mo>/</mo><mi>l</mi></math> 跳到 <math class="math-inline" aria-label="b 除以 l"><mi>b</mi><mo>/</mo><mi>l</mi></math>，跳变幅度恰为单位荷载 1。图示为定性比例，纵坐标已归一化。</figcaption>
+        </figure>
 
         <h2>机动法作影响线</h2>
 
@@ -183,14 +231,14 @@
 
         <h3>机动法的基本原理</h3>
 
-        <p>机动法的核心思想是：要绘制某量 \(S\) 的影响线，就<strong>去掉与 \(S\) 对应的约束</strong>，让结构变成机构（mechanism），然后给机构一个单位虚位移，得到的位移图就是影响线的形状。</p>
+        <p>机动法的核心思想是：要绘制某量 <math class="math-inline" aria-label="S"><mi>S</mi></math> 的影响线，就<strong>去掉与 <math class="math-inline" aria-label="S"><mi>S</mi></math> 对应的约束</strong>，让结构变成机构（mechanism），然后给机构一个单位虚位移，得到的位移图就是影响线的形状。</p>
 
         <p>具体来说：</p>
 
         <ul>
-            <li>要画弯矩 \(M\) 的影响线 → 在相应截面<strong>插入铰</strong>（释放转动约束），在铰两侧施加一对单位转角 \(\theta = 1\)，体系的位移图即为影响线。</li>
-            <li>要画剪力 \(Q\) 的影响线 → 在相应截面<strong>切断</strong>（释放竖向约束），让两侧产生单位相对竖向位移 \(\delta = 1\)，体系的位移图即为影响线。</li>
-            <li>要画反力 \(R\) 的影响线 → <strong>去掉支座</strong>（释放平动约束），沿反力方向施加单位位移 \(\delta = 1\)，体系的位移图即为影响线。</li>
+            <li>要画弯矩 <math class="math-inline" aria-label="M"><mi>M</mi></math> 的影响线 → 在相应截面<strong>插入铰</strong>（释放转动约束），在铰两侧施加一对单位转角 <math class="math-inline" aria-label="θ = 1"><mo>θ</mo><mo>=</mo><mn>1</mn></math>，体系的位移图即为影响线。</li>
+            <li>要画剪力 <math class="math-inline" aria-label="Q"><mi>Q</mi></math> 的影响线 → 在相应截面<strong>切断</strong>（释放竖向约束），让两侧产生单位相对竖向位移 <math class="math-inline" aria-label="= 1"><mi>delta</mi><mo>=</mo><mn>1</mn></math>，体系的位移图即为影响线。</li>
+            <li>要画反力 <math class="math-inline" aria-label="R"><mi>R</mi></math> 的影响线 → <strong>去掉支座</strong>（释放平动约束），沿反力方向施加单位位移 <math class="math-inline" aria-label="= 1"><mi>delta</mi><mo>=</mo><mn>1</mn></math>，体系的位移图即为影响线。</li>
         </ul>
 
         <div class="warning">
@@ -199,15 +247,15 @@
 
         <h3>机动法示例：简支梁跨中弯矩影响线</h3>
 
-        <p>以简支梁跨中截面 \(C\) 的弯矩 \(M_C\) 为例，用机动法作图：</p>
+        <p>以简支梁跨中截面 <math class="math-inline" aria-label="C"><mi>C</mi></math> 的弯矩 <math class="math-inline" aria-label="M C"><msub><mi>M</mi><mi>C</mi></msub></math> 为例，用机动法作图：</p>
 
-        <p>第一步，在截面 \(C\) 处插入一个铰（释放转动约束），在铰两侧施加一对单位转角。原来的简支梁变成一个"带铰的机构"。</p>
+        <p>第一步，在截面 <math class="math-inline" aria-label="C"><mi>C</mi></math> 处插入一个铰（释放转动约束），在铰两侧施加一对单位转角。原来的简支梁变成一个"带铰的机构"。</p>
 
-        <p>第二步，在铰左侧施加逆时针转角 \(\theta = 1\)，右侧施加顺时针转角 \(\theta = 1\)。因为转角是"单位"转角，铰左侧的梁段绕左端转动，右侧的梁段绕右端转动。</p>
+        <p>第二步，在铰左侧施加逆时针转角 <math class="math-inline" aria-label="θ = 1"><mo>θ</mo><mo>=</mo><mn>1</mn></math>，右侧施加顺时针转角 <math class="math-inline" aria-label="θ = 1"><mo>θ</mo><mo>=</mo><mn>1</mn></math>。因为转角是"单位"转角，铰左侧的梁段绕左端转动，右侧的梁段绕右端转动。</p>
 
-        <p>第三步，画出机构的位移图。由于梁段是刚性的（静定结构在去掉约束后变成刚性杆组成的机构），位移图由直线段组成。左段从 \(A\) 到 \(C\) 是一条直线（绕 \(A\) 转动），右段从 \(C\) 到 \(B\) 是一条直线（绕 \(B\) 转动）。在 \(C\) 处，两条直线相交，形成一个尖点。</p>
+        <p>第三步，画出机构的位移图。由于梁段是刚性的（静定结构在去掉约束后变成刚性杆组成的机构），位移图由直线段组成。左段从 <math class="math-inline" aria-label="A"><mi>A</mi></math> 到 <math class="math-inline" aria-label="C"><mi>C</mi></math> 是一条直线（绕 <math class="math-inline" aria-label="A"><mi>A</mi></math> 转动），右段从 <math class="math-inline" aria-label="C"><mi>C</mi></math> 到 <math class="math-inline" aria-label="B"><mi>B</mi></math> 是一条直线（绕 <math class="math-inline" aria-label="B"><mi>B</mi></math> 转动）。在 <math class="math-inline" aria-label="C"><mi>C</mi></math> 处，两条直线相交，形成一个尖点。</p>
 
-        <p>这个位移图的形状——三角形，顶点在 \(C\)——正是 \(M_C\) 影响线的形状。而顶点的纵坐标值可以通过单位转角条件确定：左侧梁段在 \(C\) 处的竖向位移为 \(a \times 1 = a\)，但注意这个"1"是转角而非位移。实际计算时，如果规定两侧转角之和为 \(1\)（即 \(\theta_L + \theta_R = 1\)），则 \(C\) 点位移满足几何关系。</p>
+        <p>这个位移图的形状——三角形，顶点在 <math class="math-inline" aria-label="C"><mi>C</mi></math>——正是 <math class="math-inline" aria-label="M C"><msub><mi>M</mi><mi>C</mi></msub></math> 影响线的形状。而顶点的纵坐标值可以通过单位转角条件确定：左侧梁段在 <math class="math-inline" aria-label="C"><mi>C</mi></math> 处的竖向位移为 <math class="math-inline" aria-label="a × 1 = a"><mi>a</mi><mo>×</mo><mn>1</mn><mo>=</mo><mi>a</mi></math>，但注意这个"1"是转角而非位移。实际计算时，如果规定两侧转角之和为 <math class="math-inline" aria-label="1"><mn>1</mn></math>（即 <math class="math-inline" aria-label="θ L + θ R = 1"><msub><mo>θ</mo><mi>L</mi></msub><mo>+</mo><msub><mo>θ</mo><mi>R</mi></msub><mo>=</mo><mn>1</mn></math>），则 <math class="math-inline" aria-label="C"><mi>C</mi></math> 点位移满足几何关系。</p>
 
         <div class="tip">
             <strong>快捷口诀：</strong>"求什么，拆什么；拆完了，给位移；位移图，就是它。" 用机动法作影响线，本质上是"以几何代代数"——用机构的位移形态代替代数函数的推导。这不光快，而且直观，能帮你建立"荷载移到哪里最不利"的直觉。
@@ -270,12 +318,12 @@ S_max = q · 正号部分的面积</code></pre>
 
         <h2>影响线的进一步推广</h2>
 
-        <p>以上我们讨论的都是静定结构的影响线。对于超静定结构，影响线的形状不再是直线段，而是<strong>曲线</strong>。这是因为超静定结构的内力不仅取决于平衡条件，还取决于变形协调条件，而变形协调条件引入了弹性参数（截面刚度 \(EI\) 等）。</p>
+        <p>以上我们讨论的都是静定结构的影响线。对于超静定结构，影响线的形状不再是直线段，而是<strong>曲线</strong>。这是因为超静定结构的内力不仅取决于平衡条件，还取决于变形协调条件，而变形协调条件引入了弹性参数（截面刚度 <math class="math-inline" aria-label="EI"><mi>E</mi><mi>I</mi></math> 等）。</p>
 
         <p>作超静定结构影响线的方法主要有两种：</p>
 
         <ul>
-            <li><strong>力法/位移法</strong>——将单位荷载放在任意位置，用力法或位移法求解指定量，得到 \(x\) 的函数表达式。这个方法理论上可行，但计算量很大。</li>
+            <li><strong>力法/位移法</strong>——将单位荷载放在任意位置，用力法或位移法求解指定量，得到 <math class="math-inline" aria-label="x"><mi>x</mi></math> 的函数表达式。这个方法理论上可行，但计算量很大。</li>
             <li><strong>机动法（推广）</strong>——在超静定结构中用机动法作影响线时，撤去约束后得到的不再是机构，而是一个<strong>静定结构</strong>。它的位移图是曲线（弹性曲线），而不是直线。这个方法的难点在于需要求解弹性曲线。</li>
         </ul>
 
@@ -301,7 +349,7 @@ S_max = q · 正号部分的面积</code></pre>
             <a href="index.html">📖 返回目录</a>
             <a href="16.html">下一章 →</a>
         </div>
-    </div>
+    </main>
 </div>
 </div>
 </body>
