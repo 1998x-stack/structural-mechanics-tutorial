@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第27章 大跨与高层结构</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        pre { overflow-x: auto; max-width: 100%; }
+        table { max-width: 100%; }
+        @media (max-width: 768px) { table { display: block; overflow-x: auto; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="章节目录">
         <h3>🏗️ 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 绪论</a></li>
@@ -41,8 +46,13 @@
             <li><a href="27.html" class="active">第27章 大跨与高层结构</a></li>
             <li><a href="28.html">第28章 综合项目实战</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main id="content" class="main-content">
+
+        <header class="article-header">
+            <h1>第27章 大跨与高层结构：空间体系、抗风抗震与结构控制</h1>
+            <p class="dek">跨度与高度是两条不同的力学主线。本章讲清大跨的网架、网壳、悬索三种空间体系如何以轴力／薄膜力抵抗整体弯矩，再对照超高层框架、框架-剪力墙与筒体体系的受力分工，最后进入风荷载、地震反应谱与隔震消能等结构控制手段。全文以定性受力路径为主，引用的工程数据均标注来源。</p>
+        </header>
 
         <h2>开篇：人类对高度的向往</h2>
 
@@ -55,6 +65,56 @@
         <h2>大跨空间结构体系</h2>
 
         <p>"大跨"是个相对的概念。在建筑结构中，一般认为跨度超过60米就可以称为大跨度结构。但真正让工程师热血沸腾的，是跨度超过100米甚至200米的结构——比如体育场穹顶、飞机库屋盖、会展中心屋面。</p>
+
+        <figure>
+            <svg viewBox="0 0 720 250" role="img" aria-labelledby="fig-span-title fig-span-desc" xmlns="http://www.w3.org/2000/svg">
+                <title id="fig-span-title">三种大跨空间结构体系的受力形态</title>
+                <desc id="fig-span-desc">左侧网架为由双向杆系构成的平面网格，整体受弯、局部传力；中间网壳为曲面壳，以薄膜力（轴压）为主；右侧悬索为下垂索，索内受拉、边缘需受压锚固。三者都通过轴力或薄膜力而非弯曲抵抗整体荷载。</desc>
+                <g>
+                    <rect x="16" y="18" width="222" height="214" rx="14" fill="#f8fafc" stroke="#cbd5e1"/>
+                    <text x="360" y="244" text-anchor="middle" font-size="11" fill="#64748b">三图均为教学示意，非具体工程尺寸</text>
+                </g>
+                <g stroke="#1e40af" stroke-width="1.4" fill="none">
+                    <line x1="46" y1="46" x2="208" y2="46"/><line x1="46" y1="72" x2="208" y2="72"/>
+                    <line x1="46" y1="98" x2="208" y2="98"/><line x1="46" y1="124" x2="208" y2="124"/>
+                    <line x1="66" y1="38" x2="66" y2="132"/><line x1="106" y1="38" x2="106" y2="132"/>
+                    <line x1="146" y1="38" x2="146" y2="132"/><line x1="186" y1="38" x2="186" y2="132"/>
+                </g>
+                <g stroke="#b91c1c" stroke-width="1.8">
+                    <line x1="66" y1="132" x2="66" y2="150"/><line x1="106" y1="132" x2="106" y2="150"/>
+                    <line x1="146" y1="132" x2="146" y2="150"/><line x1="186" y1="132" x2="186" y2="150"/>
+                </g>
+                <text x="127" y="174" text-anchor="middle" font-size="12.5" fill="#1e40af">网架 Space Truss</text>
+                <text x="127" y="196" text-anchor="middle" font-size="11" fill="#475569">双向杆系网格</text>
+                <text x="127" y="214" text-anchor="middle" font-size="11" fill="#475569">整体受弯 · 局部传力</text>
+                <g>
+                    <rect x="250" y="18" width="222" height="214" rx="14" fill="#f8fafc" stroke="#cbd5e1"/>
+                    <path d="M274,140 Q361,40 448,140" fill="none" stroke="#166534" stroke-width="2"/>
+                </g>
+                <g stroke="#166534" stroke-width="1.2">
+                    <line x1="296" y1="126" x2="296" y2="140"/><line x1="326" y1="106" x2="326" y2="140"/>
+                    <line x1="361" y1="98" x2="361" y2="140"/><line x1="396" y1="106" x2="396" y2="140"/>
+                    <line x1="426" y1="126" x2="426" y2="140"/>
+                    <line x1="274" y1="140" x2="448" y2="140"/>
+                </g>
+                <text x="361" y="174" text-anchor="middle" font-size="12.5" fill="#166534">网壳 Latticed Shell</text>
+                <text x="361" y="196" text-anchor="middle" font-size="11" fill="#475569">曲面壳体形态</text>
+                <text x="361" y="214" text-anchor="middle" font-size="11" fill="#475569">薄膜力为主 · 轴压传递</text>
+                <g>
+                    <rect x="484" y="18" width="222" height="214" rx="14" fill="#f8fafc" stroke="#cbd5e1"/>
+                    <path d="M508,58 Q595,150 682,58" fill="none" stroke="#9d174d" stroke-width="2"/>
+                </g>
+                <g stroke="#9d174d" stroke-width="1.2">
+                    <line x1="508" y1="58" x2="508" y2="130"/><line x1="595" y1="118" x2="595" y2="130"/>
+                    <line x1="682" y1="58" x2="682" y2="130"/>
+                    <line x1="508" y1="130" x2="682" y2="130"/>
+                </g>
+                <text x="595" y="174" text-anchor="middle" font-size="12.5" fill="#9d174d">悬索 Cable</text>
+                <text x="595" y="196" text-anchor="middle" font-size="11" fill="#475569">索内受拉</text>
+                <text x="595" y="214" text-anchor="middle" font-size="11" fill="#475569">边缘需受压锚固</text>
+            </svg>
+            <figcaption>三种大跨空间结构体系的受力形态：<strong>网架</strong>靠双向杆系“整体受弯、局部传力”；<strong>网壳</strong>靠曲面形态把荷载转为薄膜力（轴压为主）；<strong>悬索</strong>靠索内受拉、以边缘受压锚固平衡水平力。共同点是：都用轴力或薄膜力而非纯弯曲来抵抗整体荷载，因而材料利用效率高。</figcaption>
+        </figure>
 
         <h3>网架结构（Space Truss）</h3>
 
@@ -286,7 +346,7 @@
             <a href="index.html">📖 返回目录</a>
             <a href="28.html">下一章 →</a>
         </div>
-    </div>
+    </main>
 </div>
 </div>
 </body>
