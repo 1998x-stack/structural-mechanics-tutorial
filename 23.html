@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第23章 结构力学求解器</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        pre { overflow-x: auto; max-width: 100%; }
+        table { max-width: 100%; }
+        @media (max-width: 768px) { table { display: block; overflow-x: auto; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="章节目录">
         <h3>🏗️ 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 绪论</a></li>
@@ -41,8 +46,13 @@
             <li><a href="27.html">第27章 大跨与高层结构</a></li>
             <li><a href="28.html">第28章 综合项目实战</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main id="content" class="main-content">
+
+        <header class="article-header">
+            <h1>第23章 结构力学求解器：从手算步入电算</h1>
+            <p class="dek">求解器是“手算”与“工业级有限元”之间的桥梁。本章讲清前处理—求解设置—求解—后处理四步流程、结点/单元/约束/荷载的建模规范、内力与位移结果的合理性检查，并用两跨连续梁把机算结果与手算逐一对比。全文以杆系结构、线弹性静力分析为准。</p>
+        </header>
 
         <h2>开篇：手算时代的终结者</h2>
 
@@ -133,6 +143,42 @@
         <h2>建模基本操作</h2>
 
         <p>用求解器分析一个结构，通常需要经过四个步骤：<strong>前处理</strong>（建立模型）→<strong>求解设置</strong>（选择分析类型）→<strong>求解计算</strong>（交给计算机）→<strong>后处理</strong>（查看和分析结果）。其中，前处理是工作量最大也最容易出错的环节。</p>
+
+        <figure>
+            <svg viewBox="0 0 720 210" role="img" aria-labelledby="fig-flow-title fig-flow-desc" xmlns="http://www.w3.org/2000/svg">
+                <title id="fig-flow-title">结构力学求解器的四步工作流程</title>
+                <desc id="fig-flow-desc">从左到右四个阶段：前处理（定义结点、单元、约束与荷载）、求解设置（选择分析类型）、求解计算（计算机建立并求解方程组）、后处理（查看内力图与位移并与手算对比）。</desc>
+                <defs>
+                    <marker id="fl-ah" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#475569"/></marker>
+                </defs>
+                <g font-size="13" text-anchor="middle">
+                    <rect x="20" y="50" width="150" height="104" rx="12" fill="#eff6ff" stroke="#93c5fd"/>
+                    <text x="95" y="76" fill="#1e40af">① 前处理</text>
+                    <text x="95" y="100" font-size="11" fill="#475569">定义结点 / 单元</text>
+                    <text x="95" y="120" font-size="11" fill="#475569">约束 / 荷载</text>
+                    <text x="95" y="140" font-size="10.5" fill="#b91c1c">工作量最大、最易出错</text>
+                    <rect x="200" y="50" width="150" height="104" rx="12" fill="#fffbeb" stroke="#fcd34d"/>
+                    <text x="275" y="76" fill="#92400e">② 求解设置</text>
+                    <text x="275" y="100" font-size="11" fill="#475569">选择分析类型</text>
+                    <text x="275" y="120" font-size="11" fill="#475569">内力 / 位移 / 影响线</text>
+                    <rect x="380" y="50" width="150" height="104" rx="12" fill="#f0fdf4" stroke="#86efac"/>
+                    <text x="455" y="76" fill="#166534">③ 求解计算</text>
+                    <text x="455" y="100" font-size="11" fill="#475569">矩阵位移法</text>
+                    <text x="455" y="120" font-size="11" fill="#475569">建立并解方程组</text>
+                    <rect x="560" y="50" width="140" height="104" rx="12" fill="#fdf2f8" stroke="#f9a8d4"/>
+                    <text x="630" y="76" fill="#9d174d">④ 后处理</text>
+                    <text x="630" y="100" font-size="11" fill="#475569">内力图 / 位移</text>
+                    <text x="630" y="120" font-size="11" fill="#475569">与手算对比校核</text>
+                </g>
+                <g stroke="#475569" stroke-width="2" marker-end="url(#fl-ah)">
+                    <line x1="170" y1="102" x2="198" y2="102"/>
+                    <line x1="350" y1="102" x2="378" y2="102"/>
+                    <line x1="530" y1="102" x2="558" y2="102"/>
+                </g>
+                <text x="360" y="182" text-anchor="middle" font-size="11" fill="#475569">建模完成后先用已知结果的简单荷载做“合理性检查”，再用于实际分析</text>
+            </svg>
+            <figcaption>求解器的四步工作流程：<strong>前处理</strong>（建模，工作量最大）→<strong>求解设置</strong>→<strong>求解计算</strong>→<strong>后处理</strong>（结果校核）。本章反复强调：前处理与后处理校核才是工程判断的关键环节，中间的“点击求解”反而是最省心的一步。</figcaption>
+        </figure>
 
         <h3>第一步：定义结点与单元</h3>
 
@@ -244,7 +290,7 @@
 
         <h3>手算关键结果</h3>
 
-        <p>用力法或弯矩分配法可求得：中间支座弯矩M_B = -qL²/8 = -15×6²/8 = -67.5 kN·m。边支座弯矩为零。跨中最大弯矩 = qL²/16 = 33.75 kN·m。</p>
+        <p>用力法或弯矩分配法可求得：中间支座弯矩 <math class="math-inline" aria-label="M B 等于 负 q L 平方 除以 8"><msub><mi>M</mi><mi>B</mi></msub><mo>=</mo><mo>−</mo><mfrac><mrow><mi>q</mi><msup><mi>L</mi><mn>2</mn></msup></mrow><mn>8</mn></mfrac></math> = -15×6²/8 = -67.5 kN·m。边支座弯矩为零。跨中最大弯矩 <math class="math-inline" aria-label="跨中最大弯矩等于 q L 平方 除以 16"><mo>=</mo><mfrac><mrow><mi>q</mi><msup><mi>L</mi><mn>2</mn></msup></mrow><mn>16</mn></mfrac></math> = 33.75 kN·m。</p>
 
         <h3>求解器输入文件示例</h3>
 
@@ -374,7 +420,7 @@ SUPPORT, 3, GUIDED       // 定向支座：允许竖向位移，约束转角和�
             <a href="index.html">📖 返回目录</a>
             <a href="24.html">下一章 →</a>
         </div>
-    </div>
+    </main>
 </div>
 </div>
 </body>
