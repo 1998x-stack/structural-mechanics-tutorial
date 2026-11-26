@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第14章 矩阵位移法（二）</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        pre { overflow-x: auto; max-width: 100%; }
+        table { max-width: 100%; }
+        @media (max-width: 768px) { table { display: block; overflow-x: auto; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="章节目录">
         <h3>🏗️ 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 绪论</a></li>
@@ -41,14 +46,19 @@
             <li><a href="27.html">第27章 大跨与高层结构</a></li>
             <li><a href="28.html">第28章 综合项目实战</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main id="content" class="main-content">
 
-        <h2>引言：矩阵位移法的"最后一公里"</h2>
+        <header class="article-header">
+            <h1>第14章 矩阵位移法（二）：边界条件与等效结点荷载</h1>
+            <p class="dek">总刚集成之后还剩最后一步：去掉结构的刚体自由度。本章讲清置零法与置大数法两种边界条件引入方式、非结点荷载如何化为等效结点荷载，并给出从自由度编号到杆端力回代的完整编程流程。全文以线弹性、小变形的平面杆系结构为准。</p>
+        </header>
 
-        <p>同学们好，上一章我们走完了矩阵位移法的大部分旅程——单元刚度矩阵、坐标变换、总刚集成。但大家应该已经意识到一个问题：如果直接求解 \([K]\{U\} = \{P\}\)，得到的结果肯定不对——因为整体刚度矩阵 \([K]\) 是奇异的（singular）。</p>
+        <h2>引言：矩阵位移法的“最后一公里”</h2>
 
-        <p>为什么？设想一根悬空的梁——没有任何支座约束，你在上面加任何荷载，它都会产生刚体运动（平移+转动），位移趋于无穷大。在数学上，这意味着 \([K]\) 的行列式为零，无法求逆。在物理上，这意味着结构存在<strong>刚体位移（Rigid Body Motion）</strong>。要得到确定的解，我们必须告诉计算机：哪些自由度是被约束的——这就是<strong>边界条件（Boundary Conditions）</strong>。</p>
+        <p>同学们好，上一章我们走完了矩阵位移法的大部分旅程——单元刚度矩阵、坐标变换、总刚集成。但大家应该已经意识到一个问题：如果直接求解 <math class="math-inline" aria-label="K 乘 U 等于 P"><mrow><mo>[</mo><mi>K</mi><mo>]</mo><mo>{</mo><mi>U</mi><mo>}</mo><mo>=</mo><mo>{</mo><mi>P</mi><mo>}</mo></mrow></math>，得到的结果肯定不对——因为整体刚度矩阵 <math class="math-inline" aria-label="K"><mrow><mo>[</mo><mi>K</mi><mo>]</mo></mrow></math> 是奇异的（singular）。</p>
+
+        <p>为什么？设想一根悬空的梁——没有任何支座约束，你在上面加任何荷载，它都会产生刚体运动（平移+转动），位移趋于无穷大。在数学上，这意味着 <math class="math-inline" aria-label="K"><mrow><mo>[</mo><mi>K</mi><mo>]</mo></mrow></math> 的行列式为零，无法求逆。在物理上，这意味着结构存在<strong>刚体位移（Rigid Body Motion）</strong>。要得到确定的解，我们必须告诉计算机：哪些自由度是被约束的——这就是<strong>边界条件（Boundary Conditions）</strong>。</p>
 
         <p>2019年，我参与审查一个体育馆的钢结构屋盖设计。设计院提交的计算报告中，所有应力比都"完美"通过。但我在查看模型时发现了一个异常——屋盖在自重下的最大位移只有2mm，对于一个跨度60m的钢网架来说，这明显偏小。我仔细检查了模型的边界条件，发现设计人员把屋架所有支座都设成了"固定端"——6个自由度全部约束。但实际上，网架支座是铰接的——只能约束平动，不能约束转动。错误地把转动约束住，相当于给结构增加了额外的刚度，梁端本应释放的弯矩变成了固端弯矩，内力分布完全走样了。</p>
 
@@ -95,12 +105,31 @@
 
         <h3>方法二：置大数法（Large Number Method）</h3>
 
-        <p>置大数法的思路更暴力，但实现起来更简单：直接把约束自由度对应的对角线元素替换为一个极大的数（如 \(10^{15}\) 量级），并将荷载向量的对应分量替换为这个极大数乘以已知位移值。</p>
+        <p>置大数法的思路更暴力，但实现起来更简单：直接把约束自由度对应的对角线元素替换为一个极大的数（如 <math class="math-inline" aria-label="10 的 15 次方"><msup><mn>10</mn><mn>15</mn></msup></math> 量级），并将荷载向量的对应分量替换为这个极大数乘以已知位移值。</p>
 
-        <p style="text-align:center; font-size:1.2rem;"><strong>\(K_{ii} \rightarrow K_{ii} \times 10^{15}\)</strong></p>
-        <p style="text-align:center; font-size:1.2rem;"><strong>\(P_i \rightarrow K_{ii} \times 10^{15} \times u_i^{known}\)</strong></p>
+        <div class="math-equation" role="group" aria-label="置大数法修改刚度系数">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="置大数法修改刚度系数，可横向滚动">
+                <math display="block" aria-label="K i i 乘以 10 的 15 次方">
+                    <mrow>
+                        <msub><mi>K</mi><mrow><mi>i</mi><mi>i</mi></mrow></msub><mo>→</mo>
+                        <msub><mi>K</mi><mrow><mi>i</mi><mi>i</mi></mrow></msub><mo>×</mo><msup><mn>10</mn><mn>15</mn></msup>
+                    </mrow>
+                </math>
+            </div>
+        </div>
+        <div class="math-equation" role="group" aria-label="置大数法修改荷载分量">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="置大数法修改荷载分量，可横向滚动">
+                <math display="block" aria-label="P i 等于 K i i 乘以 10 的 15 次方乘以已知位移 u i">
+                    <mrow>
+                        <msub><mi>P</mi><mi>i</mi></msub><mo>→</mo>
+                        <msub><mi>K</mi><mrow><mi>i</mi><mi>i</mi></mrow></msub><mo>×</mo><msup><mn>10</mn><mn>15</mn></msup><mo>×</mo>
+                        <msubsup><mi>u</mi><mi>i</mi><mtext>known</mtext></msubsup>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
-        <p>这样，求解方程时，该自由度方向的位移会被"强制"接近已知值。因为对角线元素极大，方程中的其他项相比之下微不足道，所以该自由度的位移基本上就等于 \(P_i / K_{ii}\)——也就是 \(u_i^{known}\)。</p>
+        <p>这样，求解方程时，该自由度方向的位移会被"强制"接近已知值。因为对角线元素极大，方程中的其他项相比之下微不足道，所以该自由度的位移基本上就等于 <math class="math-inline" aria-label="P i 除以 K i i"><msub><mi>P</mi><mi>i</mi></msub><mo>/</mo><msub><mi>K</mi><mrow><mi>i</mi><mi>i</mi></mrow></msub></math>——也就是 <math class="math-inline" aria-label="u i known"><msubsup><mi>u</mi><mi>i</mi><mtext>known</mtext></msubsup></math>。</p>
 
         <pre><code>置大数法示例：
 
@@ -121,12 +150,12 @@
   缺点：数值稳定性略差（极端大数可能导致数值问题）</code></pre>
 
         <div class="highlight">
-            <strong>置零法 vs 置大数法：</strong>在实际的有限元软件中，置大数法更常见——因为它不需要重新排列矩阵（矩阵的结构保持不变，对稀疏矩阵求解器更友好）。但使用置大数法时需要注意：所取的"大数"不能太大也不能太小。太小了不足以"压制"其他项的影响，太大了会引起数值溢出（尤其是在单精度运算中）。经验值是一个比典型刚度系数大 \(10^{10}\) 到 \(10^{15}\) 倍的数字。在双精度浮点数中，这个范围是安全的。
+            <strong>置零法 vs 置大数法：</strong>在实际的有限元软件中，置大数法更常见——因为它不需要重新排列矩阵（矩阵的结构保持不变，对稀疏矩阵求解器更友好）。但使用置大数法时需要注意：所取的"大数"不能太大也不能太小。太小了不足以"压制"其他项的影响，太大了会引起数值溢出（尤其是在单精度运算中）。经验值是一个比典型刚度系数大 <math class="math-inline" aria-label="10 的 10 次方"><msup><mn>10</mn><mn>10</mn></msup></math> 到 <math class="math-inline" aria-label="10 的 15 次方"><msup><mn>10</mn><mn>15</mn></msup></math> 倍的数字。在双精度浮点数中，这个范围是安全的。
         </div>
 
         <h2>14.2 非结点荷载与等效结点荷载</h2>
 
-        <p>矩阵位移法的荷载向量 \(\{P\}\) 中的每一个分量对应一个<strong>结点自由度</strong>方向上的荷载。但实际工程中的荷载很少正好作用在结点上——梁上有均布荷载、跨中有集中力、风荷载分布在墙面上。这些<strong>非结点荷载（Non-nodal Loads）</strong>需要被转化为<strong>等效结点荷载（Equivalent Nodal Loads）</strong>。</p>
+        <p>矩阵位移法的荷载向量 <math class="math-inline" aria-label="P 向量"><mrow><mo>{</mo><mi>P</mi><mo>}</mo></mrow></math> 中的每一个分量对应一个<strong>结点自由度</strong>方向上的荷载。但实际工程中的荷载很少正好作用在结点上——梁上有均布荷载、跨中有集中力、风荷载分布在墙面上。这些<strong>非结点荷载（Non-nodal Loads）</strong>需要被转化为<strong>等效结点荷载（Equivalent Nodal Loads）</strong>。</p>
 
         <h3>等效结点荷载的概念</h3>
 
@@ -169,11 +198,63 @@
 
         <p>最终的等效结点荷载向量为：</p>
 
-        <p style="text-align:center; font-size:1.2rem;"><strong>\(\{P\}_{eq} = -\{F\}_{fixed}\)</strong></p>
+        <div class="math-equation" role="group" aria-label="等效结点荷载公式">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="等效结点荷载公式，可横向滚动">
+                <math display="block" aria-label="等效结点荷载向量等于固端反力的相反数">
+                    <mrow>
+                        <msub><mrow><mo>{</mo><mi>P</mi><mo>}</mo></mrow><mtext>eq</mtext></msub><mo>=</mo>
+                        <mo>−</mo><msub><mrow><mo>{</mo><mi>F</mi><mo>}</mo></mrow><mtext>fixed</mtext></msub>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
         <div class="warning">
             <strong>踩坑故事：</strong>我的一位同事在做大跨度钢桁架分析时，把风荷载按结点集中力的形式直接加在了上弦结点上——他以为"反正最终会传到结点上去的"。但这样处理相当于忽略了风荷载在杆件跨间产生的弯矩效应。他的桁架上弦杆设计偏小——因为风荷载引起的局部弯曲被完全忽略了。幸运的是，审图时发现并纠正了这个问题，但修改设计耽误了3周工期。这个故事告诉我们的道理是：<strong>除非你能确认跨间荷载对结构内力的影响可以忽略（比如桁架设计时通常假设荷载通过檩条传到结点上），否则必须使用等效结点荷载来正确考虑跨间荷载效应。</strong>
         </div>
+
+        <figure>
+            <svg viewBox="0 0 720 300" role="img" aria-labelledby="fig-bc-title fig-bc-desc" xmlns="http://www.w3.org/2000/svg">
+                <title id="fig-bc-title">边界条件引入与等效结点荷载</title>
+                <desc id="fig-bc-desc">左图展示置零法：约束自由度对应的行与列除对角线置 1 外全部置 0；右图展示两端固定梁上的均布荷载 q 被等效为结点力与结点弯矩。</desc>
+                <rect x="16" y="20" width="304" height="260" rx="16" fill="#eff6ff" stroke="#93c5fd"/>
+                <text x="168" y="46" text-anchor="middle" font-size="13.5" fill="#1e40af">置零法：约束自由度 1</text>
+                <g font-size="12" text-anchor="middle">
+                    <rect x="70" y="70" width="45" height="45" fill="#fca5a5" stroke="#64748b"/>
+                    <rect x="115" y="70" width="45" height="45" fill="#e2e8f0" stroke="#64748b"/>
+                    <rect x="160" y="70" width="45" height="45" fill="#e2e8f0" stroke="#64748b"/>
+                    <rect x="70" y="115" width="45" height="45" fill="#e2e8f0" stroke="#64748b"/>
+                    <rect x="115" y="115" width="45" height="45" fill="#bfdbfe" stroke="#64748b"/>
+                    <rect x="160" y="115" width="45" height="45" fill="#bfdbfe" stroke="#64748b"/>
+                    <rect x="70" y="160" width="45" height="45" fill="#e2e8f0" stroke="#64748b"/>
+                    <rect x="115" y="160" width="45" height="45" fill="#bfdbfe" stroke="#64748b"/>
+                    <rect x="160" y="160" width="45" height="45" fill="#bfdbfe" stroke="#64748b"/>
+                    <text x="92" y="98" fill="#7f1d1d">1</text><text x="137" y="98" fill="#64748b">0</text><text x="182" y="98" fill="#64748b">0</text>
+                    <text x="92" y="143" fill="#64748b">0</text><text x="137" y="143" fill="#1e3a8a">k₂₂</text><text x="182" y="143" fill="#1e3a8a">k₂₃</text>
+                    <text x="92" y="188" fill="#64748b">0</text><text x="137" y="188" fill="#1e3a8a">k₃₂</text><text x="182" y="188" fill="#1e3a8a">k₃₃</text>
+                </g>
+                <text x="168" y="240" text-anchor="middle" font-size="11.5" fill="#475569">行/列置零并令对角线=1，强制该自由度位移为 0</text>
+                <text x="168" y="262" text-anchor="middle" font-size="11.5" fill="#475569">不破坏矩阵结构，但需重建稀疏性</text>
+                <rect x="336" y="20" width="368" height="260" rx="16" fill="#fffbeb" stroke="#fcd34d"/>
+                <text x="520" y="46" text-anchor="middle" font-size="13.5" fill="#92400e">跨间荷载 → 等效结点荷载</text>
+                <line x1="380" y1="120" x2="660" y2="120" stroke="#1e3a8a" stroke-width="7" stroke-linecap="round"/>
+                <g stroke="#0ea5e9" stroke-width="2">
+                    <line x1="420" y1="90" x2="420" y2="114"/><line x1="460" y1="90" x2="460" y2="114"/>
+                    <line x1="500" y1="90" x2="500" y2="114"/><line x1="540" y1="90" x2="540" y2="114"/>
+                    <line x1="580" y1="90" x2="580" y2="114"/><line x1="620" y1="90" x2="620" y2="114"/>
+                </g>
+                <text x="520" y="82" text-anchor="middle" font-size="12" fill="#0369a1">均布荷载 q</text>
+                <text x="380" y="112" font-size="11.5" fill="#1e3a8a">F₁</text><text x="648" y="112" font-size="11.5" fill="#1e3a8a">F₂</text>
+                <path d="M380 134 a10 10 0 0 0 0 20" fill="none" stroke="#b91c1c" stroke-width="2.5"/>
+                <path d="M660 154 a10 10 0 0 1 0 -20" fill="none" stroke="#b91c1c" stroke-width="2.5"/>
+                <text x="352" y="160" font-size="11.5" fill="#b91c1c">M₁</text><text x="672" y="128" font-size="11.5" fill="#b91c1c">M₂</text>
+                <text x="520" y="196" text-anchor="middle" font-size="12" fill="#0f172a">Pₑq = − F_fixed</text>
+                <text x="520" y="222" text-anchor="middle" font-size="11.5" fill="#475569">先固定两端求固端反力，再取相反数得结点荷载</text>
+                <text x="520" y="246" text-anchor="middle" font-size="11.5" fill="#475569">F₁=F₂=qL/2，M₁=−M₂=qL²/12</text>
+                <text x="520" y="266" text-anchor="middle" font-size="11" fill="#94a3b8">（公式为两端固定梁标准解）</text>
+            </svg>
+            <figcaption>边界条件与等效结点荷载是矩阵位移法的“最后一公里”。左图展示<strong>置零法</strong>：把约束自由度对应的行与列除对角线置 1 外全部置零，从而强制该位移为零；<strong>置大数法</strong>则只把对角线乘一个大数，不改矩阵结构。右图说明<strong>等效结点荷载</strong>：先固定单元两端求出固端反力，再取相反数即为应施加到结点上的等效力。两种方法的固端反力公式取自两端固定梁标准解。</figcaption>
+        </figure>
 
         <h2>14.3 矩阵位移法完整计算步骤</h2>
 
@@ -182,11 +263,11 @@
         <ol>
             <li><strong>前处理</strong>——定义结点坐标、单元连接关系、材料截面属性、荷载数据；</li>
             <li><strong>自由度编号</strong>——为每个结点分配自由度编号（每个结点2-3个自由度），明确约束自由度；</li>
-            <li><strong>初始化总刚</strong>——将整体刚度矩阵 \([K]\) 初始化为 NDOF × NDOF 的零矩阵；</li>
-            <li><strong>组装总刚</strong>——对每个单元，计算局部刚度矩阵 → 坐标变换 → 对号入座集成到 \([K]\)；</li>
-            <li><strong>组装荷载向量</strong>——将结点荷载直接放入 \(\{P\}\)，将非结点荷载通过等效结点荷载的方式累加到 \(\{P\}\)；</li>
+            <li><strong>初始化总刚</strong>——将整体刚度矩阵 <math class="math-inline" aria-label="K 矩阵"><mrow><mo>[</mo><mi>K</mi><mo>]</mo></mrow></math> 初始化为 NDOF × NDOF 的零矩阵；</li>
+            <li><strong>组装总刚</strong>——对每个单元，计算局部刚度矩阵 → 坐标变换 → 对号入座集成到 <math class="math-inline" aria-label="K 矩阵"><mrow><mo>[</mo><mi>K</mi><mo>]</mo></mrow></math>；</li>
+            <li><strong>组装荷载向量</strong>——将结点荷载直接放入 <math class="math-inline" aria-label="P 向量"><mrow><mo>{</mo><mi>P</mi><mo>}</mo></mrow></math>，将非结点荷载通过等效结点荷载的方式累加到 <math class="math-inline" aria-label="P 向量"><mrow><mo>{</mo><mi>P</mi><mo>}</mo></mrow></math>；</li>
             <li><strong>引入边界条件</strong>——用置零法或置大数法处理约束自由度；</li>
-            <li><strong>求解</strong>——解线性方程组 \([K]\{U\} = \{P\}\)，得到所有结点位移；</li>
+            <li><strong>求解</strong>——解线性方程组 <math class="math-inline" aria-label="K 乘 U 等于 P"><mrow><mo>[</mo><mi>K</mi><mo>]</mo><mo>{</mo><mi>U</mi><mo>}</mo><mo>=</mo><mo>{</mo><mi>P</mi><mo>}</mo></mrow></math>，得到所有结点位移；</li>
             <li><strong>后处理</strong>——由结点位移回代到每个单元，计算单元杆端力（内力），画内力图。</li>
         </ol>
 
@@ -368,7 +449,7 @@ function equivalentNodalForce(load):
             <a href="index.html">📖 返回目录</a>
             <a href="15.html">下一章 →</a>
         </div>
-    </div>
+    </main>
 </div>
 </div>
 </body>
