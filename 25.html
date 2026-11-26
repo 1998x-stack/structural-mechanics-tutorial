@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第25章 MATLAB结构编程</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        pre { overflow-x: auto; max-width: 100%; }
+        table { max-width: 100%; }
+        @media (max-width: 768px) { table { display: block; overflow-x: auto; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="章节目录">
         <h3>🏗️ 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 绪论</a></li>
@@ -41,8 +46,13 @@
             <li><a href="27.html">第27章 大跨与高层结构</a></li>
             <li><a href="28.html">第28章 综合项目实战</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main id="content" class="main-content">
+
+        <header class="article-header">
+            <h1>第25章 MATLAB结构编程：从单元刚度矩阵到自己造工具</h1>
+            <p class="dek">当商业软件覆盖不了分析需求时，自己编程就是最后的底牌。本章用 MATLAB 从零实现矩阵位移法的五步流程，先做平面桁架、再扩展到平面刚架，并进入一致质量矩阵、特征值求解与 Newmark-β 时程分析。代码为教学演示，量纲与数值均标注为教学示意。</p>
+        </header>
 
         <h2>开篇：从"会用"到"会造"</h2>
 
@@ -83,6 +93,52 @@
 └─────────────────────────────────────┘</code></pre>
 
         <p>本章的目标就是用MATLAB实现这五个步骤。我们先从最简单的平面桁架开始，再扩展到平面刚架。</p>
+
+        <figure>
+            <svg viewBox="0 0 720 220" role="img" aria-labelledby="fig-mdm-title fig-mdm-desc" xmlns="http://www.w3.org/2000/svg">
+                <title id="fig-mdm-title">MATLAB 实现矩阵位移法的五步流程与矩阵规模</title>
+                <desc id="fig-mdm-desc">流程从左到右：数据输入、单元分析（局部刚度矩阵与坐标变换）、整体分析（总刚集成与边界条件）、求解（解 K·U=F）、回代求内力。下方标注各阶段的矩阵规模，说明为什么必须用数组化编程。</desc>
+                <defs>
+                    <marker id="mdm-ah" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#475569"/></marker>
+                </defs>
+                <g font-size="12" text-anchor="middle">
+                    <rect x="12" y="34" width="130" height="104" rx="12" fill="#eff6ff" stroke="#93c5fd"/>
+                    <text x="77" y="58" fill="#1e40af">① 数据输入</text>
+                    <text x="77" y="80" font-size="10.5" fill="#475569">结点 / 单元</text>
+                    <text x="77" y="98" font-size="10.5" fill="#475569">约束 / 荷载</text>
+                    <text x="77" y="122" font-size="10" fill="#64748b">无矩阵运算</text>
+                    <rect x="154" y="34" width="130" height="104" rx="12" fill="#fffbeb" stroke="#fcd34d"/>
+                    <text x="219" y="58" fill="#92400e">② 单元分析</text>
+                    <text x="219" y="80" font-size="10.5" fill="#475569">局部 k̅</text>
+                    <text x="219" y="98" font-size="10.5" fill="#475569">k = Tᵀ k̅ T</text>
+                    <text x="219" y="122" font-size="10" fill="#64748b">每个单元一次</text>
+                    <rect x="296" y="34" width="130" height="104" rx="12" fill="#f0fdf4" stroke="#86efac"/>
+                    <text x="361" y="58" fill="#166534">③ 整体分析</text>
+                    <text x="361" y="80" font-size="10.5" fill="#475569">K = ∑ k</text>
+                    <text x="361" y="98" font-size="10.5" fill="#475569">对号入座集成</text>
+                    <text x="361" y="122" font-size="10" fill="#64748b">循环累加最耗时</text>
+                    <rect x="438" y="34" width="130" height="104" rx="12" fill="#fdf2f8" stroke="#f9a8d4"/>
+                    <text x="503" y="58" fill="#9d174d">④ 求解</text>
+                    <text x="503" y="80" font-size="10.5" fill="#475569">引入边界条件</text>
+                    <text x="503" y="98" font-size="10.5" fill="#475569">K·U = F</text>
+                    <text x="503" y="122" font-size="10" fill="#64748b">核心一步</text>
+                    <rect x="580" y="34" width="128" height="104" rx="12" fill="#f5f3ff" stroke="#c4b5fd"/>
+                    <text x="644" y="58" fill="#5b21b6">⑤ 回代求内力</text>
+                    <text x="644" y="80" font-size="10.5" fill="#475569">f̅ = k̅ T Uₑ</text>
+                    <text x="644" y="98" font-size="10.5" fill="#475569">杆端内力</text>
+                    <text x="644" y="122" font-size="10" fill="#64748b">逐单元回代</text>
+                </g>
+                <g stroke="#475569" stroke-width="2" marker-end="url(#mdm-ah)">
+                    <line x1="142" y1="86" x2="152" y2="86"/>
+                    <line x1="284" y1="86" x2="294" y2="86"/>
+                    <line x1="426" y1="86" x2="436" y2="86"/>
+                    <line x1="568" y1="86" x2="578" y2="86"/>
+                </g>
+                <text x="360" y="172" text-anchor="middle" font-size="11" fill="#475569">结点自由度 n 决定总刚 K 的规模（n×n）；结点越多，“对号入座”集成与求解越耗时</text>
+                <text x="360" y="196" text-anchor="middle" font-size="11" fill="#b91c1c">自己写的程序同样只“求解你建立的方程”——内力回代后仍需手算与合理性校核</text>
+            </svg>
+            <figcaption>MATLAB 实现矩阵位移法的五步流程：<strong>数据输入 → 单元分析 → 整体分析 → 求解 → 回代求内力</strong>。其中“整体分析”的对号入座集成与线性方程组求解是计算量的主体，也是数组化编程（避免逐元素循环）最能体现价值的环节。</figcaption>
+        </figure>
 
         <h2>平面桁架编程（全代码实现）</h2>
 
@@ -657,7 +713,7 @@ end
             <a href="index.html">📖 返回目录</a>
             <a href="26.html">下一章 →</a>
         </div>
-    </div>
+    </main>
 </div>
 </div>
 </body>
