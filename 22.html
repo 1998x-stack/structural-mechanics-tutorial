@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第22章 能量原理与近似方法</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        pre { overflow-x: auto; max-width: 100%; }
+        table { max-width: 100%; }
+        @media (max-width: 768px) { table { display: block; overflow-x: auto; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="章节目录">
         <h3>🏗️ 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 绪论</a></li>
@@ -41,10 +46,15 @@
             <li><a href="27.html">第27章 大跨与高层结构</a></li>
             <li><a href="28.html">第28章 综合项目实战</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main id="content" class="main-content">
 
-        <h2>第二十二章 能量原理与近似方法</h2>
+        <header class="article-header">
+            <h1>第22章 能量原理与近似方法</h1>
+            <p class="dek">从应变能、外力势能与总势能出发，最小势能原理把“求解平衡方程”变成“最小化一个标量”。本章推导里兹法的实施步骤与简支梁算例，并说明矩阵位移法为何就是“离散化的最小势能原理”。全文在线弹性、小变形、保守力系的条件下讨论。</p>
+        </header>
+
+        <h2>引言：换一个“能量”的视角</h2>
 
         <p>在整个结构力学的学习中，我们始终在做一件事：建立方程并求解。力法以力为未知量，需要平衡+协调；位移法以位移为未知量，需要平衡+物理+几何。但你是否想过——有没有一种更"根本"的方式来看待结构行为？不需要列平衡方程、不需要画隔离体图，而是直接从一个<strong>标量（能量）</strong>出发，推导出结构的控制方程？</p>
 
@@ -75,22 +85,22 @@
             <tbody>
                 <tr>
                     <td>轴向拉压</td>
-                    <td>U = ∫(N²/(2EA)) dx</td>
+                    <td><math class="math-inline" aria-label="U 等于积分 N 平方除以 2 E A 对 x"><mi>U</mi><mo>=</mo><mo>∫</mo><mfrac><msup><mi>N</mi><mn>2</mn></msup><mrow><mn>2</mn><mi>E</mi><mi>A</mi></mrow></mfrac><mi>d</mi><mi>x</mi></math></td>
                     <td>N为轴力，EA为抗拉刚度</td>
                 </tr>
                 <tr>
                     <td>弯曲</td>
-                    <td>U = ∫(M²/(2EI)) dx</td>
+                    <td><math class="math-inline" aria-label="U 等于积分 M 平方除以 2 E I 对 x"><mi>U</mi><mo>=</mo><mo>∫</mo><mfrac><msup><mi>M</mi><mn>2</mn></msup><mrow><mn>2</mn><mi>E</mi><mi>I</mi></mrow></mfrac><mi>d</mi><mi>x</mi></math></td>
                     <td>M为弯矩，EI为抗弯刚度</td>
                 </tr>
                 <tr>
                     <td>剪切</td>
-                    <td>U = ∫(αV²/(2GA)) dx</td>
+                    <td><math class="math-inline" aria-label="U 等于积分 alpha V 平方除以 2 G A 对 x"><mi>U</mi><mo>=</mo><mo>∫</mo><mfrac><mrow><mi>α</mi><msup><mi>V</mi><mn>2</mn></msup></mrow><mrow><mn>2</mn><mi>G</mi><mi>A</mi></mrow></mfrac><mi>d</mi><mi>x</mi></math></td>
                     <td>V为剪力，α为剪应力分布系数</td>
                 </tr>
                 <tr>
                     <td>扭转</td>
-                    <td>U = ∫(T²/(2GJ)) dx</td>
+                    <td><math class="math-inline" aria-label="U 等于积分 T 平方除以 2 G J 对 x"><mi>U</mi><mo>=</mo><mo>∫</mo><mfrac><msup><mi>T</mi><mn>2</mn></msup><mrow><mn>2</mn><mi>G</mi><mi>J</mi></mrow></mfrac><mi>d</mi><mi>x</mi></math></td>
                     <td>T为扭矩，GJ为抗扭刚度</td>
                 </tr>
             </tbody>
@@ -120,7 +130,13 @@
 
         <p>定义一个弹性结构的<strong>总势能 Π</strong>为应变能与外力势能之和：</p>
 
-        <pre><code>    Π = U + V</code></pre>
+        <div class="math-equation" role="group" aria-label="总势能定义">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="总势能定义，可横向滚动">
+                <math display="block" aria-label="总势能 Pi 等于应变能 U 加外力势能 V">
+                    <mrow><mi>Π</mi><mo>=</mo><mi>U</mi><mo>+</mo><mi>V</mi></mrow>
+                </math>
+            </div>
+        </div>
 
         <p>这个看似简单的标量函数，是整个能量法的核心。后面所有的方法都从这里出发。</p>
 
@@ -257,6 +273,31 @@
             <strong>踩坑故事：</strong>多年前一位研究生用里兹法分析一个悬臂板的振动问题。他选择了一组多项式作为试探函数，这些多项式单独看都满足几何边界条件（悬臂端位移为零）。但他的前两项函数φ₁(x)和φ₂(x)之间几乎是线性相关的（一个是他写的(x/L)²，另一个是(x/L)²+0.001(x/L)³）。结果他的刚度矩阵几乎是奇异的——方程组解出来的系数a₁和a₂巨大且正负抵消，表面上挠度曲线看起来合理，但中间参数已经"爆炸"了。这就是著名的"数值病态"问题。教训是：<strong>选择试探函数时，基函数之间要尽量"正交"（线性无关），否则计算结果对数值误差极其敏感。这也解释了为什么有限元法中统一使用多项式插值函数（形函数），而不是随意挑选的函数——形函数在单元层面保证了良好的数值性质。</strong>
         </div>
 
+        <figure>
+            <svg viewBox="0 0 720 310" role="img" aria-labelledby="fig-fem-title fig-fem-desc" xmlns="http://www.w3.org/2000/svg">
+                <title id="fig-fem-title">里兹法的全局试探函数与有限元法的单元组装对比</title>
+                <desc id="fig-fem-desc">上图里兹法用一条贯穿整个结构域的连续挠曲曲线（含待定系数的试探函数）逼近真解；下图有限元法将梁划分为四个单元，每个单元用局部形函数插值，再通过结点位移组装成整体解。</desc>
+                <text x="16" y="30" font-size="13" fill="#1e3a8a">里兹法：一条全局试探函数逼近整体变形</text>
+                <line x1="60" y1="70" x2="660" y2="70" stroke="#94a3b8" stroke-width="2"/>
+                <path d="M60 74 Q360 138 660 74" fill="none" stroke="#2563eb" stroke-width="3"/>
+                <line x1="60" y1="150" x2="660" y2="150" stroke="#1e3a8a" stroke-width="1.5"/>
+                <line x1="60" y1="146" x2="60" y2="154" stroke="#1e3a8a"/>
+                <line x1="660" y1="146" x2="660" y2="154" stroke="#1e3a8a"/>
+                <text x="360" y="170" text-anchor="middle" font-size="12" fill="#1e3a8a">ũ(x) = Σ aᵢ φᵢ(x)　（基函数需满足全部位移边界条件）</text>
+                <text x="16" y="212" font-size="13" fill="#166534">有限元法：分单元 + 局部形函数 + 组装</text>
+                <line x1="60" y1="250" x2="660" y2="250" stroke="#94a3b8" stroke-width="2"/>
+                <polyline points="60,250 210,236 360,230 510,236 660,250" fill="none" stroke="#16a34a" stroke-width="3"/>
+                <g fill="#b91c1c">
+                    <circle cx="60" cy="250" r="5"/><circle cx="210" cy="236" r="5"/><circle cx="360" cy="230" r="5"/><circle cx="510" cy="236" r="5"/><circle cx="660" cy="250" r="5"/>
+                </g>
+                <g stroke="#cbd5e1" stroke-dasharray="3 3">
+                    <line x1="210" y1="230" x2="210" y2="268"/><line x1="360" y1="224" x2="360" y2="268"/><line x1="510" y1="230" x2="510" y2="268"/>
+                </g>
+                <text x="360" y="288" text-anchor="middle" font-size="12" fill="#166534">单元① 单元② 单元③ 单元④　（红点=结点，局部多项式在单元内插值）</text>
+            </svg>
+            <figcaption>同一条挠曲曲线，两种“猜”的方式。<strong>里兹法</strong>（上）用一个贯穿全梁的全局试探函数 <math class="math-inline" aria-label="u 波浪 等于 sigma a i phi i"><mi>u</mi><mo>~</mo><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mo>∑</mo><msub><mi>a</mi><mi>i</mi></msub><msub><mi>φ</mi><mi>i</mi></msub><mo>(</mo><mi>x</mi><mo>)</mo></math>，基函数必须满足全部位移边界条件；<strong>有限元法</strong>（下）把梁分成若干小单元，每个单元内只用简单多项式插值，再靠结点位移“拼接”。图示为概念对比，位移为定性比例。</figcaption>
+        </figure>
+
         <h2>从能量原理到有限元法</h2>
 
         <p>现在，让我们做一个重要的思想跨越——从里兹法到有限元法。</p>
@@ -379,7 +420,7 @@
             <a href="index.html">📖 返回目录</a>
             <a href="23.html">下一章 →</a>
         </div>
-    </div>
+    </main>
 </div>
 </div>
 </body>
