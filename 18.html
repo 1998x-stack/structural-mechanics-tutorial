@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第18章 工程结构案例</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        pre { overflow-x: auto; max-width: 100%; }
+        table { max-width: 100%; }
+        @media (max-width: 768px) { table { display: block; overflow-x: auto; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="章节目录">
         <h3>🏗️ 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 绪论</a></li>
@@ -41,8 +46,13 @@
             <li><a href="27.html">第27章 大跨与高层结构</a></li>
             <li><a href="28.html">第28章 综合项目实战</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main id="content" class="main-content">
+
+        <header class="article-header">
+            <h1>第18章 工程结构案例：把力学“看”进真实结构</h1>
+            <p class="dek">结构力学的价值不在于套公式，而在于形成能“看穿”结构的直觉。本章用简支梁桥与连续梁桥的弯矩对比、工业厂房排架的风荷载分配、多层框架的侧移与 P-Δ 效应，以及三起典型事故的力学反思，把前 17 章的概念落到真实工程上。文中的数值与结论均标注其出处或作为教学示意说明。</p>
+        </header>
 
         <h2>从课本到工地：力学不是纸上谈兵</h2>
 
@@ -82,13 +92,13 @@
                 </tr>
                 <tr>
                     <td>跨中最大正弯矩</td>
-                    <td>较大（\(ql²/8\) 每跨独立）</td>
-                    <td>较小（约 \(ql²/12\) ~ \(ql²/16\)）</td>
+                    <td>较大（<math class="math-inline" aria-label="ql²/8"><mi>q</mi><mi>l</mi><mn>²</mn><mo>/</mo><mn>8</mn></math> 每跨独立）</td>
+                    <td>较小（约 <math class="math-inline" aria-label="ql²/12"><mi>q</mi><mi>l</mi><mn>²</mn><mo>/</mo><mn>12</mn></math> ~ <math class="math-inline" aria-label="ql²/16"><mi>q</mi><mi>l</mi><mn>²</mn><mo>/</mo><mn>16</mn></math>）</td>
                 </tr>
                 <tr>
                     <td>支座处弯矩</td>
                     <td>零（铰支座不传递弯矩）</td>
-                    <td>较大的负弯矩（约 \(ql²/10\)）</td>
+                    <td>较大的负弯矩（约 <math class="math-inline" aria-label="ql²/10"><mi>q</mi><mi>l</mi><mn>²</mn><mo>/</mo><mn>10</mn></math>）</td>
                 </tr>
                 <tr>
                     <td>最大挠度</td>
@@ -128,6 +138,37 @@
 
         <p>简支梁桥的最大优势是"简单明了"——计算简单、施工简单、支座沉降不产生附加内力。缺点是需要更多的材料（跨中大弯矩需要大截面）。连续梁桥的优势是内力分布更均匀（跨中正弯矩小，节省材料），但代价是计算复杂、对支座沉降敏感。</p>
 
+        <figure>
+            <svg viewBox="0 0 720 300" role="img" aria-labelledby="fig-br-title fig-br-desc" xmlns="http://www.w3.org/2000/svg">
+                <title id="fig-br-title">三跨简支梁桥与连续梁桥的弯矩分布对比</title>
+                <desc id="fig-br-desc">上图为三跨简支梁桥：每跨独立受力，弯矩图各跨为大正弯矩（跨中下挠），支座处为零。下图为三跨连续梁桥：跨中正弯矩减小，中间支座处出现较大负弯矩（梁顶受拉）。</desc>
+                <text x="16" y="30" font-size="13.5" fill="#1e3a8a">简支梁桥：各跨独立，跨中正弯矩大</text>
+                <line x1="60" y1="70" x2="660" y2="70" stroke="#1e3a8a" stroke-width="6" stroke-linecap="round"/>
+                <g fill="none" stroke="#1e3a8a" stroke-width="2">
+                    <path d="M60 84 L48 96 L72 96 Z"/><path d="M260 84 L248 96 L272 96 Z"/>
+                    <path d="M460 84 L448 96 L472 96 Z"/><path d="M660 84 L648 96 L672 96 Z"/>
+                </g>
+                <line x1="60" y1="130" x2="660" y2="130" stroke="#cbd5e1" stroke-dasharray="4 4"/>
+                <g fill="none" stroke="#16a34a" stroke-width="3">
+                    <path d="M60 130 Q160 106 260 130"/>
+                    <path d="M260 130 Q360 106 460 130"/>
+                    <path d="M460 130 Q560 106 660 130"/>
+                </g>
+                <text x="360" y="102" text-anchor="middle" font-size="11" fill="#166534">跨中正弯矩 ≈ ql²/8</text>
+                <text x="16" y="172" font-size="13.5" fill="#92400e">连续梁桥：整体受力，跨中减小、支座负弯矩</text>
+                <line x1="60" y1="210" x2="660" y2="210" stroke="#1e3a8a" stroke-width="7" stroke-linecap="round"/>
+                <g fill="none" stroke="#1e3a8a" stroke-width="2">
+                    <path d="M60 224 L48 236 L72 236 Z"/><path d="M260 224 L248 236 L272 236 Z"/>
+                    <path d="M460 224 L448 236 L472 236 Z"/><path d="M660 224 L648 236 L672 236 Z"/>
+                </g>
+                <line x1="60" y1="262" x2="660" y2="262" stroke="#cbd5e1" stroke-dasharray="4 4"/>
+                <path d="M60 262 Q160 242 260 276 Q360 242 460 276 Q560 242 660 262" fill="none" stroke="#d97706" stroke-width="3"/>
+                <text x="360" y="250" text-anchor="middle" font-size="11" fill="#b45309">跨中 ≈ ql²/12 ～ ql²/16</text>
+                <text x="260" y="292" text-anchor="middle" font-size="11" fill="#b45309">中间支座负弯矩 ≈ ql²/10（梁顶受拉）</text>
+            </svg>
+            <figcaption>三跨（30m+40m+30m）简支与连续梁桥在恒载下的弯矩分布对比。<strong>简支梁桥</strong>每跨独立，跨中正弯矩大（约 <math class="math-inline" aria-label="q l 平方 除以 8"><mi>q</mi><msup><mi>l</mi><mn>2</mn></msup><mo>/</mo><mn>8</mn></math>），支座处弯矩为零；<strong>连续梁桥</strong>整体受力，跨中正弯矩降至约 <math class="math-inline" aria-label="q l 平方 除以 12 到 16"><mi>q</mi><msup><mi>l</mi><mn>2</mn></msup><mo>/</mo><mn>12</mn><mo>∼</mo><mn>16</mn></math>，但中间支座出现约 <math class="math-inline" aria-label="q l 平方 除以 10"><mi>q</mi><msup><mi>l</mi><mn>2</mn></msup><mo>/</mo><mn>10</mn></math> 的负弯矩（梁顶受拉）。弯矩图为等截面常刚度下的定性形状，具体系数取决于跨径比与支承条件。</figcaption>
+        </figure>
+
         <h2>案例二：单层工业厂房的排架分析</h2>
 
         <h3>结构体系与计算简图</h3>
@@ -138,7 +179,7 @@
 
         <ul>
             <li>柱顶在屋架（刚度极大的构件）约束下，左右两柱的柱顶水平位移基本相等；</li>
-            <li>水平荷载按柱的<strong>抗侧刚度</strong>比例分配给各柱。抗侧刚度与柱的 \(EI\) 成正比，与柱高的三次方成反比：\(D = 3EI/h³\)（柱底固定、柱顶铰接时）；</li>
+            <li>水平荷载按柱的<strong>抗侧刚度</strong>比例分配给各柱。抗侧刚度与柱的 <math class="math-inline" aria-label="EI"><mi>E</mi><mi>I</mi></math> 成正比，与柱高的三次方成反比：<math class="math-inline" aria-label="D = 3EI/h³"><mi>D</mi><mo>=</mo><mn>3</mn><mi>E</mi><mi>I</mi><mo>/</mo><mi>h</mi><mn>³</mn></math>（柱底固定、柱顶铰接时）；</li>
             <li>柱底弯矩最大——这是控制柱截面设计的关键内力。</li>
         </ul>
 
@@ -317,7 +358,7 @@
             <a href="index.html">📖 返回目录</a>
             <a href="19.html">下一章 →</a>
         </div>
-    </div>
+    </main>
 </div>
 </div>
 </body>
