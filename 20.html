@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第20章 单自由度体系强迫振动</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        pre { overflow-x: auto; max-width: 100%; }
+        table { max-width: 100%; }
+        @media (max-width: 768px) { table { display: block; overflow-x: auto; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="章节目录">
         <h3>🏗️ 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 绪论</a></li>
@@ -41,10 +46,15 @@
             <li><a href="27.html">第27章 大跨与高层结构</a></li>
             <li><a href="28.html">第28章 综合项目实战</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main id="content" class="main-content">
 
-        <h2>第二十章 单自由度体系强迫振动</h2>
+        <header class="article-header">
+            <h1>第20章 单自由度体系强迫振动</h1>
+            <p class="dek">结构从不会“自娱自乐”——风、地震、车辆与机械总是在“强迫”它振动。本章讲清简谐荷载下的稳态响应、动力放大系数 DMF 与共振，给出任意荷载的杜哈梅积分，并用频率比 β 解释隔振为何必须满足 β&gt;√2。全文以线弹性、小变形、黏滞阻尼的单自由度体系为准。</p>
+        </header>
+
+        <h2>引言：被“强迫”振动的结构</h2>
 
         <p>上一章我们研究了"结构自己唱歌"——自由振动。但现实中的结构从不会"自娱自乐"，它们总是被各种外力"强迫着跳舞"：风吹、地震、车辆、机械振动。当外力的节奏恰好和结构的"舞步"合拍时，一场危险的共振就可能上演。</p>
 
@@ -89,9 +99,29 @@
 
         <p>我们定义<strong>动力放大系数（Dynamic Magnification Factor, DMF）</strong> 为：</p>
 
-        <pre><code>    DMF = 最大动位移 / 静位移 = 1 / √[(1-β²)² + (2ζβ)²]
+        <p>定义<strong>动力放大系数（Dynamic Magnification Factor, DMF）</strong>为最大动位移与静位移之比：</p>
 
-    其中静位移 u_st = p₀/k</code></pre>
+        <div class="math-equation" role="group" aria-label="动力放大系数公式">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="动力放大系数公式，可横向滚动">
+                <math display="block" aria-label="DMF 等于 1 除以根号下 1 减 beta 平方的平方 加 2 zeta beta 的平方">
+                    <mrow>
+                        <mi>DMF</mi><mo>=</mo>
+                        <mfrac>
+                            <mn>1</mn>
+                            <msqrt>
+                                <mrow>
+                                    <msup><mrow><mo>(</mo><mn>1</mn><mo>−</mo><msup><mi>β</mi><mn>2</mn></msup><mo>)</mo></mrow><mn>2</mn></msup>
+                                    <mo>+</mo>
+                                    <msup><mrow><mo>(</mo><mn>2</mn><mi>ζ</mi><mi>β</mi><mo>)</mo></mrow><mn>2</mn></msup>
+                                </mrow>
+                            </msqrt>
+                        </mfrac>
+                    </mrow>
+                </math>
+            </div>
+        </div>
+
+        <p>其中静位移 <math class="math-inline" aria-label="u st 等于 p 0 除以 k"><msub><mi>u</mi><mtext>st</mtext></msub><mo>=</mo><msub><mi>p</mi><mn>0</mn></msub><mo>/</mo><mi>k</mi></math>，频率比 <math class="math-inline" aria-label="beta 等于 theta 除以 omega"><mi>β</mi><mo>=</mo><mi>θ</mi><mo>/</mo><mi>ω</mi></math>。DMF 是结构动力学中最重要的无量纲参数之一。
 
         <p>DMF是结构动力学中最重要的无量纲参数之一。它告诉我们：同样大小的荷载，作用在结构上产生的动位移是静位移的多少倍？</p>
 
@@ -166,6 +196,37 @@
                 </tr>
             </tbody>
         </table>
+
+        <figure>
+            <svg viewBox="0 0 720 340" role="img" aria-labelledby="fig-dmf-title fig-dmf-desc" xmlns="http://www.w3.org/2000/svg">
+                <title id="fig-dmf-title">动力放大系数 DMF 随频率比 β 的变化曲线</title>
+                <desc id="fig-dmf-desc">横轴为频率比 β，纵轴为 DMF。四条曲线分别对应阻尼比 0、0.05、0.10、0.20。阻尼越小，β=1 附近的峰值越高；阻尼越大，峰值越低越平缓。β 小于 0.5 为准静力区，β 大于 1.5 为惯性区。</desc>
+                <line x1="70" y1="300" x2="680" y2="300" stroke="#334155" stroke-width="2"/>
+                <line x1="70" y1="300" x2="70" y2="30" stroke="#334155" stroke-width="2"/>
+                <text x="690" y="304" font-size="12" fill="#334155">β</text>
+                <text x="46" y="36" font-size="12" fill="#334155">DMF</text>
+                <g font-size="11" fill="#64748b" text-anchor="middle">
+                    <text x="170" y="318">0.5</text><text x="320" y="318">1.0</text><text x="470" y="318">1.5</text><text x="620" y="318">2.0</text>
+                </g>
+                <line x1="320" y1="30" x2="320" y2="300" stroke="#cbd5e1" stroke-dasharray="5 5"/>
+                <line x1="170" y1="30" x2="170" y2="300" stroke="#e2e8f0" stroke-dasharray="4 4"/>
+                <line x1="470" y1="30" x2="470" y2="300" stroke="#e2e8f0" stroke-dasharray="4 4"/>
+                <path d="M70 296 C140 290 240 200 300 70 C310 50 330 50 340 70 C400 200 500 290 680 298" fill="none" stroke="#dc2626" stroke-width="2.5"/>
+                <path d="M70 296 C150 290 250 240 305 150 C315 132 330 132 345 150 C410 245 520 292 680 298" fill="none" stroke="#d97706" stroke-width="2.5"/>
+                <path d="M70 296 C160 292 260 268 310 205 C320 190 332 190 350 205 C420 275 540 296 680 298" fill="none" stroke="#16a34a" stroke-width="2.5"/>
+                <path d="M70 296 C170 293 280 282 320 250 C332 240 342 240 360 250 C440 288 560 297 680 298" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+                <g font-size="11.5">
+                    <text x="360" y="52" fill="#dc2626">ζ=0（无阻尼，峰值发散）</text>
+                    <text x="330" y="168" fill="#d97706">ζ=0.05</text>
+                    <text x="332" y="222" fill="#16a34a">ζ=0.10</text>
+                    <text x="340" y="266" fill="#2563eb">ζ=0.20</text>
+                </g>
+                <text x="120" y="290" font-size="10.5" fill="#94a3b8">准静力区</text>
+                <text x="600" y="290" font-size="10.5" fill="#94a3b8">惯性区</text>
+                <text x="320" y="300" font-size="10.5" fill="#b91c1c" text-anchor="middle">共振 β=1</text>
+            </svg>
+            <figcaption>动力放大系数 <math class="math-inline" aria-label="DMF"><mi>DMF</mi></math> 随频率比 <math class="math-inline" aria-label="beta"><mi>β</mi></math> 的变化（四条曲线对应不同阻尼比）。<strong>共振区</strong>（约 0.5≤β≤1.5）内 DMF 显著放大，阻尼越小峰值越尖；无阻尼时 β=1 处峰值理论发散，实际结构峰值约为 <math class="math-inline" aria-label="1 除以 2 zeta"><mn>1</mn><mo>/</mo><mo>(</mo><mn>2</mn><mi>ζ</mi><mo>)</mo></math>。<strong>惯性区</strong>（β&gt;1.5）DMF&lt;1，结构“跟不上”荷载。曲线按理论公式绘制，为教学示意。</figcaption>
+        </figure>
 
         <p>从这个表格中，我们可以提炼出几个极其重要的工程结论：</p>
 
@@ -275,14 +336,27 @@
 
         <p>隔振的核心指标是<strong>隔振效率（隔离系数）</strong>，定义为传递力与激振力的比值（主动隔振）或传递位移与基础位移的比值（被动隔振）。</p>
 
-        <pre><code>    力的传递率 TR（Transmissibility）：
-    TR = F_transmitted / F_applied
+        <p>力的传递率 <strong>TR（Transmissibility）</strong> 定义为传递力与激振力之比：</p>
 
-    TR = √[1 + (2ζβ)²] / √[(1-β²)² + (2ζβ)²]
+        <div class="math-equation" role="group" aria-label="力的传递率公式">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="力的传递率公式，可横向滚动">
+                <math display="block" aria-label="TR 等于根号下 1 加 2 zeta beta 的平方 除以根号下 1 减 beta 平方的平方 加 2 zeta beta 的平方">
+                    <mrow>
+                        <mi>TR</mi><mo>=</mo>
+                        <mfrac>
+                            <msqrt><mrow><mn>1</mn><mo>+</mo><msup><mrow><mo>(</mo><mn>2</mn><mi>ζ</mi><mi>β</mi><mo>)</mo></mrow><mn>2</mn></msup></mrow></msqrt>
+                            <msqrt><mrow><msup><mrow><mo>(</mo><mn>1</mn><mo>−</mo><msup><mi>β</mi><mn>2</mn></msup><mo>)</mo></mrow><mn>2</mn></msup><mo>+</mo><msup><mrow><mo>(</mo><mn>2</mn><mi>ζ</mi><mi>β</mi><mo>)</mo></mrow><mn>2</mn></msup></mrow></msqrt>
+                        </mfrac>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
-    当 β &lt; √2 时，TR &gt; 1 —— 隔振系统反而放大了振动！
-    当 β &gt; √2 时，TR &lt; 1 —— 隔振系统有效
-    当 β → ∞ 时，TR → 0 —— 理想隔振（但实际不可能达到）</code></pre>
+        <ul>
+            <li>当 <math class="math-inline" aria-label="beta 小于 根号 2"><mi>β</mi><mo>&lt;</mo><msqrt><mn>2</mn></msqrt></math> 时，<math class="math-inline" aria-label="TR 大于 1"><mi>TR</mi><mo>&gt;</mo><mn>1</mn></math>——隔振系统反而放大了振动！</li>
+            <li>当 <math class="math-inline" aria-label="beta 大于 根号 2"><mi>β</mi><mo>&gt;</mo><msqrt><mn>2</mn></msqrt></math> 时，<math class="math-inline" aria-label="TR 小于 1"><mi>TR</mi><mo>&lt;</mo><mn>1</mn></math>——隔振系统有效；</li>
+            <li>当 <math class="math-inline" aria-label="beta 趋于无穷"><mi>β</mi><mo>→</mo><mo>∞</mo></math> 时，<math class="math-inline" aria-label="TR 趋于 0"><mi>TR</mi><mo>→</mo><mn>0</mn></math>——理想隔振（但实际不可能达到）。</li>
+        </ul>
 
         <p>这里有一个反直觉的重要结论：只有当频率比β>√2时，隔振系统才真正起到"隔振"作用。如果β<√2，隔振器不仅不隔振，反而会放大振动！这就解释了为什么隔振设计的关键是"让隔振器的自振频率远低于干扰频率"。</p>
 
@@ -339,7 +413,7 @@
             <a href="index.html">📖 返回目录</a>
             <a href="21.html">下一章 →</a>
         </div>
-    </div>
+    </main>
 </div>
 </div>
 </body>
