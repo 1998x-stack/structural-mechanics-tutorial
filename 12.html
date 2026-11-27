@@ -9,6 +9,13 @@
         pre { overflow-x: auto; max-width: 100%; }
         table { max-width: 100%; }
         @media (max-width: 768px) { table { display: block; overflow-x: auto; } }
+        .md-demo { border: 1px solid #cbd5e1; border-radius: 12px; padding: 14px 16px; margin: 18px 0; background: #f8fafc; }
+        .md-demo .md-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px 12px; margin: 10px 0; }
+        .md-demo .md-cell { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 10px; font-size: .95rem; }
+        .md-demo .md-cell b { color: #1e3a8a; }
+        .md-demo .md-controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+        .md-demo button { padding: 6px 18px; border-radius: 30px; border: 1px solid #8fb88a; background: #b7d8b0; color: #1f452b; font: inherit; cursor: pointer; }
+        @media (max-width: 640px) { .md-demo .md-grid { grid-template-columns: 1fr 1fr; } }
     </style>
 </head>
 <body>
@@ -365,6 +372,21 @@
             <strong>实用的手算表格格式：</strong>在我的学生时代，老师教我们用一种"上-下-箭头"的表格来做力矩分配——上面写分配系数，中间写各轮分配值，箭头表示传递方向。我至今觉得这种表格是最清晰的手算组织方式。建议你在做习题时也采用这种格式——它能让你清晰地追踪每一轮分配，减少错误。
         </div>
 
+        <h3>动手演示：不平衡力矩如何逐轮“流走”</h3>
+
+        <p>考虑一根三跨连续梁 <strong>A–B–C–D</strong>：两端 A、D 为固定端，各跨跨度均为 <math class="math-inline" aria-label="l 等于 6 米"><mi>l</mi><mo>=</mo><mn>6</mn></math> m、线刚度相同，仅在 AB 跨作用均布荷载 <math class="math-inline" aria-label="q 等于 20 千牛每米"><mi>q</mi><mo>=</mo><mn>20</mn></math> kN/m。固端弯矩为 <math class="math-inline" aria-label="M A B 固端等于负 60 千牛米"><msubsup><mi>M</mi><mrow><mi>A</mi><mi>B</mi></mrow><mtext>F</mtext></msubsup><mo>=</mo><mo>-</mo><mn>60</mn></math> kN·m 与 <math class="math-inline" aria-label="M B A 固端等于正 60 千牛米"><msubsup><mi>M</mi><mrow><mi>B</mi><mi>A</mi></mrow><mtext>F</mtext></msubsup><mo>=</mo><mo>+</mo><mn>60</mn></math> kN·m，其余杆端为 0。点击按钮，让程序像手算一样“放松 B → 再放松 C”，观察每轮分配与传递后各杆端弯矩的变化。</p>
+
+        <div class="md-demo">
+            <div class="md-grid" id="md-grid" role="group" aria-label="各杆端弯矩（单位 kN·m）"></div>
+            <div class="md-controls">
+                <button type="button" id="md-step">推进一轮（B→C）</button>
+                <button type="button" id="md-reset">重置</button>
+                <span id="md-status" aria-live="polite" style="font-size:.92rem;color:#475569"></span>
+            </div>
+        </div>
+
+        <p>迭代收敛后得到杆端弯矩 <strong>−76、+28、−28、−8、+8、+4</strong> kN·m（顺序 A–B–C–D 的六个杆端），此时 B、C 两个结点各自两侧弯矩之和均为 0，结构达到平衡。这一结果可用本章的手算表格逐轮复核：每放松一个结点、把不平衡力矩反号分配出去并各传递一半，不平衡量就按约 <math class="math-inline" aria-label="二分之一"><mfrac><mn>1</mn><mn>2</mn></mfrac></math> 的倍率衰减，通常 3～4 轮即达工程精度。（荷载与线刚度均为教学取值，非具体工程实例。）</p>
+
         <h2>12.6 力矩分配法与位移法的联系</h2>
 
         <p>力矩分配法并不是一种"独立"的方法——它实际上是<strong>位移法的迭代形式</strong>。</p>
@@ -406,5 +428,41 @@
     </main>
 </div>
 </div>
+    <script>
+    (function () {
+        var names = ['AB', 'BA', 'BC', 'CB', 'CD', 'DC'];
+        function init() { return { AB: -60, BA: 60, BC: 0, CB: 0, CD: 0, DC: 0 }; }
+        var M = init(), round = 0;
+        var grid = document.getElementById('md-grid');
+        var status = document.getElementById('md-status');
+        function render() {
+            grid.innerHTML = names.map(function (k) {
+                return '<div class="md-cell"><b>M<sub>' + k + '</sub></b> = ' + M[k].toFixed(2) + ' kN·m</div>';
+            }).join('');
+        }
+        function relax(node) {
+            var near = node === 'B' ? ['BA', 'BC'] : ['CB', 'CD'];
+            var far = node === 'B' ? ['AB', 'CB'] : ['BC', 'DC'];
+            var u = M[near[0]] + M[near[1]];
+            var d = -u / 2;
+            M[near[0]] += d; M[near[1]] += d;
+            M[far[0]] += d / 2; M[far[1]] += d / 2;
+            return u;
+        }
+        document.getElementById('md-step').addEventListener('click', function () {
+            round += 1;
+            var uB = relax('B'), uC = relax('C');
+            render();
+            status.textContent = '第 ' + round + ' 轮：放松前 B 端不平衡力矩 ' + uB.toFixed(3) +
+                ' kN·m、C 端 ' + uC.toFixed(3) + ' kN·m；两者逐轮减半，趋近于 0 时结构达到平衡。';
+        });
+        document.getElementById('md-reset').addEventListener('click', function () {
+            M = init(); round = 0; render();
+            status.textContent = '已重置：仅在 AB 跨施加均布荷载，此时仅在 B 端存在 +60 kN·m 的不平衡力矩。';
+        });
+        render();
+        status.textContent = '初始状态：仅在 AB 跨施加均布荷载，B 端不平衡力矩为 +60 kN·m。';
+    })();
+    </script>
 </body>
 </html>
