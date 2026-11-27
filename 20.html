@@ -9,6 +9,11 @@
         pre { overflow-x: auto; max-width: 100%; }
         table { max-width: 100%; }
         @media (max-width: 768px) { table { display: block; overflow-x: auto; } }
+        .dmf-demo { border: 1px solid #cbd5e1; border-radius: 12px; padding: 14px 16px; margin: 18px 0; background: #f8fafc; }
+        .dmf-demo label { display: block; font-size: .95rem; color: #1e3a8a; margin: 8px 0 4px; }
+        .dmf-demo input[type=range] { width: min(320px, 100%); }
+        .dmf-demo button { padding: 6px 18px; border-radius: 30px; border: 1px solid #8fb88a; background: #b7d8b0; color: #1f452b; font: inherit; cursor: pointer; margin-top: 10px; }
+        .dmf-demo #dmf-result { font-size: .95rem; color: #334155; margin: 10px 0 0; }
     </style>
 </head>
 <body>
@@ -234,6 +239,19 @@
             <li><strong>三个频段分区</strong>：β&lt;0.5为准静力区（动力效应不明显），0.5≤β≤1.5为共振区（DMF显著放大），β&gt;1.5为惯性区（DMF小于1，结构"跟不上"荷载的变化）。</li>
         </ul>
 
+        <h3>动手演示：给定 β 与 ζ，DMF 究竟多大</h3>
+
+        <p>上面的曲线和表格给出的是趋势，下面把公式做成可交互的计算器。拖动 β、ζ 两个滑块（或点击按钮在几个典型工况间循环），页面按 <math class="math-inline" aria-label="DMF 等于 1 除以根号下 1 减 beta 平方的平方加 2 zeta beta 的平方"><mi>DMF</mi><mo>=</mo><mfrac><mn>1</mn><msqrt><mrow><msup><mrow><mo>(</mo><mn>1</mn><mo>−</mo><msup><mi>β</mi><mn>2</mn></msup><mo>)</mo></mrow><mn>2</mn></msup><mo>+</mo><msup><mrow><mo>(</mo><mn>2</mn><mi>ζ</mi><mi>β</mi><mo>)</mo></mrow><mn>2</mn></msup></mrow></msqrt></mfrac></math> 实时算出 DMF。</p>
+
+        <div class="dmf-demo">
+            <label for="dmf-b">频率比 β = <output id="dmf-b-out">1.00</output></label>
+            <input type="range" id="dmf-b" min="0" max="2.5" step="0.05" value="1">
+            <label for="dmf-z">阻尼比 ζ = <output id="dmf-z-out">0.05</output></label>
+            <input type="range" id="dmf-z" min="0" max="0.2" step="0.01" value="0.05" aria-describedby="dmf-result">
+            <button type="button" id="dmf-next">切换典型工况</button>
+            <p id="dmf-result" aria-live="polite"></p>
+        </div>
+
         <h2>共振现象分析</h2>
 
         <p>共振是结构动力学中最重要也最危险的现象。我们来深入看看共振前后的振动特征。</p>
@@ -414,5 +432,37 @@
     </main>
 </div>
 </div>
+    <script>
+    (function () {
+        var bb = document.getElementById('dmf-b');
+        var zz = document.getElementById('dmf-z');
+        var bo = document.getElementById('dmf-b-out');
+        var zo = document.getElementById('dmf-z-out');
+        var res = document.getElementById('dmf-result');
+        var btn = document.getElementById('dmf-next');
+        var presets = [[1.0, 0.05], [0.3, 0.05], [2.0, 0.05], [1.0, 0.01], [1.0, 0.20]];
+        var pi = 0;
+        function update() {
+            var b = parseFloat(bb.value), z = parseFloat(zz.value);
+            bo.textContent = b.toFixed(2);
+            zo.textContent = z.toFixed(2);
+            var denom = Math.sqrt(Math.pow(1 - b * b, 2) + Math.pow(2 * z * b, 2));
+            var dmf = denom < 1e-9 ? Infinity : 1 / denom;
+            var band = b < 0.5 ? '准静力区' : (b <= 1.5 ? '共振区' : '惯性区');
+            var txt = 'β = ' + b.toFixed(2) + '、ζ = ' + z.toFixed(2) + '：DMF = ' + dmf.toFixed(3) + '（处于' + band + '）。';
+            if (Math.abs(b - 1) < 0.05 && z > 0) txt += ' 两者均在共振点附近，DMF ≈ 1/(2ζ) = ' + (1 / (2 * z)).toFixed(2) + '。';
+            res.textContent = txt;
+        }
+        btn.addEventListener('click', function () {
+            pi = (pi + 1) % presets.length;
+            bb.value = presets[pi][0];
+            zz.value = presets[pi][1];
+            update();
+        });
+        bb.addEventListener('input', update);
+        zz.addEventListener('input', update);
+        update();
+    })();
+    </script>
 </body>
 </html>
