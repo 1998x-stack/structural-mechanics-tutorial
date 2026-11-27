@@ -9,6 +9,11 @@
         pre { overflow-x: auto; max-width: 100%; }
         table { max-width: 100%; }
         @media (max-width: 768px) { table { display: block; overflow-x: auto; } }
+        .st-demo { border: 1px solid #cbd5e1; border-radius: 12px; padding: 14px 16px; margin: 18px 0; background: #f8fafc; }
+        .st-demo label { display: block; font-size: .95rem; color: #1e3a8a; margin-bottom: 6px; }
+        .st-demo input[type=range] { width: min(320px, 100%); }
+        .st-demo button { padding: 6px 18px; border-radius: 30px; border: 1px solid #8fb88a; background: #b7d8b0; color: #1f452b; font: inherit; cursor: pointer; margin-left: 10px; }
+        .st-demo #st-result { font-size: .95rem; color: #334155; margin: 10px 0 0; }
     </style>
 </head>
 <body>
@@ -259,6 +264,19 @@ y(x) = A · sin(kx) + B · cos(kx)</code></pre>
 
         <p>从这个表可以看出：<strong>端部约束越强，临界荷载越大</strong>。两端固定的压杆承载力是两端铰支的4倍——这是一个巨大的差异。所以实际设计中，柱脚和柱顶的连接构造至关重要。</p>
 
+        <h3>动手演示：长度系数如何改变临界荷载</h3>
+
+        <p>把欧拉公式写成计算长度形式后，临界荷载与 μ 的关系非常干净：<math class="math-inline" aria-label="P cr 正比于 1 除以 mu 平方"><msub><mi>P</mi><mi>cr</mi></msub><mo>∝</mo><mfrac><mn>1</mn><msup><mi>μ</mi><mn>2</mn></msup></mfrac></math>。拖动滑块改变 μ（0.5～2.0），或点击按钮在四种典型边界条件（两端铰支 1.0 → 固定-自由 2.0 → 两端固定 0.5 → 固定-铰支 0.7）间循环切换，即可看到相对两端铰支（μ=1）的临界荷载倍数如何变化。</p>
+
+        <div class="st-demo">
+            <label for="st-mu">计算长度系数 μ = <output id="st-mu-out">1.0</output></label>
+            <input type="range" id="st-mu" min="0.5" max="2" step="0.1" value="1" aria-describedby="st-result">
+            <button type="button" id="st-apply">切换典型边界条件</button>
+            <p id="st-result" aria-live="polite"></p>
+        </div>
+
+        <p>可以看出，把 μ 从 1.0 降到 0.5（相当于把两端铰支加强为两端固定），相对承载力从 1.00 提高到 4.00；反之若削弱为固定-自由（μ=2.0），则只剩 0.25。这也解释了为何加强端部约束、增设侧向支撑对压杆稳定如此有效。</p>
+
         <div class="warning">
             <strong>工程陷阱：</strong>千万不要以为你在图纸上画了"固定端"，它就真的是固定端。固定端要求基础有足够的转动刚度来约束柱端的转动。如果基础太小（比如独立柱基在没有拉梁的情况下），柱脚在实际中可能更接近"铰接"而不是"固定端"。我在一个项目中就见过这样的问题：设计师按固定端计算了一根10米高的广告牌立柱，但基础只有4根直径0.6m的灌注桩。有限元分析表明，在实际土体刚度下，柱脚的转动约束只有理想固定端的30%，实际临界荷载只有设计值的60%。幸好这个问题在地基设计阶段被发现了，否则后果不堪设想。
         </div>
@@ -376,5 +394,30 @@ i = √(I/A) —— 截面回转半径</code></pre>
     </main>
 </div>
 </div>
+    <script>
+    (function () {
+        var mu = document.getElementById('st-mu');
+        var out = document.getElementById('st-mu-out');
+        var res = document.getElementById('st-result');
+        var btn = document.getElementById('st-apply');
+        var presets = [1.0, 2.0, 0.5, 0.7];
+        function update() {
+            var m = parseFloat(mu.value);
+            out.textContent = m.toFixed(1);
+            var ratio = 1 / (m * m);
+            var label = m < 0.95 ? '约束强于铰支' : (m > 1.05 ? '约束弱于铰支' : '与两端铰支相同');
+            res.textContent = 'μ = ' + m.toFixed(1) + '：相对两端铰支的临界荷载倍数 P_cr / P_cr(铰支) = 1/μ² = ' +
+                ratio.toFixed(3) + '（' + label + '）。';
+        }
+        btn.addEventListener('click', function () {
+            var idx = presets.indexOf(parseFloat(mu.value));
+            idx = (idx + 1) % presets.length;
+            mu.value = presets[idx];
+            update();
+        });
+        mu.addEventListener('input', update);
+        update();
+    })();
+    </script>
 </body>
 </html>
