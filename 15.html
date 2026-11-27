@@ -9,6 +9,11 @@
         pre { overflow-x: auto; max-width: 100%; }
         table { max-width: 100%; }
         @media (max-width: 768px) { table { display: block; overflow-x: auto; } }
+        .il-demo { border: 1px solid #cbd5e1; border-radius: 12px; padding: 14px 16px; margin: 18px 0; background: #f8fafc; }
+        .il-demo label { display: block; font-size: .95rem; color: #1e3a8a; margin-bottom: 6px; }
+        .il-demo input[type=range] { width: min(320px, 100%); }
+        .il-demo button { padding: 6px 18px; border-radius: 30px; border: 1px solid #8fb88a; background: #b7d8b0; color: #1f452b; font: inherit; cursor: pointer; margin-left: 10px; }
+        .il-demo #il-result { font-size: .95rem; color: #334155; margin: 10px 0 0; }
     </style>
 </head>
 <body>
@@ -223,6 +228,19 @@
             <figcaption>简支梁三条典型影响线（单位移动荷载 <math class="math-inline" aria-label="P 等于 1"><mi>P</mi><mo>=</mo><mn>1</mn></math>）：<strong>反力 R_A</strong> 由 1 线性降到 0；<strong>截面 C 弯矩</strong> 呈三角峰，峰值 <math class="math-inline" aria-label="a b 除以 l"><mi>a</mi><mi>b</mi><mo>/</mo><mi>l</mi></math>，当 C 在跨中时等于 <math class="math-inline" aria-label="l 除以 4"><mi>l</mi><mo>/</mo><mn>4</mn></math>；<strong>截面 C 剪力</strong> 在 C 处由 <math class="math-inline" aria-label="负 a 除以 l"><mo>−</mo><mi>a</mi><mo>/</mo><mi>l</mi></math> 跳到 <math class="math-inline" aria-label="b 除以 l"><mi>b</mi><mo>/</mo><mi>l</mi></math>，跳变幅度恰为单位荷载 1。图示为定性比例，纵坐标已归一化。</figcaption>
         </figure>
 
+        <h3>动手演示：单位移动荷载沿梁移动</h3>
+
+        <p>设简支梁跨度 <math class="math-inline" aria-label="l 等于 8 米"><mi>l</mi><mo>=</mo><mn>8</mn></math> m，取跨中截面 C 位于 <math class="math-inline" aria-label="a 等于 b 等于 4 米"><mi>a</mi><mo>=</mo><mi>b</mi><mo>=</mo><mn>4</mn></math> m。拖动滑块改变单位荷载 <math class="math-inline" aria-label="P 等于 1"><mi>P</mi><mo>=</mo><mn>1</mn></math> 的位置 <math class="math-inline" aria-label="x"><mi>x</mi></math>（0～8 m），页面按本节静力法公式实时给出 <math class="math-inline" aria-label="R A"><msub><mi>R</mi><mi>A</mi></msub></math>、<math class="math-inline" aria-label="R B"><msub><mi>R</mi><mi>B</mi></msub></math>、<math class="math-inline" aria-label="M C"><msub><mi>M</mi><mi>C</mi></msub></math> 与 <math class="math-inline" aria-label="Q C"><msub><mi>Q</mi><mi>C</mi></msub></math> 的值。</p>
+
+        <div class="il-demo">
+            <label for="il-x">荷载位置 x = <output id="il-x-out">4.0</output> m</label>
+            <input type="range" id="il-x" min="0" max="8" step="0.5" value="4" aria-describedby="il-result">
+            <button type="button" id="il-next">移动荷载到下一位置</button>
+            <p id="il-result" aria-live="polite"></p>
+        </div>
+
+        <p>观察两个最不利位置：<math class="math-inline" aria-label="R A"><msub><mi>R</mi><mi>A</mi></msub></math> 在荷载置于 A 端（x=0）时取最大值 1.000；而跨中弯矩 <math class="math-inline" aria-label="M C"><msub><mi>M</mi><mi>C</mi></msub></math> 在荷载恰置于 C 处（x=4 m）时取峰值 2.000 kN·m，与影响线的三角尖顶 <math class="math-inline" aria-label="a b 除以 l 等于 2"><mi>a</mi><mi>b</mi><mo>/</mo><mi>l</mi><mo>=</mo><mn>2</mn></math> 完全一致。</p>
+
         <h2>机动法作影响线</h2>
 
         <p>如果你觉得静力法作影响线——列表达式、分段讨论——有些繁琐，那么机动法（Kinematic Method）会让你眼前一亮。</p>
@@ -352,5 +370,31 @@ S_max = q · 正号部分的面积</code></pre>
     </main>
 </div>
 </div>
+    <script>
+    (function () {
+        var l = 8, a = 4, b = 4;
+        var xs = [4, 0, 8, 2, 6], pi = 0;
+        var xr = document.getElementById('il-x');
+        var xo = document.getElementById('il-x-out');
+        var res = document.getElementById('il-result');
+        var btn = document.getElementById('il-next');
+        function update() {
+            var x = parseFloat(xr.value);
+            xo.textContent = x.toFixed(1);
+            var RA = (l - x) / l, RB = x / l;
+            var MC = x <= a ? RB * b : RA * a;
+            var QC = x < a ? -RB : RA;
+            res.textContent = 'x = ' + x.toFixed(1) + ' m：R_A = ' + RA.toFixed(3) + ' kN、R_B = ' + RB.toFixed(3) +
+                ' kN、M_C = ' + MC.toFixed(3) + ' kN·m、Q_C = ' + QC.toFixed(3) + ' kN。';
+        }
+        btn.addEventListener('click', function () {
+            pi = (pi + 1) % xs.length;
+            xr.value = xs[pi];
+            update();
+        });
+        xr.addEventListener('input', update);
+        update();
+    })();
+    </script>
 </body>
 </html>
